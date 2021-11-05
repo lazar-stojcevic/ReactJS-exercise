@@ -12,7 +12,7 @@
             <td>{{student.id}}</td>
             <td>{{student.name}}</td>
             <td>{{student.email}}</td>
-            <td><button class="bg-light" @click="deleteStudent(student.id)">Obrisi</button></td>
+            <td><button class="bg-light" @click="deleteStudent(student.id)">Obriši studenta</button></td>
           </tr>
         </tbody>
       </table>
