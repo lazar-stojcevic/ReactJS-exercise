@@ -1,21 +1,22 @@
 package com.example.backend.Beans;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.List;
+
 
 @Entity
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.STRING)
-public abstract class User {
+public abstract class User implements UserDetails {
     @Id
     @SequenceGenerator(name = "myGen", sequenceName = "mySeq", initialValue = 1, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myGen")
@@ -23,21 +24,33 @@ public abstract class User {
     private long id;
 
     @Column(length = 50)
-    private String name;
+    private String firstname;
 
     @Column(length = 50)
-    private String lastname;
+    private String lastName;
 
-    @Column(unique = true, nullable = false, updatable = false, length = 100)
-    private String eMail;
+    @Column(unique = true, updatable = false, length = 100)
+    private String email;
 
-    @Column(nullable = false, length = 30)
+    @Column(length = 255, nullable = false)
     private String password;
 
     @Column(length = 50)
     private String phone;
 
+    @Column(name = "last_password_reset_date")
+    private Timestamp lastPasswordResetDate;
+
+    @Column (name = "enabled")
+    private boolean enabled;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address", referencedColumnName = "address_id")
     private Address address;
+
+
 }
