@@ -15,6 +15,8 @@ public class UserRegistration {
 
     private String country;
 
+    private String phone;
+
     private String userType;
 
     public String getEmail() {
@@ -64,4 +66,20 @@ public class UserRegistration {
     public String getUserType() { return userType; }
 
     public void setUserType(String userType) { this.userType = userType; }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 }

@@ -1,10 +1,30 @@
 import axios from "axios";
 
-const LOGIN_URL = 'http://localhost:9000/rest/logIn';
+const LOGIN_URL = 'http://localhost:8080/auth/login';
 
 class LogInService{
+    access_token = null;
+
     login(user){
-        return axios.post(LOGIN_URL, user);
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        };
+        const body = {
+            'username': user.username,
+            'password': user.password
+        };
+        return axios.post(LOGIN_URL, body, {headers}).then((res) => {
+            this.access_token = res.accessToken;
+        });
+    }
+
+    tokenIsPresent() {
+        return this.access_token !== undefined && this.access_token != null;
+    }
+
+    getToken() {
+        return this.access_token;
     }
 }
 

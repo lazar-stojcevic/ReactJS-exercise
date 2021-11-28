@@ -9,6 +9,7 @@ import LogIn from "./components/LogIn";
 import VueRouter from 'vue-router'
 import Vue from "vue";
 import axios from "axios";
+import Registration from "@/components/Registration";
 
 Vue.use(VueRouter)
 const router = new VueRouter({
@@ -16,6 +17,7 @@ const router = new VueRouter({
   base: '/home',
   routes: [
     { path: '/login', component: LogIn },
+    { path: '/registration', component: Registration },
   ]
 });
 

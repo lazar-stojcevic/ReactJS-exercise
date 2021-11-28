@@ -62,7 +62,6 @@ public class AuthenticationController {
     // Endpoint za registraciju novog korisnika
     @PostMapping("/signup")
     public ResponseEntity<User> addUser(@RequestBody UserRegistration userRequest, UriComponentsBuilder ucBuilder) throws Exception {
-
         User existUser = this.customerService.findByEmail(userRequest.getEmail());
 
         if (existUser != null) {
