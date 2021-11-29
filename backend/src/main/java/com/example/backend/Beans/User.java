@@ -42,7 +42,7 @@ public abstract class User implements UserDetails {
     private Timestamp lastPasswordResetDate;
 
     @Column (name = "enabled")
-    private boolean enabled;
+    private boolean enabled = false;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
