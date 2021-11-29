@@ -10,8 +10,8 @@ public class JwtAuthenticationRequest {
         super();
     }
 
-    public JwtAuthenticationRequest(String username, String password) {
-        this.setUsername(username);
+    public JwtAuthenticationRequest(String email, String password) {
+        this.setUsername(email);
         this.setPassword(password);
     }
 

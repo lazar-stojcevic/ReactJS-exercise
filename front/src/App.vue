@@ -27,7 +27,9 @@ export default {
   components: {
   },
   data: function(){
-    return{ tip: 'neulogovani'}
+    return{
+      tip: 'neulogovani',
+    }
   },
   mounted() {
     axios.get('/ulogovaniKorisnik')

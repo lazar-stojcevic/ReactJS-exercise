@@ -2,18 +2,18 @@
   <b-container fluid="sm">
     <b-row class="my-1">
       <b-col sm="2">
-        <label for="input-default">Username:</label>
+        <label>Email:</label>
       </b-col>
       <b-col sm="5">
-        <b-form-input id="input-default" placeholder="Enter your name"  v-model="user.name"></b-form-input>
+        <b-form-input id="input-default" placeholder="Enter your name"  v-model="user.email"></b-form-input>
       </b-col>
     </b-row>
     <b-row class="my-1">
       <b-col sm="2">
-        <label for="input-default">Password:</label>
+        <label>Password:</label>
       </b-col>
       <b-col sm="5">
-        <b-form-input id="input-default" placeholder="Enter your name"  v-model="user.password"></b-form-input>
+        <b-form-input id="input-default" placeholder="Enter your password"  v-model="user.password"></b-form-input>
       </b-col>
     </b-row>
     <b-button type="Log in" variant="primary" v-on:click="login">Submit</b-button>
@@ -28,13 +28,17 @@ export default {
   data: function () {
     return {
       user: {
-        name:'', password:''
+        email:'',
+        password:''
       }
     }
   },
   methods: {
     login : function() {
-      LogInService.login(this.user);
+      LogInService.login(this.user).then(() => {
+        if (LogInService.getToken() !== '')
+          this.$router.push("/registration");
+      });
     }
   }
 }

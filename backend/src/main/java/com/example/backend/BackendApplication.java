@@ -43,7 +43,7 @@ public class BackendApplication implements CommandLineRunner {
 
 
         Customer customer2 = new Customer();
-        customer2.setEmail("stojcevic@naaci.com");
+        customer2.setEmail("stole@naaci.com");
         customer2.setFirstname("Lazar");
         customer2.setLastName("Stojcevic");
         customer2.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");

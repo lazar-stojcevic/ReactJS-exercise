@@ -47,7 +47,7 @@ public class Customer extends User {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return this.getEnabled();
     }
 
 }

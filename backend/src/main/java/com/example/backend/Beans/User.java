@@ -52,5 +52,9 @@ public abstract class User implements UserDetails {
     @JoinColumn(name = "address", referencedColumnName = "address_id")
     private Address address;
 
+    public boolean getEnabled(){
+        return this.enabled;
+    }
+
 
 }

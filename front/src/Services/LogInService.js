@@ -3,7 +3,7 @@ import axios from "axios";
 const LOGIN_URL = 'http://localhost:8080/auth/login';
 
 class LogInService{
-    access_token = null;
+    access_token = '';
 
     login(user){
         const headers = {
@@ -11,12 +11,13 @@ class LogInService{
             'Content-Type': 'application/json'
         };
         const body = {
-            'username': user.username,
+            'email': user.email,
             'password': user.password
         };
         return axios.post(LOGIN_URL, body, {headers}).then((res) => {
-            this.access_token = res.accessToken;
+            this.access_token = res.data.accessToken;
         });
+
     }
 
     tokenIsPresent() {

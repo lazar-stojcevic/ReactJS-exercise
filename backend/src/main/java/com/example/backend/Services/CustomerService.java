@@ -61,7 +61,7 @@ public class CustomerService implements IUserService {
 
         u.setFirstname(userRegistration.getFirstname());
         u.setLastName(userRegistration.getLastname());
-        u.setEnabled(true); //Za sad je true dok se ne doda slanje na mejl
+        u.setEnabled(false); //Za sad je true dok se ne doda slanje na mejl
         u.setEmail(userRegistration.getEmail());
         u.setPhone(userRegistration.getPhone());
         u.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
@@ -78,5 +78,10 @@ public class CustomerService implements IUserService {
         u.setRole(roles);
 
         return this.customerRepository.save(u);
+    }
+
+    public Customer verifyUser(Customer customer){
+        customer.setEnabled(true);
+        return this.customerRepository.save(customer);
     }
 }
