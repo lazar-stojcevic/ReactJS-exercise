@@ -107,7 +107,6 @@ public class AuthenticationController {
         customerService.verifyUser(existUser);
 
         return new ResponseEntity<>("User verified", HttpStatus.CREATED);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     private User tryToRegisterFishingInstructor(UserRegistration userRequest) {
