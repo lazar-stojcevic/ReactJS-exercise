@@ -19,7 +19,10 @@ public class FishingInstructor extends User {
 
     @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Adventure> adventures = new HashSet<Adventure>();
-    //TODO: TIME SPAN KADA JE SLOBODAN MOZE KAO LISTA
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "holiday", referencedColumnName = "holiday_id")
+    private HolidayTimespan holiday;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
