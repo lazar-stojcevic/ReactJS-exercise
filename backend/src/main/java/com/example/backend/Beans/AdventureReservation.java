@@ -6,15 +6,13 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @ToString
 @Table(name = "AdventureReservations")
-public class AdventureReservations {
+public class AdventureReservation {
     @Id
     @SequenceGenerator(name = "myGen_adventureReservation", sequenceName = "mySeq_adventureReservation",
             initialValue = 1, allocationSize = 1)
@@ -35,5 +33,12 @@ public class AdventureReservations {
     @JoinColumn(name = "adventure_id")
     private Adventure adventure;
 
+    @Column(length = 1000)
+    private String report;
+
+    @Column
     private boolean isReserved;
+
+    @Column
+    private boolean isCanceled;
 }

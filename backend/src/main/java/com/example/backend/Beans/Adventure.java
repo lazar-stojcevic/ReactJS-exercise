@@ -52,7 +52,7 @@ public class Adventure {
 
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
-    private Set<AdventureReservations> reservations = new HashSet<AdventureReservations>();
+    private Set<AdventureReservation> reservations = new HashSet<AdventureReservation>();
 
     @OneToOne(cascade = CascadeType.ALL)
     private PriceList priceList;
