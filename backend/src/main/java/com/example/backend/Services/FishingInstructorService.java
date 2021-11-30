@@ -7,7 +7,6 @@ import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Dtos.UserRegistration;
 import com.example.backend.Repository.FishingInstructorRepository;
 import com.example.backend.Services.Interfaces.IFishingInstructorService;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -12,15 +12,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "holiday_timespan")
 public class HolidayTimespan {
     @Id
-    @SequenceGenerator(name = "myGen_holiday", sequenceName = "mySeq_holiday",
+    @SequenceGenerator(name = "myGen_holiday_timespan", sequenceName = "mySeq_holiday_timespan",
             initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myGen_holiday")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myGen_holiday_timespan")
     @Column(name = "holiday_id", unique = true, nullable = false)
     private long id;
-    @Column
-    private LocalDateTime from;
-    @Column
-    private LocalDateTime to;
+
+    private LocalDateTime fromDate;
+
+    private LocalDateTime toDate;
 }
