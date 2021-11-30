@@ -26,6 +26,11 @@ class LogInService{
     getToken() {
         return this.access_token;
     }
+
+    //TODO: TREBA DODATI NA BEKU DA VRACA I USERA
+    getUser(){
+        return this.access_token.user;
+    }
 }
 
 export default new LogInService()
