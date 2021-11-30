@@ -2,6 +2,8 @@ package com.example.backend.Services;
 
 import com.example.backend.Beans.Address;
 import com.example.backend.Beans.FishingInstructor;
+import com.example.backend.Beans.HolidayTimespan;
+import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Dtos.UserRegistration;
 import com.example.backend.Repository.FishingInstructorRepository;
 import com.example.backend.Services.Interfaces.IFishingInstructorService;
@@ -58,6 +60,19 @@ public class FishingInstructorService implements IFishingInstructorService {
 
     public void deleteFishingInstructor(long id){
         fishingInstructorRepository.deleteById(id);
+    }
+
+    public FishingInstructor addHolidayToFishingInstructor(long id, HolidayTimespan holiday){
+        FishingInstructor instructor = findFishingInstructorById(id);
+        instructor.setHoliday(holiday);
+        return fishingInstructorRepository.save(instructor);
+    }
+
+    public void changePasswordToFishingInstructor(PasswordChangeDto passwordChangeDto){
+        FishingInstructor instructor = findFishingInstructorById(passwordChangeDto.getUserId());
+        instructor.setPassword(passwordEncoder.encode(passwordChangeDto.getPassword()));
+        instructor.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
+        fishingInstructorRepository.save(instructor);
     }
 
     //VALIDACIJA

@@ -52,5 +52,7 @@ public abstract class User implements UserDetails {
     @JoinColumn(name = "address", referencedColumnName = "address_id")
     private Address address;
 
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "holiday", referencedColumnName = "holiday_id")
+    private HolidayTimespan holiday;
 }

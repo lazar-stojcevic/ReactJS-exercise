@@ -1,6 +1,8 @@
 package com.example.backend.Controllers;
 
 import com.example.backend.Beans.FishingInstructor;
+import com.example.backend.Beans.HolidayTimespan;
+import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Services.FishingInstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,19 @@ public class FishingInstructorController {
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteFishingInstructor(@PathVariable long id){
         fishingInstructorService.deleteFishingInstructor(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/holiday/{id}", consumes = "application/json")
+    public ResponseEntity<FishingInstructor> addHolidayToFishingInstructor(@PathVariable long id,
+                                                                           @RequestBody HolidayTimespan holiday){
+        return new ResponseEntity<>(fishingInstructorService.addHolidayToFishingInstructor(id, holiday),
+                HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/password", consumes = "application/json")
+    public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDto passwordChangeDto){
+        fishingInstructorService.changePasswordToFishingInstructor(passwordChangeDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
