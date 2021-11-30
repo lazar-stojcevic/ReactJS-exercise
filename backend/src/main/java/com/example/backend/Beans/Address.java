@@ -11,7 +11,7 @@ import javax.persistence.*;
 @ToString
 public class Address {
     @Id
-    @SequenceGenerator(name = "generator", sequenceName = "sequenceAddress")
+    @SequenceGenerator(name = "generator", sequenceName = "sequenceAddress", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
     @Column(name="address_id")
     private long id;

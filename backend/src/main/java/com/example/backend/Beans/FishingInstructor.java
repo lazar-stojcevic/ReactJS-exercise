@@ -5,9 +5,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -15,6 +16,14 @@ import java.util.Collection;
 @Setter
 @DiscriminatorValue("FI")
 public class FishingInstructor extends User {
+
+    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Adventure> adventures = new HashSet<Adventure>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "holiday", referencedColumnName = "holiday_id")
+    private HolidayTimespan holiday;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
