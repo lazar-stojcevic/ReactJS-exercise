@@ -68,6 +68,10 @@ public class FishingInstructorService implements IFishingInstructorService {
         return fishingInstructorRepository.save(instructor);
     }
 
+    public FishingInstructor updateFishingInstructor(FishingInstructor fishingInstructor){
+        return fishingInstructorRepository.save(fishingInstructor);
+    }
+
     public void changePasswordToFishingInstructor(PasswordChangeDto passwordChangeDto){
         FishingInstructor instructor = findFishingInstructorById(passwordChangeDto.getUserId());
         instructor.setPassword(passwordEncoder.encode(passwordChangeDto.getPassword()));

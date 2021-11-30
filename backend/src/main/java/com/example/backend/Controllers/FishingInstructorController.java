@@ -54,9 +54,14 @@ public class FishingInstructorController {
                 HttpStatus.CREATED);
     }
 
-    @PostMapping(path = "/password", consumes = "application/json")
+    @PutMapping(path = "/password", consumes = "application/json")
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDto passwordChangeDto){
         fishingInstructorService.changePasswordToFishingInstructor(passwordChangeDto);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(consumes = "application/json")
+    public ResponseEntity<FishingInstructor> updateFishingInstructor(@RequestBody FishingInstructor instructor){
+        return new ResponseEntity<>(fishingInstructorService.updateFishingInstructor(instructor), HttpStatus.CREATED);
     }
 }
