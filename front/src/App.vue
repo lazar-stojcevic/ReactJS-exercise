@@ -1,48 +1,45 @@
 <template>
   <div id="app">
-    <my-navbar></my-navbar>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd; padding: 5px">
+      <div class="container-fluid">
+        <router-link class="btn btn-secondary" to="/">Home</router-link>
+      </div>
+      <span v-bind:hidden="userRole === 'neulogovan'"><button class="btn btn-secondary" style="margin: 5px" @click="logout()">LogOut</button></span>
+      <span v-bind:hidden="userRole !== 'neulogovan'"><router-link class="btn btn-secondary" to="/login" style="margin: 5px">LogIn</router-link></span>
+      <router-link class="btn btn-secondary" to="/registration" style="margin: 5px">Registration</router-link>
+    </nav>
+
+    <!--RUTER-->
     <router-view/>
   </div>
 </template>
 
 <script>
-import LogIn from "./components/LogIn";
-import VueRouter from 'vue-router'
-import Vue from "vue";
-import axios from "axios";
-import Registration from "@/components/Registration";
 
-Vue.use(VueRouter)
-const router = new VueRouter({
-  mode: 'hash',
-  base: '/home',
-  routes: [
-    { path: '/login', component: LogIn },
-    { path: '/registration', component: Registration },
-  ]
-});
+import LogInService from "@/Services/LogInService";
 
 export default {
-  router: router,
-  name: 'App',
-  components: {
-  },
-  data: function(){
-    return{
-      tip: 'neulogovani',
+  data() {
+    return {
+      userRole : 'neulogovan',
+      isLogged: false
     }
   },
-  mounted() {
-    axios.get('/ulogovaniKorisnik')
-        .then(response => {
-          if (response.data == null) {
-            this.tip = "neulogovani"
-          }
-          else {
-            this.tip = response.data
-          }
-          window.location.href = "#/home";
-        })
+  methods: {
+    mounted(){
+      this.userRole = LogInService.userRole;
+    },
+    logout(){
+      LogInService.logout();
+    },
+    setUserRole(userRole){
+      this.userRole = userRole;
+      if(this.userRole === '')
+        this.isLogged = false;
+      else
+        this.isLogged = true;
+      alert(this.userRole);
+    }
   }
 }
 </script>

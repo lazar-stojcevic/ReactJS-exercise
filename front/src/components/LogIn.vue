@@ -36,8 +36,10 @@ export default {
   methods: {
     login : function() {
       LogInService.login(this.user).then(() => {
-        if (LogInService.getToken() !== '')
+        if (LogInService.getToken() === '' || LogInService.getToken() === null || LogInService.getToken() === undefined)
           this.$router.push("/registration");
+        else
+          this.$router.push("/");
       });
     }
   }

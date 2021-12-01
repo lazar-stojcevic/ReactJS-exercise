@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -64,7 +65,7 @@ public class CustomerService implements IUserService {
         u.setEnabled(false); //Za sad je true dok se ne doda slanje na mejl
         u.setEmail(userRegistration.getEmail());
         u.setPhone(userRegistration.getPhone());
-        u.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
+        u.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         Address address = new Address();
             address.setCity(userRegistration.getCity());
             address.setStreet(userRegistration.getStreet());

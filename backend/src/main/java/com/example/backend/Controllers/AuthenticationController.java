@@ -26,6 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Objects;
 
 @RestController
@@ -46,7 +47,11 @@ public class AuthenticationController {
 
     @Autowired
     private JavaMailSender javaMailSender;
+
+    @Autowired
     private FishingInstructorService fishingInstructorService;
+
+    //@Autowired
 
     // Prvi endpoint koji pogadja korisnik kada se loguje.
     // Tada zna samo svoje korisnicko ime i lozinku i to prosledjuje na backend.
@@ -65,11 +70,12 @@ public class AuthenticationController {
 
         // Kreiraj token za tog korisnika
         User user = (User) authentication.getPrincipal();
+        //DODATI USER ROLE I ID
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
 
         // Vrati token kao odgovor na uspesnu autentifikaciju
-        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn, user.getId(), user.getRole().getName()));
     }
 
     // Endpoint za registraciju novog korisnika

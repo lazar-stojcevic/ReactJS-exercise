@@ -1,5 +1,6 @@
 package com.example.backend.Beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class FishingInstructor extends User {
     @JoinColumn(name = "holiday", referencedColumnName = "holiday_id")
     private HolidayTimespan holiday;
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -31,26 +33,29 @@ public class FishingInstructor extends User {
 
     @Override
     public String getUsername() {
-        return null;
+        return this.getEmail();
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return this.getEnabled();
     }
 }

@@ -1,24 +1,31 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd; padding: 5px">
-    <div class="container-fluid">
-      <router-link class="btn btn-secondary" to="/">Home</router-link>
-    </div>
-    <router-link class="btn btn-secondary" to="/login" style="margin: 5px">LogIn</router-link>
-    <router-link class="btn btn-secondary" to="/registration" style="margin: 5px">Registration</router-link>
-  </nav>
+  <div></div>
 </template>
 
 <script>
-
+import LogInService from "@/Services/LogInService";
 export default {
-  name: "Navbar",
-  data: function () {
+  data() {
     return {
-
+      userRole : 'neulogovan',
+      isLogged: false
     }
   },
   methods: {
-
+    mounted(){
+      this.userRole = LogInService.userRole;
+    },
+    logout(){
+      LogInService.logout();
+    },
+    setUserRole(userRole){
+      this.userRole = userRole;
+      if(this.userRole === '')
+        this.isLogged = false;
+      else
+        this.isLogged = true;
+      alert(this.userRole);
+    }
   }
 }
 </script>

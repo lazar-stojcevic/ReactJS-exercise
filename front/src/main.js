@@ -1,14 +1,23 @@
 import Vue from 'vue'
 import App from './App.vue'
+import VueRouter from 'vue-router'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import BootstrapVue from 'bootstrap-vue';
-import Navbar from "@/components/Navbar";
+import routes from "@/router/routes";
 
-Vue.component('my-navbar', Navbar)
+Vue.use(VueRouter);
+const router = new VueRouter({routes})
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+  router,
+  el: '#app',
+  data() {
+    return {
+
+    }
+  },
+  render: h => h(App)
+}).$mount("#app");

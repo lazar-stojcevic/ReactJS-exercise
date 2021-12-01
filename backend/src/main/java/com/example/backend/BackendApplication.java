@@ -1,9 +1,6 @@
 package com.example.backend;
 
-import com.example.backend.Beans.Address;
-import com.example.backend.Beans.Customer;
-import com.example.backend.Beans.FishingInstructor;
-import com.example.backend.Beans.Role;
+import com.example.backend.Beans.*;
 import com.example.backend.Repository.RoleRepository;
 import com.example.backend.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +8,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @SpringBootApplication
 public class BackendApplication implements CommandLineRunner {
@@ -35,6 +34,11 @@ public class BackendApplication implements CommandLineRunner {
         Role role3 = new Role();
         role3.setName("FISHING_INSTRUCTOR_ROLE");
 
+        //ROLE REPO
+        roleRepository.save(role1);
+        roleRepository.save(role2);
+        roleRepository.save(role3);
+
         Customer customer1 = new Customer();
         customer1.setEmail("joxy99@gmail.com");
         customer1.setFirstname("Jovana");
@@ -42,7 +46,7 @@ public class BackendApplication implements CommandLineRunner {
         customer1.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
         customer1.setEnabled(true);
         customer1.setPhone("555-333");
-        customer1.setLastPasswordResetDate(new Timestamp(2015, 13, 1, 1, 1, 1, 1));
+        customer1.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         customer1.setRole(role1);
 
 
@@ -53,18 +57,18 @@ public class BackendApplication implements CommandLineRunner {
         customer2.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
         customer2.setEnabled(true);
         customer2.setPhone("555-333");
-        customer2.setLastPasswordResetDate(new Timestamp(2010, 13, 1, 1, 1, 1, 1));
+        customer2.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         customer2.setRole(role2);
 
-        FishingInstructor fishingInstructor = new FishingInstructor();
-        fishingInstructor.setEmail("lupulov@org.com");
+        User fishingInstructor = new FishingInstructor();
+        fishingInstructor.setEmail("asd@gmail.com");
         fishingInstructor.setFirstname("Bojan");
         fishingInstructor.setLastName("Lupulov");
         fishingInstructor.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
         fishingInstructor.setEnabled(true);
         fishingInstructor.setPhone("566-566");
-        fishingInstructor.setLastPasswordResetDate(new Timestamp(2017, 8, 1, 1, 1, 1, 1));
-        fishingInstructor.setRole(role3);
+        fishingInstructor.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
+        fishingInstructor.setRole(roleRepository.findByName("FISHING_INSTRUCTOR_ROLE").get(0));
 
         Address address = new Address();
         address.setStreet("Dostojevskog");
@@ -77,14 +81,9 @@ public class BackendApplication implements CommandLineRunner {
         fishingInstructor1.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
         fishingInstructor1.setEnabled(false);
         fishingInstructor1.setPhone("566-566");
-        fishingInstructor1.setLastPasswordResetDate(new Timestamp(2017, 8, 1, 1, 1, 1, 1));
-        fishingInstructor1.setRole(role3);
+        fishingInstructor1.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
+        fishingInstructor1.setRole(roleRepository.findByName("FISHING_INSTRUCTOR_ROLE").get(0));
         fishingInstructor1.setAddress(address);
-
-        //ROLE REPO
-        roleRepository.save(role1);
-        roleRepository.save(role2);
-        roleRepository.save(role3);
 
         //USER REPO
         repository.save(customer1);
