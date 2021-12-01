@@ -1,5 +1,4 @@
 import axios from "axios";
-import Navbar from "@/components/Navbar";
 
 const LOGIN_URL = 'http://localhost:8080/auth/login';
 
@@ -25,7 +24,6 @@ class LogInService{
             this.userRole = res.data.role;
             this.accessToken = res.data.accessToken;
             this.expiresIn = res.data.expiresIn;
-            Navbar.methods.setUserRole(this.userRole);
         });
     }
 
@@ -34,19 +32,10 @@ class LogInService{
         this.userRole = '';
         this.accessToken = '';
         this.expiresIn = '';
-        //za nav bar isto
-        Navbar.methods.setUserRole('');
-        this.$router.push("/login");
     }
 
-    //TODO: IZMENITI LOGIKU
     tokenIsPresent() {
         return this.accessToken !== undefined && this.accessToken != null;
-    }
-
-    //TODO: IZMENITI LOGIKU
-    getToken() {
-        return this.accessToken;
     }
 }
 

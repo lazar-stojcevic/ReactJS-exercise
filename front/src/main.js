@@ -4,6 +4,9 @@ import VueRouter from 'vue-router'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import BootstrapVue from 'bootstrap-vue';
 import routes from "@/router/routes";
+import Navbar from "@/components/Navbar";
+
+Vue.component('my-navbar', Navbar)
 
 Vue.use(VueRouter);
 const router = new VueRouter({routes})

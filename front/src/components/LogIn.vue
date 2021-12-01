@@ -36,7 +36,7 @@ export default {
   methods: {
     login : function() {
       LogInService.login(this.user).then(() => {
-        if (LogInService.getToken() === '' || LogInService.getToken() === null || LogInService.getToken() === undefined)
+        if (LogInService.userRole === '')
           this.$router.push("/registration");
         else
           this.$router.push("/");
