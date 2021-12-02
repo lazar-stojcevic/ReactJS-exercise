@@ -7,9 +7,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor
@@ -28,7 +26,9 @@ public class FishingInstructor extends User {
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        ArrayList<Role> retVal = new ArrayList<Role>();
+        retVal.add(this.getRole());
+        return retVal;
     }
 
     @Override

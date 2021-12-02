@@ -23,12 +23,16 @@ public class FishingInstructorController {
         this.fishingInstructorService = fishingInstructorService;
     }
 
-    //TODO: DODATI AUTORIZACIJU
     @GetMapping
-    public Collection<FishingInstructor> getAll(){
-        return fishingInstructorService.getAllFishingInstructors();
+    public ResponseEntity<Collection<FishingInstructor>> getAll(){
+        return new ResponseEntity<>(fishingInstructorService.getAllFishingInstructors(), HttpStatus.OK);
     }
 
+    @GetMapping (path = "/{id}")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    public ResponseEntity<FishingInstructor> getInstructorById(@PathVariable long id){
+        return new ResponseEntity<>(fishingInstructorService.findFishingInstructorById(id), HttpStatus.OK);
+    }
     @PutMapping(path = "/enable/{id}")
     public ResponseEntity<?> enableFishingInstructor(@PathVariable long id){
         FishingInstructor instructor = fishingInstructorService.enableFishingInstructor(id);

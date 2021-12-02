@@ -26,13 +26,13 @@ public class BackendApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Role role1 = new Role();
-        role1.setName("CUSTOMER_ROLE");
+        role1.setName("ROLE_CUSTOMER");
 
         Role role2 = new Role();
-        role2.setName("ADMIN_ROLE");
+        role2.setName("ROLE_ADMIN");
 
         Role role3 = new Role();
-        role3.setName("FISHING_INSTRUCTOR_ROLE");
+        role3.setName("ROLE_INSTRUCTOR");
 
         //ROLE REPO
         roleRepository.save(role1);
@@ -68,7 +68,7 @@ public class BackendApplication implements CommandLineRunner {
         fishingInstructor.setEnabled(true);
         fishingInstructor.setPhone("566-566");
         fishingInstructor.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
-        fishingInstructor.setRole(roleRepository.findByName("FISHING_INSTRUCTOR_ROLE").get(0));
+        fishingInstructor.setRole(roleRepository.findByName("ROLE_INSTRUCTOR").get(0));
 
         Address address = new Address();
         address.setStreet("Dostojevskog");
@@ -82,7 +82,7 @@ public class BackendApplication implements CommandLineRunner {
         fishingInstructor1.setEnabled(false);
         fishingInstructor1.setPhone("566-566");
         fishingInstructor1.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
-        fishingInstructor1.setRole(roleRepository.findByName("FISHING_INSTRUCTOR_ROLE").get(0));
+        fishingInstructor1.setRole(roleRepository.findByName("ROLE_INSTRUCTOR").get(0));
         fishingInstructor1.setAddress(address);
 
         //USER REPO

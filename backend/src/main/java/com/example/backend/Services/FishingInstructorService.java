@@ -86,7 +86,7 @@ public class FishingInstructorService implements IFishingInstructorService {
         instructor.setFirstname(user.getFirstname());
         instructor.setLastName(user.getLastname());
         instructor.setPhone(user.getPhone());
-        instructor.setRole(roleService.findByName("FISHING_INSTRUCTOR_ROLE"));
+        instructor.setRole(roleService.findByName("ROLE_INSTRUCTOR"));
         instructor.setPassword(passwordEncoder.encode(user.getPassword()));
         instructor.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         return instructor;

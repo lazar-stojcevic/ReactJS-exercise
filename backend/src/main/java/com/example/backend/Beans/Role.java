@@ -22,7 +22,7 @@ public class Role implements GrantedAuthority {
     @JsonIgnore
     @Override
     public String getAuthority() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {

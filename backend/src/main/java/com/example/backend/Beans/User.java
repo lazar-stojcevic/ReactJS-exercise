@@ -56,5 +56,7 @@ public abstract class User implements UserDetails {
         return this.enabled;
     }
 
-
+    public Role getRole() {
+        return this.role;
+    }
 }
