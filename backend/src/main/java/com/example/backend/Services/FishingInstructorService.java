@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -76,6 +77,13 @@ public class FishingInstructorService implements IFishingInstructorService {
         instructor.setPassword(passwordEncoder.encode(passwordChangeDto.getPassword()));
         instructor.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         fishingInstructorRepository.save(instructor);
+    }
+
+    public boolean isPasswordMatching(long id, String password) {
+        FishingInstructor instructor = findFishingInstructorById(id);
+        String pass = passwordEncoder.encode(password);
+        String pass1 = instructor.getPassword();
+        return Objects.equals(pass1, pass);
     }
 
     //VALIDACIJA

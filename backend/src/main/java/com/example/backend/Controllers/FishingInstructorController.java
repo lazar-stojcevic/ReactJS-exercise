@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping(path = "fishingInstructor")
 public class FishingInstructorController {
@@ -53,6 +54,7 @@ public class FishingInstructorController {
     }
 
     @PutMapping(path = "/holiday/{id}", consumes = "application/json")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<FishingInstructor> addHolidayToFishingInstructor(@PathVariable long id,
                                                                            @RequestBody HolidayTimespan holiday){
         return new ResponseEntity<>(fishingInstructorService.addHolidayToFishingInstructor(id, holiday),
@@ -60,13 +62,24 @@ public class FishingInstructorController {
     }
 
     @PutMapping(path = "/password", consumes = "application/json")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDto passwordChangeDto){
         fishingInstructorService.changePasswordToFishingInstructor(passwordChangeDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(consumes = "application/json")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<FishingInstructor> updateFishingInstructor(@RequestBody FishingInstructor instructor){
         return new ResponseEntity<>(fishingInstructorService.updateFishingInstructor(instructor), HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/passwordMatching", consumes = "application/json")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    public ResponseEntity<String> isPasswordMatching(@RequestBody PasswordChangeDto passwordChangeDto){
+        if(this.fishingInstructorService.isPasswordMatching(passwordChangeDto.getUserId(),
+                passwordChangeDto.getPassword()))
+            return new ResponseEntity<>("OK", HttpStatus.OK);
+        else return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 }

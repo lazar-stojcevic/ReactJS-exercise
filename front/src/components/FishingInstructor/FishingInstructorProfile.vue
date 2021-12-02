@@ -8,25 +8,44 @@
             <tbody>
             <tr>
               <td>FULL NAME</td>
-              <td></td>
+              <td>{{user.firstname}} {{user.lastName}}</td>
             </tr>
             <tr>
               <td>FULL ADDRESS</td>
-              <td></td>
+              <td v-if="user.address !== null">{{user.address.street}}, {{user.address.city}}, {{user.address.country}}</td>
+              <td v-else>ADDRESS IS NOT SET</td>
             </tr>
             <tr>
               <td>EMAIL</td>
-              <td></td>
+              <td>{{user.email}}</td>
             </tr>
             <tr>
               <td>PHONE</td>
-              <td></td>
+              <td>{{user.phone}}</td>
             </tr>
             </tbody>
           </table>
-          <div class="btn-group-sm">
-            <button class="btn-info">CHANGE YOUR INFO</button>
-            <button class="btn-info">CHANGE PASSWORD</button>
+          <div class="btn-group-sm" style="margin: 5px">
+            <button  @click="changeModeToInfo()" v-if="mode === 'neutral'" class="btn-info">CHANGE YOUR INFO</button>
+            <button @click="changeModeToPassword()" v-if="mode === 'neutral'" class="btn-info">CHANGE PASSWORD</button>
+          </div>
+          <div v-if="mode === 'changePassword'" class="container">
+            <form @submit.prevent="changePassword">
+              <div class="input-group mb-3">
+                <span class="input-group-text">NEW PASSWORD</span>
+                <input type="password" class="form-control" v-model="newPassword">
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text">CONFIRM PASSWORD</span>
+                <input type="password" class="form-control" v-model="confirmPassword">
+              </div>
+              <div class="input-group mb-3">
+                <div class="btn-group-sm">
+                  <button type="submit" class="btn-info">CONFIRM</button>
+                  <button @click="changeModeToNeutral()" type="reset" class="btn-danger">CLOSE</button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
         <div class="col">ODMOR</div>
@@ -36,9 +55,6 @@
 </template>
 
 <script>
-//import LogInService from "@/Services/LogInService";
-//import axios from "axios";
-
 import FishingInstructorService from "@/Services/FishingInstructorService";
 import LogInService from "@/Services/LogInService";
 
@@ -46,18 +62,46 @@ export default {
   data(){
     return{
       user: '',
-      //changePassword, changeInfo
-      mode: 'neutral'
+      mode: 'neutral', //changePassword, changeInfo
+      newPassword: '',
+      confirmPassword: ''
     }
   },
   mounted() {
+    if(LogInService.userRole === '')
+      this.$router.push('/login');
     FishingInstructorService.getFishingInstructorById(LogInService.userId).then(res => {
       this.user = res.data;
     });
   },
   methods: {
-
+    changeModeToNeutral(){
+      if(this.mode === 'changePassword'){
+        this.newPassword = '';
+        this.confirmPassword = '';
+      }
+      this.mode = 'neutral';
+    },
+    changeModeToInfo(){
+      this.mode = 'changeInfo';
+    },
+    changeModeToPassword(){
+      this.mode = 'changePassword'
+    },
+    changePassword(){
+      if(this.newPassword !== this.confirmPassword && this.newPassword.trim() !== ''){
+        alert("NEW PASSWORD IS NOT MATCHING WITH CONFIRM PASSWORD");
+        return;
+      }
+      FishingInstructorService.changePassword(this.confirmPassword, this.user.id)
+          .then(() => {
+            LogInService.logout();
+            this.$router.push('/login');
+          })
+          .catch(err => { alert("SERVER ERROR: " + err)});
+    }
   }
+
 }
 </script>
 

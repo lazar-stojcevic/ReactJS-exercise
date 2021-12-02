@@ -24,7 +24,6 @@ class LogInService{
             this.userRole = res.data.role;
             this.accessToken = res.data.accessToken;
             this.expiresIn = res.data.expiresIn;
-            alert(this.userRole);
         });
     }
 
