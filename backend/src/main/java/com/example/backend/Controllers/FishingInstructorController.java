@@ -2,6 +2,8 @@ package com.example.backend.Controllers;
 
 import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Beans.HolidayTimespan;
+import com.example.backend.Dtos.FishingInstructorChangeDto;
+import com.example.backend.Dtos.HolidayTimespanDto;
 import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Services.FishingInstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(allowedHeaders = "*")
 @RestController
 @RequestMapping(path = "fishingInstructor")
 public class FishingInstructorController {
@@ -56,7 +58,7 @@ public class FishingInstructorController {
     @PutMapping(path = "/holiday/{id}", consumes = "application/json")
     @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<FishingInstructor> addHolidayToFishingInstructor(@PathVariable long id,
-                                                                           @RequestBody HolidayTimespan holiday){
+                                                                           @RequestBody HolidayTimespanDto holiday){
         return new ResponseEntity<>(fishingInstructorService.addHolidayToFishingInstructor(id, holiday),
                 HttpStatus.CREATED);
     }
@@ -70,8 +72,10 @@ public class FishingInstructorController {
 
     @PutMapping(consumes = "application/json")
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    public ResponseEntity<FishingInstructor> updateFishingInstructor(@RequestBody FishingInstructor instructor){
-        return new ResponseEntity<>(fishingInstructorService.updateFishingInstructor(instructor), HttpStatus.CREATED);
+    public ResponseEntity<FishingInstructor> updateFishingInstructor(
+            @RequestBody FishingInstructorChangeDto fishingInstructorChangeDto){
+        return new ResponseEntity<>(fishingInstructorService.updateFishingInstructor(fishingInstructorChangeDto),
+                HttpStatus.CREATED);
     }
 
     @PostMapping(path = "/passwordMatching", consumes = "application/json")

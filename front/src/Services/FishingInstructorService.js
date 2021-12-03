@@ -24,5 +24,35 @@ class FishingInstructorService{
         data.userId = userId;
         return axios.put(FISHING_INSTRUCTOR_URL + '/password', JSON.stringify(data), {headers});
     }
+
+    changeFishingInstructor(instructor){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.id = instructor.id;
+        data.firstname = instructor.firstname;
+        data.lastName = instructor.lastName;
+        data.phone = instructor.phone;
+        data.street = instructor.address.street;
+        data.city = instructor.address.city;
+        data.country = instructor.address.country;
+        return axios.put(FISHING_INSTRUCTOR_URL, data, {headers});
+    }
+
+    addHoliday(fromDate, toDate, userId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.fromDate = fromDate;
+        data.toDate = toDate;
+        return axios.put(FISHING_INSTRUCTOR_URL + '/holiday/' + userId, JSON.stringify(data),
+            {headers} );
+    }
 }
 export default new FishingInstructorService()

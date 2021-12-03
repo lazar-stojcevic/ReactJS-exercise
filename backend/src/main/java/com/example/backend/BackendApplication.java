@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @SpringBootApplication
@@ -59,7 +60,7 @@ public class BackendApplication implements CommandLineRunner {
         customer2.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         customer2.setRole(role2);
 
-        User fishingInstructor = new FishingInstructor();
+        FishingInstructor fishingInstructor = new FishingInstructor();
         fishingInstructor.setEmail("asd@gmail.com");
         fishingInstructor.setFirstname("Bojan");
         fishingInstructor.setLastName("Lupulov");
@@ -68,6 +69,15 @@ public class BackendApplication implements CommandLineRunner {
         fishingInstructor.setPhone("566-566");
         fishingInstructor.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         fishingInstructor.setRole(roleRepository.findByName("ROLE_INSTRUCTOR").get(0));
+        Address address1 = new Address();
+        address1.setStreet("Jaksica");
+        address1.setCity("Jarkovac");
+        address1.setCountry("Srbija");
+        fishingInstructor.setAddress(address1);
+        HolidayTimespan holidayTimespan = new HolidayTimespan();
+        holidayTimespan.setFromDate(LocalDate.of(2021, 12, 25));
+        holidayTimespan.setToDate(LocalDate.of(2022, 1, 10));
+        fishingInstructor.setHoliday(holidayTimespan);
 
         Address address = new Address();
         address.setStreet("Dostojevskog");

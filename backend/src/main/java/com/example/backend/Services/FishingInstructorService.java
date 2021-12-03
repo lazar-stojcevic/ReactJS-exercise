@@ -3,6 +3,8 @@ package com.example.backend.Services;
 import com.example.backend.Beans.Address;
 import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Beans.HolidayTimespan;
+import com.example.backend.Dtos.FishingInstructorChangeDto;
+import com.example.backend.Dtos.HolidayTimespanDto;
 import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Dtos.UserRegistration;
 import com.example.backend.Repository.FishingInstructorRepository;
@@ -12,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
@@ -28,6 +31,7 @@ public class FishingInstructorService implements IFishingInstructorService {
 
     @Autowired
     private RoleService roleService;
+
 
     public FishingInstructorService(FishingInstructorRepository fishingInstructorRepository) {
         this.fishingInstructorRepository = fishingInstructorRepository;
@@ -62,14 +66,22 @@ public class FishingInstructorService implements IFishingInstructorService {
         fishingInstructorRepository.deleteById(id);
     }
 
-    public FishingInstructor addHolidayToFishingInstructor(long id, HolidayTimespan holiday){
+    public FishingInstructor addHolidayToFishingInstructor(long id, HolidayTimespanDto holidayDto){
         FishingInstructor instructor = findFishingInstructorById(id);
-        instructor.setHoliday(holiday);
+        instructor.getHoliday().setFromDate(LocalDate.parse(holidayDto.getFromDate()));
+        instructor.getHoliday().setToDate(LocalDate.parse(holidayDto.getToDate()));
         return fishingInstructorRepository.save(instructor);
     }
 
-    public FishingInstructor updateFishingInstructor(FishingInstructor fishingInstructor){
-        return fishingInstructorRepository.save(fishingInstructor);
+    public FishingInstructor updateFishingInstructor(FishingInstructorChangeDto changeDto){
+        FishingInstructor instructor = findFishingInstructorById(changeDto.getId());
+        instructor.setFirstname(changeDto.getFirstname());
+        instructor.setLastName(changeDto.getLastName());
+        instructor.setPhone(changeDto.getPhone());
+        instructor.getAddress().setStreet(changeDto.getStreet());
+        instructor.getAddress().setCity(changeDto.getCity());
+        instructor.getAddress().setCountry(changeDto.getCountry());
+        return fishingInstructorRepository.save(instructor);
     }
 
     public void changePasswordToFishingInstructor(PasswordChangeDto passwordChangeDto){
@@ -86,7 +98,6 @@ public class FishingInstructorService implements IFishingInstructorService {
         return Objects.equals(pass1, pass);
     }
 
-    //VALIDACIJA
     private FishingInstructor createFishingInstructor(UserRegistration user) {
         FishingInstructor instructor =  new FishingInstructor();
         instructor.setAddress(createAddress(user));
