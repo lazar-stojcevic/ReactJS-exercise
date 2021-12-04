@@ -1,6 +1,7 @@
 package com.example.backend;
 
 import com.example.backend.Beans.*;
+import com.example.backend.Repository.AdventureRepository;
 import com.example.backend.Repository.RoleRepository;
 import com.example.backend.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class BackendApplication implements CommandLineRunner {
     private UserRepository repository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private AdventureRepository adventureRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -99,6 +102,40 @@ public class BackendApplication implements CommandLineRunner {
         repository.save(customer2);
         repository.save(fishingInstructor);
         repository.save(fishingInstructor1);
+
+        //ADVENTURE
+        Adventure adventure = new Adventure();
+        Address adventureAddress = new Address();
+        adventureAddress.setStreet("Neka ulica 5");
+        adventureAddress.setCity("Neki grad");
+        adventureAddress.setCountry("Neka drzava");
+        adventure.setAddress(adventureAddress);
+        adventure.setName("Izlet na jezeru");
+        adventure.setInstructor((FishingInstructor) repository.findByEmail("asd@gmail.com"));
+        adventure.setMaxPersons(10);
+        adventure.setDescription("Poseta rezervatu prirode i etno selima u blizini");
+        adventure.setCancelingTerms("10% uplate zadrzava instruktor");
+        adventure.setInstructorBiography("Diplomirani biolog i veliki ljubitelj prirode");
+        adventure.setConductRules("Strogo je zabranjeno bacanje djubreta van kanti za smece");
+        adventure.setEquipment("Dvogledi i durbini");
+
+        Adventure adventure1 = new Adventure();
+        Address adventureAddress1 = new Address();
+        adventureAddress1.setStreet("Svetosavska 5");
+        adventureAddress1.setCity("Jarkovac");
+        adventureAddress1.setCountry("Srbija");
+        adventure1.setAddress(adventureAddress1);
+        adventure1.setName("Pecanje na kanalu DTD");
+        adventure1.setInstructor((FishingInstructor) repository.findByEmail("asd@gmail.com"));
+        adventure1.setMaxPersons(4);
+        adventure1.setDescription("Izlet pokraj prelepog kanala Dunav-Tisa-Dunav, uz sve cari pecanja i uzivanja u prirodi i vodi");
+        adventure1.setCancelingTerms("15% uplate zadrzava instruktor");
+        adventure1.setInstructorBiography("Programer u pokusaju :D");
+        adventure1.setConductRules("Strogo je zabranjeno bacanje djubreta van kanti za smece, kao i paljenje vatre u prirodi");
+        adventure1.setEquipment("Teleskop i blinker");
+
+        adventureRepository.save(adventure);
+        adventureRepository.save(adventure1);
     }
 
 }
