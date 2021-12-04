@@ -5,10 +5,10 @@ const LOGIN_URL = 'http://localhost:8080/auth/login';
 //AKO NE PRORADI BRISANJE U LOCALSTORAGE ONDA CE SE CUVATI U POLJIMA DOLE
 class LogInService{
     user = '';
-    userId = '';
-    userRole = '';
-    accessToken = '';
-    expiresIn = '';
+    userId = localStorage.getItem('userId');
+    userRole = localStorage.getItem('userRole');
+    accessToken = localStorage.getItem('accessToken');
+    expiresIn = localStorage.getItem('expiresIn');
 
     login(user){
         const headers = {
@@ -24,7 +24,15 @@ class LogInService{
             this.userRole = res.data.role;
             this.accessToken = res.data.accessToken;
             this.expiresIn = res.data.expiresIn;
+            localStorage.setItem("userId", res.data.id)
+            localStorage.setItem("userRole", res.data.role)
+            localStorage.setItem("accessToken", res.data.accessToken)
+            localStorage.setItem("expiresIn", res.data.expiresIn)
         });
+    }
+
+    getRole(){
+        return localStorage.getItem("userRole")
     }
 
     logout(){
@@ -32,6 +40,10 @@ class LogInService{
         this.userRole = '';
         this.accessToken = '';
         this.expiresIn = '';
+        localStorage.setItem("userId", '.')
+        localStorage.setItem("userRole", '.')
+        localStorage.setItem("accessToken", '.')
+        localStorage.setItem("expiresIn", '.')
     }
 
     tokenIsPresent() {

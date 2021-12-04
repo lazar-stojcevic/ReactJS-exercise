@@ -2,7 +2,10 @@ package com.example.backend.Services;
 
 import com.example.backend.Beans.Address;
 import com.example.backend.Beans.Customer;
+import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Beans.Role;
+import com.example.backend.Dtos.CustomerChangeDto;
+import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Dtos.UserRegistration;
 import com.example.backend.Repository.AddressRepository;
 import com.example.backend.Repository.CustomerRepository;
@@ -13,7 +16,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class CustomerService implements IUserService {
@@ -49,15 +55,20 @@ public class CustomerService implements IUserService {
         return customerRepository.findAll();
     }
 
+    public Customer findCustomerById(long id){
+        Optional<Customer> instructor = customerRepository.findById(id);
+        return instructor.orElse(null);
+    }
+
+    public Collection<Customer> getAllCustomers(){
+        return customerRepository.findAll();
+    }
+
     @Override
     public Customer save(UserRegistration userRegistration) {
         Customer u = new Customer();
 
         u.setEmail(userRegistration.getEmail());
-
-        // pre nego sto postavimo lozinku u atribut hesiramo je kako bi se u bazi nalazila hesirana lozinka
-        // treba voditi racuna da se koristi isi password encoder bean koji je postavljen u AUthenticationManager-u kako bi koristili isti algoritam
-        //System.out.println(userRegistration);
         u.setPassword(passwordEncoder.encode(userRegistration.getPassword()));
 
         u.setFirstname(userRegistration.getFirstname());
@@ -81,8 +92,37 @@ public class CustomerService implements IUserService {
         return this.customerRepository.save(u);
     }
 
-    public Customer verifyUser(Customer customer){
+    public void verifyUser(Customer customer){
         customer.setEnabled(true);
-        return this.customerRepository.save(customer);
+        this.customerRepository.save(customer);
+    }
+
+    public Customer updateCustomer(CustomerChangeDto changeDto){
+        Customer customer = findCustomerById(changeDto.getId());
+        customer.setFirstname(changeDto.getFirstname());
+        customer.setLastName(changeDto.getLastName());
+        customer.setPhone(changeDto.getPhone());
+        customer.getAddress().setStreet(changeDto.getStreet());
+        customer.getAddress().setCity(changeDto.getCity());
+        customer.getAddress().setCountry(changeDto.getCountry());
+        return customerRepository.save(customer);
+    }
+
+    public void changePasswordToCustomer(PasswordChangeDto passwordChangeDto){
+        Customer customer = findCustomerById(passwordChangeDto.getUserId());
+        customer.setPassword(passwordEncoder.encode(passwordChangeDto.getPassword()));
+        customer.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
+        customerRepository.save(customer);
+    }
+
+    public boolean isPasswordMatching(long id, String password) {
+        Customer customer = findCustomerById(id);
+        String pass = passwordEncoder.encode(password);
+        String pass1 = customer.getPassword();
+        return Objects.equals(pass1, pass);
+    }
+
+    public void deleteCustomer(long id){
+        customerRepository.deleteById(id);
     }
 }

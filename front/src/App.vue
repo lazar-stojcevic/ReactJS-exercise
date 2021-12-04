@@ -12,6 +12,12 @@ export default {
   data() {
     return {
     }
+  },
+  mounted() {
+    localStorage.setItem("userId", '')
+    localStorage.setItem("userRole", '')
+    localStorage.setItem("accessToken", '')
+    localStorage.setItem("expiresIn", '')
   }
 }
 </script>

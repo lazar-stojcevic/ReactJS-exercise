@@ -5,6 +5,9 @@
       <!--FISHING_INSTRUCTOR_ROLE-->
       <router-link class="btn btn-secondary" :hidden="LogInService.userRole.trim() !== 'ROLE_INSTRUCTOR'"
       to="/fishingInstructorProfile">Profile</router-link>
+      <!--CUSTOMER_ROLE-->
+      <router-link class="btn btn-secondary" :hidden="LogInService.userRole.trim() !== 'ROLE_CUSTOMER'"
+                   to="/customerProfile">Profile</router-link>
     </div>
     <button :hidden="LogInService.userRole === ''" class="btn btn-outline-secondary" style="margin: 5px" @click="logout()">LogOut</button>
     <router-link :hidden="LogInService.userRole !== ''" class="btn btn-secondary" to="/login" style="margin: 5px">LogIn</router-link>

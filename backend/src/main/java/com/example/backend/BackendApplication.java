@@ -58,7 +58,12 @@ public class BackendApplication implements CommandLineRunner {
         customer2.setEnabled(true);
         customer2.setPhone("555-333");
         customer2.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
-        customer2.setRole(role2);
+        Address address0 = new Address();
+        address0.setStreet("Nikole Teste");
+        address0.setCity("Karavukovo");
+        address0.setCountry("Srbija");
+        customer2.setAddress(address0);
+        customer2.setRole(role1);
 
         FishingInstructor fishingInstructor = new FishingInstructor();
         fishingInstructor.setEmail("asd@gmail.com");
