@@ -23,6 +23,14 @@
               <td>PHONE</td>
               <td>{{user.phone}}</td>
             </tr>
+            <tr>
+              <td>REWARD POINTS</td>
+              <td>{{user.points}}</td>
+            </tr>
+            <tr>
+              <td>USER CATEGORY</td>
+              <td>*PLATINUM* - 5% discaunt on all reservations</td>
+            </tr>
             </tbody>
           </table>
           <div class="btn-group-sm" style="margin: 5px">

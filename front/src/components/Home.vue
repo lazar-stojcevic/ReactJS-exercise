@@ -16,7 +16,7 @@
     <br>
     <br>
     <br>
-    <b-button href="/cottages" variant="primary">See cottages</b-button>
+    <router-link class="btn btn-secondary" to="/allcottages" style="margin: 5px">See cottages</router-link>
   </b-card>
     <br>
     <b-card
@@ -26,7 +26,7 @@
         :img-src="slika2"
         img-alt="Card Image"
         text-variant="white"
-        title="Hiring instructors"
+        title="Fishing instructors"
     >
       <b-card-text>
         Unforgettable avantures with experienced instructor!
@@ -35,7 +35,7 @@
       <br>
       <br>
       <br>
-      <b-button href="/avanture" variant="primary">See adventures</b-button>
+      <router-link class="btn btn-secondary" to="/avantures" style="margin: 5px">See avantures</router-link>
     </b-card>
     <br>
 
@@ -56,7 +56,7 @@
       <br>
       <br>
       <br>
-      <b-button href="/boats" variant="primary">See boats</b-button>
+      <router-link class="btn btn-secondary" to="/boats" style="margin: 5px">See boats</router-link>
     </b-card>
   </div>
 </template>
@@ -72,13 +72,15 @@ export default {
       slika2 : slika2,
       slika3 : slika3
     }
+  },
+  mounted() {
+    if (localStorage.getItem("userId") === null){
+      this.$forceUpdate()
+    }
   }
 }
 </script>
 
 <style scoped>
-  .picture{
-    width: 100%;
-    height: 100px;
-  }
+
 </style>

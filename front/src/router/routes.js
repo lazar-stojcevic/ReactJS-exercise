@@ -4,6 +4,7 @@ import Registration from "@/components/Registration";
 import FishingInstructorProfile from "@/components/FishingInstructor/FishingInstructorProfile";
 import AdventureProfile from "@/components/FishingInstructor/AdventureProfile";
 import CustomerProfile from "@/components/Customer/CustomerProfile";
+import AllCottages from "@/components/Customer/AllCottages";
 
 const routes = [
     {path: '/', component: Home},
@@ -12,6 +13,7 @@ const routes = [
     {path: '/fishingInstructorProfile', component: FishingInstructorProfile},
     {path: '/adventureProfile', component: AdventureProfile},
     {path: '/customerProfile', component: CustomerProfile},
+    {path: '/allcottages', component: AllCottages},
 ]
 
 export default routes;

@@ -25,6 +25,9 @@ public class Customer extends User {
         return retVal;
     }
 
+    @Column
+    private int points;
+
     @Override
     public String getUsername() {
         return this.getEmail();

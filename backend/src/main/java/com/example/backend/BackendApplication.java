@@ -48,6 +48,7 @@ public class BackendApplication implements CommandLineRunner {
         customer1.setPhone("555-333");
         customer1.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         customer1.setRole(role1);
+        customer1.setPoints(150);
 
 
         Customer customer2 = new Customer();
@@ -64,6 +65,7 @@ public class BackendApplication implements CommandLineRunner {
         address0.setCountry("Srbija");
         customer2.setAddress(address0);
         customer2.setRole(role1);
+        customer2.setPoints(100);
 
         FishingInstructor fishingInstructor = new FishingInstructor();
         fishingInstructor.setEmail("asd@gmail.com");
