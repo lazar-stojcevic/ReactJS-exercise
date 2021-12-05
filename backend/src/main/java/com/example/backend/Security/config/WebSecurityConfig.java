@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     // Handler za vracanje 401 kada klijent sa neodogovarajucim korisnickim imenom i lozinkom pokusa da pristupi resursu
     @Autowired
-    private a restAuthenticationEntryPoint;
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     // Registrujemo authentication manager koji ce da uradi autentifikaciju korisnika za nas
     @Bean

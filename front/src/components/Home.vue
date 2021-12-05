@@ -35,7 +35,7 @@
       <br>
       <br>
       <br>
-      <router-link class="btn btn-secondary" to="/avantures" style="margin: 5px">See avantures</router-link>
+      <router-link class="btn btn-secondary" to="/allinstructors" style="margin: 5px">See advantures!</router-link>
     </b-card>
     <br>
 
@@ -56,7 +56,7 @@
       <br>
       <br>
       <br>
-      <router-link class="btn btn-secondary" to="/boats" style="margin: 5px">See boats</router-link>
+      <router-link class="btn btn-secondary" to="/allboats" style="margin: 5px">See boats</router-link>
     </b-card>
   </div>
 </template>

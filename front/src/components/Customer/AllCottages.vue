@@ -60,7 +60,6 @@ export default {
     return {
       cottages : [],
       filtered : [],
-      cottage : {},
       filter: {
         name:'',
         location:'',
@@ -70,6 +69,7 @@ export default {
     }
   },
   mounted() {
+    //DUMMY
     this.cottages = [
       {id: 1, name : "Neko ime 1", city : "Beograd" , street : "Ustanicka", country : "Serbia" , description: "Very nice", mark: 3.5},
       {id: 2, name : "Neko ime 2", city : "Novi Sad" , street : "Ustanicka", country : "Serbia", description: "Very nice", mark: 1.5},

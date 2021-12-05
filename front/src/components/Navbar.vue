@@ -1,11 +1,16 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd; padding: 5px">
-    <div class="container-fluid" style="align-items: self-start">
+    <div class="container-fluid" style="align-items: self-start; justify-content: flex-start">
       <router-link class="btn btn-secondary" to="/">Home</router-link>
       <!--FISHING_INSTRUCTOR_ROLE-->
       <router-link class="btn btn-secondary" :hidden="LogInService.userRole.trim() !== 'ROLE_INSTRUCTOR'"
       to="/fishingInstructorProfile">Profile</router-link>
       <!--CUSTOMER_ROLE-->
+      <b-nav-item-dropdown text="Registrations" class="align-content-lg-end" right :hidden="LogInService.userRole.trim() !== 'ROLE_CUSTOMER'">
+        <b-dropdown-item href="#/cottageRegistration">Cottages</b-dropdown-item>
+        <b-dropdown-item href="#/adventureRegistration">Adventures</b-dropdown-item>
+        <b-dropdown-item href="#/boatsRegistration">Boats</b-dropdown-item>
+      </b-nav-item-dropdown>
       <router-link class="btn btn-secondary" :hidden="LogInService.userRole.trim() !== 'ROLE_CUSTOMER'"
                    to="/customerProfile">Profile</router-link>
     </div>
