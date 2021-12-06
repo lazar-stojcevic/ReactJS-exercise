@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import BootstrapVue from 'bootstrap-vue';
 import routes from "@/router/routes";
 import Navbar from "@/components/Navbar";
+import moment from "moment";
 
 Vue.component('my-navbar', Navbar)
 
@@ -13,6 +14,11 @@ const router = new VueRouter({routes})
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment(String(value)).format('MM/DD/YYYY hh:mm')
+  }
+});
 
 new Vue({
   router,

@@ -18,7 +18,8 @@ export default {
     localStorage.setItem("userRole", '')
     localStorage.setItem("accessToken", '')
     localStorage.setItem("expiresIn", '')
-  }
+  },
+
 }
 </script>
 

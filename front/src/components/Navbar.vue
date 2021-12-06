@@ -7,9 +7,9 @@
       to="/fishingInstructorProfile">Profile</router-link>
       <!--CUSTOMER_ROLE-->
       <b-nav-item-dropdown text="Registrations" class="align-content-lg-end" right :hidden="LogInService.userRole.trim() !== 'ROLE_CUSTOMER'">
-        <b-dropdown-item href="#/cottageRegistration">Cottages</b-dropdown-item>
-        <b-dropdown-item href="#/adventureRegistration">Adventures</b-dropdown-item>
-        <b-dropdown-item href="#/boatsRegistration">Boats</b-dropdown-item>
+        <b-dropdown-item href="#/cottageReservations">Cottages</b-dropdown-item>
+        <b-dropdown-item href="#/adventureReservations">Adventures</b-dropdown-item>
+        <b-dropdown-item href="#/boatsReservations">Boats</b-dropdown-item>
       </b-nav-item-dropdown>
       <router-link class="btn btn-secondary" :hidden="LogInService.userRole.trim() !== 'ROLE_CUSTOMER'"
                    to="/customerProfile">Profile</router-link>

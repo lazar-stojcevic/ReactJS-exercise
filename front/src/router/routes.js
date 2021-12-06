@@ -7,6 +7,7 @@ import CustomerProfile from "@/components/Customer/CustomerProfile";
 import AllCottages from "@/components/Customer/AllCottages";
 import AllBoats from "@/components/Customer/AllBoats";
 import AllInstructors from "@/components/Customer/AllInstructors";
+import CottageReservations from "@/components/Customer/CottageReservations";
 
 const routes = [
     {path: '/', component: Home},
@@ -18,6 +19,7 @@ const routes = [
     {path: '/allcottages', component: AllCottages},
     {path: '/allboats', component: AllBoats},
     {path: '/allinstructors', component: AllInstructors},
+    {path: '/cottageReservations', component: CottageReservations},
 ]
 
 export default routes;
