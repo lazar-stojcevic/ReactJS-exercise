@@ -126,6 +126,7 @@
           </div>
         </div>
       </div>
+      <!--OVDE IDE KALENDAR ZAUZETOSTI-->
     </div>
   </div>
 </template>
@@ -133,16 +134,23 @@
 <script>
 import FishingInstructorService from "@/Services/FishingInstructorService";
 import LogInService from "@/Services/LogInService";
-//validacija teksta
+
 export default {
   data(){
     return{
-      user: '',
+      user: {
+        address: {
+          street: ''
+        },
+        holiday: {
+          fromDate: ''
+        }
+      },
       mode: 'neutral', //changePassword, changeInfo
       newPassword: '',
       confirmPassword: '',
       newUserInfo: '',
-      fromDate: '',
+      fromDate: ' ',
       toDate: ''
       }
     },
@@ -214,7 +222,9 @@ export default {
       this.$router.push('/myAdventures');
     },
     requestForDeleting(){
-
+      FishingInstructorService.requestForDeleting(this.user.id).then(() => {LogInService.logout()}).catch(
+          () => {alert("PROBABLY REQUEST IS ALREADY SENT")}
+      )
     }
   }
 

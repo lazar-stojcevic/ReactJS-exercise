@@ -17,11 +17,15 @@ import java.util.*;
 public class FishingInstructor extends User {
 
     @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Adventure> adventures = new HashSet<Adventure>();
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "holiday", referencedColumnName = "holiday_id")
     private HolidayTimespan holiday;
+
+    @Column
+    private boolean isForDeleting = false;
 
     @JsonIgnore
     @Override
@@ -30,6 +34,10 @@ public class FishingInstructor extends User {
         retVal.add(this.getRole());
         return retVal;
     }
+
+    public boolean getIsForDeleting() { return  this.isForDeleting; }
+
+    public void setIsForDeleting(boolean value) { this.isForDeleting = value; }
 
     @Override
     public String getUsername() {

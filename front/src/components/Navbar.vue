@@ -4,7 +4,7 @@
       <router-link class="btn btn-secondary" to="/">Home</router-link>
       <!--FISHING_INSTRUCTOR_ROLE-->
       <div class="btn-group" :hidden="LogInService.userRole.trim() !== 'ROLE_INSTRUCTOR'">
-        <router-link class=" btn btn-secondary" to="/adventureProfile">CREATE ADVENTURE</router-link>
+        <router-link class=" btn btn-secondary" to="/createAdventure">CREATE ADVENTURE</router-link>
         <router-link class=" btn btn-outline-secondary" to="/">HISTORY OF RESERVATIONS</router-link>
         <router-link class=" btn btn-secondary" to="/fishingInstructorProfile">PROFILE</router-link>
       </div>

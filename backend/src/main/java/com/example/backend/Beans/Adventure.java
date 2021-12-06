@@ -1,5 +1,7 @@
 package com.example.backend.Beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,7 +30,7 @@ public class Adventure {
     @JoinColumn(name = "address", referencedColumnName = "address_id")
     private Address address;
 
-    @Column
+    @Column()
     private int maxPersons;
 
     @Column(length = 1000)
@@ -40,22 +42,24 @@ public class Adventure {
     @Column(length = 500)
     private String equipment;
 
-    @Column()
+    @Column
     private String cancelingTerms;
 
+    @Column
     private String conductRules;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
+    //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private FishingInstructor instructor;
 
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
+    @JsonIgnore
     private Set<AdventureReservation> reservations = new HashSet<AdventureReservation>();
 
     @OneToOne(cascade = CascadeType.ALL)
     private PriceList priceList;
-    //PRAVILA PONASANJA - u vidu teksta;
     //SLIKE
 }
