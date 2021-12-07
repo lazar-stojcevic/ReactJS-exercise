@@ -42,5 +42,13 @@ class CustomerService{
         return axios.put(CUSTOMER_URL, data, {headers});
     }
 
+    getCustomerPenaltyPoints(userId){
+        const headers = {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(CUSTOMER_URL + '/penalty/' + userId, {headers});
+    }
+
 }
 export default new CustomerService()

@@ -49,7 +49,7 @@ public class BackendApplication implements CommandLineRunner {
         customer1.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         customer1.setRole(role1);
         customer1.setPoints(150);
-
+        customer1.setPenaltyPoints(0);
 
         Customer customer2 = new Customer();
         customer2.setEmail("stole@naaci.com");
@@ -60,12 +60,13 @@ public class BackendApplication implements CommandLineRunner {
         customer2.setPhone("555-333");
         customer2.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         Address address0 = new Address();
-        address0.setStreet("Nikole Teste");
+        address0.setStreet("Nikole Tesle");
         address0.setCity("Karavukovo");
         address0.setCountry("Srbija");
         customer2.setAddress(address0);
         customer2.setRole(role1);
-        customer2.setPoints(100);
+        customer2.setPoints(10);
+        customer2.setPenaltyPoints(2);
 
         FishingInstructor fishingInstructor = new FishingInstructor();
         fishingInstructor.setEmail("asd@gmail.com");

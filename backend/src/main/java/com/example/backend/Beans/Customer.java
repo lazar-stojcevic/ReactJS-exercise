@@ -28,6 +28,9 @@ public class Customer extends User {
     @Column
     private int points;
 
+    @Column
+    private int penaltyPoints;
+
     @Override
     public String getUsername() {
         return this.getEmail();

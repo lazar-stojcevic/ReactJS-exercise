@@ -84,6 +84,8 @@ public class CustomerService implements IUserService {
 
         addressRepository.save(address);
         u.setAddress(address);
+        u.setPenaltyPoints(0);
+        u.setPoints(0);
 
         // u primeru se registruju samo obicni korisnici i u skladu sa tim im se i dodeljuje samo rola USER
         Role roles = roleService.findByName("CUSTOMER_ROLE");
@@ -120,6 +122,11 @@ public class CustomerService implements IUserService {
         String pass = passwordEncoder.encode(password);
         String pass1 = customer.getPassword();
         return Objects.equals(pass1, pass);
+    }
+
+    public int getCustomerPenaltyPoints(long id){
+        Customer customer = findCustomerById(id);
+        return customer.getPenaltyPoints();
     }
 
     public void deleteCustomer(long id){

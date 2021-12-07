@@ -31,8 +31,14 @@ public class CustomerControler {
 
     @GetMapping (path = "/{id}")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<Customer> getInstructorById(@PathVariable long id){
+    public ResponseEntity<Customer> getCustomerById(@PathVariable long id){
         return new ResponseEntity<>(customerService.findCustomerById(id), HttpStatus.OK);
+    }
+
+    @GetMapping (path = "/penalty/{id}")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<Integer> getCustomerPenaltyPoints(@PathVariable long id){
+        return new ResponseEntity<>(customerService.getCustomerPenaltyPoints(id), HttpStatus.OK);
     }
 
 

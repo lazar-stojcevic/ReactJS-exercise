@@ -8,6 +8,12 @@ import AllCottages from "@/components/Customer/AllCottages";
 import AllBoats from "@/components/Customer/AllBoats";
 import AllInstructors from "@/components/Customer/AllInstructors";
 import CottageReservations from "@/components/Customer/CottageReservations";
+import BoatReservations from "@/components/Customer/BoatReservations";
+import AdventureReservations from "@/components/Customer/AdventureReservations";
+import BookedReservations from "@/components/Customer/BookedReservations";
+import PenaltyPoints from "@/components/Customer/PenaltyPoints";
+import Subscriptions from "@/components/Customer/Subscriptions";
+import Complaint from "@/components/Customer/Complaint";
 
 const routes = [
     {path: '/', component: Home},
@@ -20,6 +26,12 @@ const routes = [
     {path: '/allboats', component: AllBoats},
     {path: '/allinstructors', component: AllInstructors},
     {path: '/cottageReservations', component: CottageReservations},
+    {path: '/boatReservations', component: BoatReservations},
+    {path: '/adventureReservations', component: AdventureReservations},
+    {path: '/bookedReservations', component: BookedReservations},
+    {path: '/penaltyPoints', component: PenaltyPoints},
+    {path: '/subscriptions', component: Subscriptions},
+    {path: '/complaint', component: Complaint}
 ]
 
 export default routes;

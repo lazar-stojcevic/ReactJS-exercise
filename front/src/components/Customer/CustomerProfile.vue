@@ -27,9 +27,17 @@
               <td>REWARD POINTS</td>
               <td>{{user.points}}</td>
             </tr>
-            <tr>
+            <tr v-if="user.points > 100">
               <td>USER CATEGORY</td>
               <td>*PLATINUM* - 5% discaunt on all reservations</td>
+            </tr>
+            <tr v-else-if="user.points > 50">
+              <td>USER CATEGORY</td>
+              <td>*GOLD* - 3% discaunt on all reservations</td>
+            </tr>
+            <tr v-else>
+              <td>USER CATEGORY</td>
+              <td>Need more point from price reduction</td>
             </tr>
             </tbody>
           </table>
