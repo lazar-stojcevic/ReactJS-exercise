@@ -2,6 +2,7 @@ package com.example.backend;
 
 import com.example.backend.Beans.*;
 import com.example.backend.Repository.AdventureRepository;
+import com.example.backend.Repository.AdventureReservationRepository;
 import com.example.backend.Repository.RoleRepository;
 import com.example.backend.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,8 @@ public class BackendApplication implements CommandLineRunner {
     private RoleRepository roleRepository;
     @Autowired
     private AdventureRepository adventureRepository;
-
+    @Autowired
+    private AdventureReservationRepository adventureReservationRepository;
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
     }
@@ -136,6 +138,30 @@ public class BackendApplication implements CommandLineRunner {
 
         adventureRepository.save(adventure);
         adventureRepository.save(adventure1);
+
+        AdventureReservation reservation = new AdventureReservation();
+        reservation.setAdventure(adventure);
+        reservation.setLength(6);
+        reservation.setPrice(5000);
+        reservation.setReservationStart(LocalDateTime.now());
+
+        AdventureReservation reservation1 = new AdventureReservation();
+        reservation1.setAdventure(adventure);
+        reservation1.setLength(6);
+        reservation1.setPrice(5000);
+        reservation1.setReservationStart(LocalDateTime.of(2020, 10,2,10,20));
+        reservation1.setReserved(true);
+
+        AdventureReservation reservation2 = new AdventureReservation();
+        reservation2.setAdventure(adventure);
+        reservation2.setLength(4);
+        reservation2.setPrice(2500);
+        reservation2.setReservationStart(LocalDateTime.of(2022, 2,2,10,20));
+        reservation2.setReserved(true);
+
+        adventureReservationRepository.save(reservation1);
+        adventureReservationRepository.save(reservation);
+        adventureReservationRepository.save(reservation2);
     }
 
 }

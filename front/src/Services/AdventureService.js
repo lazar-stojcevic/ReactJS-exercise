@@ -6,7 +6,6 @@ const URL = 'http://localhost:8080/adventure';
 class AdventureService{
     adventureId = ''
 
-    //TODO: U HEADERU TREBA PROSLEDITI JWT
     getAllAdventures(){
         const headers = {
             'Accept': 'application/json',

@@ -5,6 +5,7 @@ import FishingInstructorProfile from "@/components/FishingInstructor/FishingInst
 import AdventureProfile from "@/components/FishingInstructor/AdventureProfile";
 import AdventuresOfFishingInstructor from "@/components/FishingInstructor/AdventuresOfFishingInstructor";
 import CreateNewAdventure from "@/components/FishingInstructor/CreateNewAdventure";
+import HistoryOfReservations from "@/components/FishingInstructor/HistoryOfReservations";
 
 const routes = [
     {path: '/', component: Home},
@@ -13,7 +14,8 @@ const routes = [
     {path: '/fishingInstructorProfile', component: FishingInstructorProfile},
     {path: '/adventureProfile', component: AdventureProfile},
     {path: '/myAdventures', component: AdventuresOfFishingInstructor},
-    {path: '/createAdventure', component: CreateNewAdventure}
+    {path: '/createAdventure', component: CreateNewAdventure},
+    {path: '/reservationHistory', component: HistoryOfReservations}
 ]
 
 export default routes;

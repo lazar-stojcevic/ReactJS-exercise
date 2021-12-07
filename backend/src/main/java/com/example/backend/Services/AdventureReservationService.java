@@ -5,6 +5,7 @@ import com.example.backend.Repository.AdventureReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,13 +24,34 @@ public class AdventureReservationService {
         return adventureReservationRepository.findAll();
     }
 
-    public Collection<AdventureReservation> getAllFastAdventureReservations(){
+    public Collection<AdventureReservation> getAllNextReservedTermsOfAdventure(long adventureId){
         List<AdventureReservation> adventureReservations = new ArrayList<>();
-        for (AdventureReservation ar: getAllAdventureReservations())
-            if(!ar.isReserved())
+        for (AdventureReservation ar : adventureReservationRepository.findAll())
+            if(ar.isReserved() && ar.getAdventure().getId() == adventureId &&
+                    ar.getReservationStart().isAfter(LocalDateTime.now()))
                 adventureReservations.add(ar);
 
         return adventureReservations;
+    }
+
+    public Collection<AdventureReservation> getAllFreeFastReservations(long adventureId){
+        List<AdventureReservation> adventureReservations = new ArrayList<>();
+        for (AdventureReservation ar: getAllAdventureReservations())
+            if(!ar.isReserved() && ar.getAdventure().getId() == adventureId)
+                adventureReservations.add(ar);
+
+        return adventureReservations;
+    }
+
+    public Collection<AdventureReservation> getAllPastReservationOfInstructor(long instructorId){
+        List<AdventureReservation> pastAdventure = new ArrayList<>();
+        for (AdventureReservation ar: adventureReservationRepository.findAll()) {
+            LocalDateTime reservationEnd = ar.getReservationStart().plusHours(ar.getLength());
+            if(reservationEnd.isBefore(LocalDateTime.now()) && ar.isReserved()){
+                pastAdventure.add(ar);
+            }
+        }
+        return pastAdventure;
     }
 
     public AdventureReservation findAdventureReservationById(long id){

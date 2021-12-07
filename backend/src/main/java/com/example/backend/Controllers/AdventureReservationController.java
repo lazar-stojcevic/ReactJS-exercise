@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.PublicKey;
 import java.util.Collection;
 
+@CrossOrigin(allowedHeaders = "*")
 @RestController
 @RequestMapping("adventureReservation")
 public class AdventureReservationController {
@@ -25,9 +25,25 @@ public class AdventureReservationController {
         return new ResponseEntity<>(adventureReservationService.getAllAdventureReservations(), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/fast")
-    public ResponseEntity<Collection<AdventureReservation>> getAllFastReservations(){
-        return new ResponseEntity<>(adventureReservationService.getAllFastAdventureReservations(), HttpStatus.OK);
+    @GetMapping(path = "/nextReservations/{adventureId}")
+    public ResponseEntity<Collection<AdventureReservation>> getAllNextReservedTermsOfAdventure(
+            @PathVariable long adventureId){
+        return new ResponseEntity<>(adventureReservationService.getAllNextReservedTermsOfAdventure(adventureId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/fast/{adventureId}")
+    public ResponseEntity<Collection<AdventureReservation>> getAllFreeFastReservationsOfAdventure(
+            @PathVariable long adventureId){
+        return new ResponseEntity<>(adventureReservationService.getAllFreeFastReservations(adventureId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/pastReservation/{instructorId}")
+    public ResponseEntity<Collection<AdventureReservation>> getAllPastReservationOfInstructor(
+            @PathVariable long instructorId){
+        return new ResponseEntity<>(adventureReservationService.getAllPastReservationOfInstructor(instructorId),
+                HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
