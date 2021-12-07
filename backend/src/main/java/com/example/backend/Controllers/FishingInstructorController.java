@@ -1,7 +1,6 @@
 package com.example.backend.Controllers;
 
 import com.example.backend.Beans.FishingInstructor;
-import com.example.backend.Beans.HolidayTimespan;
 import com.example.backend.Dtos.FishingInstructorChangeDto;
 import com.example.backend.Dtos.HolidayTimespanDto;
 import com.example.backend.Dtos.PasswordChangeDto;
@@ -78,12 +77,13 @@ public class FishingInstructorController {
                 HttpStatus.CREATED);
     }
 
-    @PostMapping(path = "/passwordMatching", consumes = "application/json")
+    @PutMapping(path = "/deletingRequest/{id}")
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    public ResponseEntity<String> isPasswordMatching(@RequestBody PasswordChangeDto passwordChangeDto){
-        if(this.fishingInstructorService.isPasswordMatching(passwordChangeDto.getUserId(),
-                passwordChangeDto.getPassword()))
-            return new ResponseEntity<>("OK", HttpStatus.OK);
-        else return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    public ResponseEntity<?> requestForDeleting(@PathVariable long id){
+        FishingInstructor instructor = fishingInstructorService.requestForDeleting(id);
+        if(instructor == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

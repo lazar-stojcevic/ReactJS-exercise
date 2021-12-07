@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <div class="grid">
-      <!--PRVI RED-->
       <div class="row" style="margin-top: 20px">
         <div class="col">
+          <!--INFO-->
           <table class="table table-striped">
             <tbody>
             <tr>
@@ -25,13 +25,17 @@
             </tr>
             </tbody>
           </table>
-          <div class="btn-group-sm" style="margin: 5px">
+          <!--BUTTONS-->
+          <div class="btn-group-sm" style="margin: 10px">
             <button @click="changeModeToInfo" v-if="mode === 'neutral'" class="btn-info">CHANGE YOUR INFO</button>
             <button @click="changeModeToPassword" v-if="mode === 'neutral'" class="btn-info">CHANGE PASSWORD</button>
             <button @click="changeModeToHoliday" v-if="mode === 'neutral'" class="btn-info">ADD HOLIDAY</button>
+            <button @click="myAdventures" v-if="mode === 'neutral'" class="btn-info">MY ADVENTURES</button>
+            <button @click="requestForDeleting" v-if="mode === 'neutral'" class="btn-danger">SEND REQUEST FOR DELETING</button>
           </div>
+          <!--CALENDAR-->
           <div v-if="user.holiday !== null" style="text-align: center">
-            <h><strong>YOUR HOLIDAY TIMESPAN</strong></h>
+            <strong style="margin: 10px">YOUR HOLIDAY TIMESPAN</strong>
           <table class="table table-striped">
             <thead>
             <tr>
@@ -47,6 +51,7 @@
             </tbody>
           </table>
           </div>
+          <!--PASSWORD CHANGING-->
           <div v-if="mode === 'changePassword'" class="container">
             <form @submit.prevent="changePassword">
               <div class="input-group mb-3">
@@ -65,6 +70,7 @@
               </div>
             </form>
           </div>
+          <!--INFO CHANGING-->
           <div v-if="mode === 'changeInfo'" class="container">
             <form @submit.prevent="changeUserInfo">
               <div class="input-group mb-3">
@@ -99,6 +105,7 @@
               </div>
             </form>
           </div>
+          <!--ADDING HOLIDAY-->
           <div v-if="mode === 'addHoliday'" class="container">
             <form @submit.prevent="addHoliday">
               <div class="input-group mb-3">
@@ -118,10 +125,8 @@
             </form>
           </div>
         </div>
-        <div class="col">
-          AVANTURE
-        </div>
       </div>
+      <!--OVDE IDE KALENDAR ZAUZETOSTI-->
     </div>
   </div>
 </template>
@@ -129,16 +134,23 @@
 <script>
 import FishingInstructorService from "@/Services/FishingInstructorService";
 import LogInService from "@/Services/LogInService";
-//validacija teksta
+
 export default {
   data(){
     return{
-      user: '',
+      user: {
+        address: {
+          street: ''
+        },
+        holiday: {
+          fromDate: ''
+        }
+      },
       mode: 'neutral', //changePassword, changeInfo
       newPassword: '',
       confirmPassword: '',
       newUserInfo: '',
-      fromDate: '',
+      fromDate: ' ',
       toDate: ''
       }
     },
@@ -205,6 +217,14 @@ export default {
             alert("SERVER ERROR");
       });
       this.mode = 'neutral';
+    },
+    myAdventures(){
+      this.$router.push('/myAdventures');
+    },
+    requestForDeleting(){
+      FishingInstructorService.requestForDeleting(this.user.id).then(() => {LogInService.logout()}).catch(
+          () => {alert("PROBABLY REQUEST IS ALREADY SENT")}
+      )
     }
   }
 

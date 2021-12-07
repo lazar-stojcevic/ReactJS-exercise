@@ -21,10 +21,10 @@ public class AdventureService {
     }
 
     public Adventure findAdventureById(long id){
-        return adventureRepository.findById(id).orElse(null);
+        return adventureRepository.findById(id).get();
     }
 
-    //PITANJE JE DA LI JE OVAKO
+    //DTO OBJEKAT ZA IZMENU
     public Adventure updateAdventure(Adventure adventure){
         return adventureRepository.save(adventure);
     }
@@ -33,10 +33,12 @@ public class AdventureService {
         return adventureRepository.findAll();
     }
 
-    public Adventure saveAdventure(Adventure adventure){
+    public Adventure saveAdventure(long instructorId, Adventure adventure){
+        adventure.setInstructor(fishingInstructorService.findFishingInstructorById(instructorId));
         return adventureRepository.save(adventure);
     }
 
+    //provere da li ima rezervisanih termina
     public void deleteAdventure(long id){
         adventureRepository.deleteById(id);
     }

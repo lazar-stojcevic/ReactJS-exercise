@@ -91,11 +91,12 @@ public class FishingInstructorService implements IFishingInstructorService {
         fishingInstructorRepository.save(instructor);
     }
 
-    public boolean isPasswordMatching(long id, String password) {
+    public FishingInstructor requestForDeleting(long id){
         FishingInstructor instructor = findFishingInstructorById(id);
-        String pass = passwordEncoder.encode(password);
-        String pass1 = instructor.getPassword();
-        return Objects.equals(pass1, pass);
+        if(instructor.getIsForDeleting())
+            return null;
+        instructor.setIsForDeleting(true);
+        return fishingInstructorRepository.save(instructor);
     }
 
     private FishingInstructor createFishingInstructor(UserRegistration user) {

@@ -54,5 +54,14 @@ class FishingInstructorService{
         return axios.put(FISHING_INSTRUCTOR_URL + '/holiday/' + userId, JSON.stringify(data),
             {headers} );
     }
+
+    requestForDeleting(userId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.put(FISHING_INSTRUCTOR_URL + '/deletingRequest/' + userId, {}, {headers});
+    }
 }
 export default new FishingInstructorService()

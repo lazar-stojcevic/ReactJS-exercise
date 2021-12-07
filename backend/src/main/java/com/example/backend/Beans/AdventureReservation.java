@@ -1,5 +1,6 @@
 package com.example.backend.Beans;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,6 +22,7 @@ public class AdventureReservation {
     private long id;
 
     @Column(nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm")
     private LocalDateTime reservationStart;
 
     @Column(nullable = false)
