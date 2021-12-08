@@ -45,7 +45,7 @@
       <b-card-text>
         Average mark: {{cottage.mark}}
       </b-card-text>
-      <router-link class="btn btn-secondary" :to="'cottage/'+cottage.id.toString()" style="margin: 5px">See boats</router-link>
+      <router-link class="btn btn-secondary" :to="'cottage/'+cottage.id.toString()" style="margin: 5px">See cottage</router-link>
 
     </b-card>
   </div>

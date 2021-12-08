@@ -17,6 +17,10 @@ import Complaint from "@/components/Customer/Complaint";
 import AdventuresOfFishingInstructor from "@/components/FishingInstructor/AdventuresOfFishingInstructor";
 import CreateNewAdventure from "@/components/FishingInstructor/CreateNewAdventure";
 import HistoryOfReservations from "@/components/FishingInstructor/HistoryOfReservations";
+import OneCottage from "@/components/Customer/OneCottage";
+import OneBoat from "@/components/Customer/OneBoat";
+import OneInstructor from "@/components/Customer/OneInstructor";
+
 
 const routes = [
     {path: '/', component: Home},
@@ -37,7 +41,10 @@ const routes = [
     {path: '/complaint', component: Complaint},
     {path: '/myAdventures', component: AdventuresOfFishingInstructor},
     {path: '/createAdventure', component: CreateNewAdventure},
-    {path: '/reservationHistory', component: HistoryOfReservations}
+    {path: '/reservationHistory', component: HistoryOfReservations},
+    {path: '/cottage/:id', component: OneCottage},
+    {path: '/boat/:id', component: OneBoat},
+    {path: '/instructor/:id', component: OneInstructor},
 ]
 
 export default routes;
