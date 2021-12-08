@@ -17,6 +17,9 @@ import Complaint from "@/components/Customer/Complaint";
 import AdventuresOfFishingInstructor from "@/components/FishingInstructor/AdventuresOfFishingInstructor";
 import CreateNewAdventure from "@/components/FishingInstructor/CreateNewAdventure";
 import HistoryOfReservations from "@/components/FishingInstructor/HistoryOfReservations";
+import AdminProfile from "@/components/Admin/AdminProfile";
+import ProfileRequests from "@/components/Admin/ProfileRequests";
+import CreateNewAdmin from "@/components/Admin/CreateNewAdmin";
 
 const routes = [
     {path: '/', component: Home},
@@ -37,7 +40,10 @@ const routes = [
     {path: '/complaint', component: Complaint},
     {path: '/myAdventures', component: AdventuresOfFishingInstructor},
     {path: '/createAdventure', component: CreateNewAdventure},
-    {path: '/reservationHistory', component: HistoryOfReservations}
+    {path: '/reservationHistory', component: HistoryOfReservations},
+    {path: '/adminProfile', component: AdminProfile},
+    {path: '/profileRequests', component: ProfileRequests},
+    {path: '/createNewAdmin', component: CreateNewAdmin}
 ]
 
 export default routes;

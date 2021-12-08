@@ -21,10 +21,16 @@
                    to="/complaint">Complaint</router-link>
     </div>
     <!--FISHING_INSTRUCTOR_ROLE-->
-    <div class="btn-group" :hidden="LogInService.userRole !== 'ROLE_INSTRUCTOR'">
+    <div class="btn-group" v-if="LogInService.userRole === 'ROLE_INSTRUCTOR'">
       <router-link class=" btn btn-secondary" to="/createAdventure">CREATE ADVENTURE</router-link>
       <router-link class=" btn btn-outline-secondary" to="/reservationHistory">HISTORY OF RESERVATIONS</router-link>
       <router-link class=" btn btn-secondary" to="/fishingInstructorProfile">PROFILE</router-link>
+    </div>
+    <!--ADMIN-->
+    <div class="btn-group" v-if="LogInService.userRole === 'ROLE_ADMIN'">
+      <router-link class=" btn btn-secondary" to="/createNewAdmin">CREATE ADMIN</router-link>
+      <router-link class=" btn btn-outline-secondary" to="/profileRequests">PROFILE REQUESTS</router-link>
+      <router-link class=" btn btn-secondary" to="/adminProfile">PROFILE</router-link>
     </div>
     <button :hidden="LogInService.userRole === ''" class="btn btn-outline-secondary" style="margin: 5px" @click="logout()">LogOut</button>
     <router-link :hidden="LogInService.userRole !== ''" class="btn btn-secondary" to="/login" style="margin: 5px">LogIn</router-link>

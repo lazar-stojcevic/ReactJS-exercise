@@ -1,10 +1,7 @@
 package com.example.backend;
 
 import com.example.backend.Beans.*;
-import com.example.backend.Repository.AdventureRepository;
-import com.example.backend.Repository.AdventureReservationRepository;
-import com.example.backend.Repository.RoleRepository;
-import com.example.backend.Repository.UserRepository;
+import com.example.backend.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,6 +21,9 @@ public class BackendApplication implements CommandLineRunner {
     private AdventureRepository adventureRepository;
     @Autowired
     private AdventureReservationRepository adventureReservationRepository;
+    @Autowired
+    private AdminRepository adminRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
     }
@@ -170,6 +170,24 @@ public class BackendApplication implements CommandLineRunner {
         adventureReservationRepository.save(reservation1);
         adventureReservationRepository.save(reservation);
         adventureReservationRepository.save(reservation2);
+
+        Admin admin = new Admin();
+        Address adminAddress = new Address();
+        adminAddress.setStreet("Svetosavska 10");
+        adminAddress.setCity("Jarkovac");
+        adminAddress.setCountry("Srbija");
+        admin.setFirstTimeCreated(false);
+        admin.setAddress(adminAddress);
+        admin.setRole(role2);
+        admin.setEmail("qwe@gmail.com");
+        admin.setFirstname("Stojan");
+        admin.setLastName("Stojanovic");
+        admin.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
+        admin.setEnabled(true);
+        admin.setPhone("555-333");
+        admin.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
+
+        adminRepository.save(admin);
     }
 
 }

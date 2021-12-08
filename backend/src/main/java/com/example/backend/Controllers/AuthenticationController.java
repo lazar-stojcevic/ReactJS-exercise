@@ -11,11 +11,13 @@ import com.example.backend.Security.util.TokenUtils;
 import com.example.backend.Services.CustomerService;
 import com.example.backend.Services.EmailService;
 import com.example.backend.Services.FishingInstructorService;
+import com.example.backend.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,6 +32,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @RestController
+@CrossOrigin(allowedHeaders = "*")
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
 
@@ -51,8 +54,8 @@ public class AuthenticationController {
     @Autowired
     private FishingInstructorService fishingInstructorService;
 
-    //@Autowired
-
+    @Autowired
+    private UserService userService;
     // Prvi endpoint koji pogadja korisnik kada se loguje.
     // Tada zna samo svoje korisnicko ime i lozinku i to prosledjuje na backend.
     @PostMapping("/login")
@@ -113,6 +116,12 @@ public class AuthenticationController {
         customerService.verifyUser(existUser);
 
         return new ResponseEntity<>("User verified", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/notEnabled")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Collection<User>> allUsersForEnabling(){
+        return new ResponseEntity<>(userService.getAllNotEnabledUsers(), HttpStatus.OK);
     }
 
     private User tryToRegisterFishingInstructor(UserRegistration userRequest) {
