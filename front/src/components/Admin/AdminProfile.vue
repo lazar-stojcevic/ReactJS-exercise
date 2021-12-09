@@ -137,6 +137,10 @@
       <cottageOwners></cottageOwners>
       <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
     </div>
+    <div v-if="mode === 'customers'">
+      <customers></customers>
+      <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
+    </div>
 
   </div>
 </template>
@@ -148,11 +152,13 @@ import LogInService from "@/Services/LogInService";
 import AllInstructors from "@/components/Admin/InnerAdminComponents/AllInstructors";
 import AllCottageOwners from "@/components/Admin/InnerAdminComponents/AllCottageOwners";
 import AllCottages from "@/components/Admin/InnerAdminComponents/AllCottages";
+import AllCustomers from "@/components/Admin/InnerAdminComponents/AllCustomers";
 export default {
   components:{
     'instructors' : AllInstructors,
     'cottageOwners': AllCottageOwners,
-    'cottages': AllCottages
+    'cottages': AllCottages,
+    'customers': AllCustomers
   },
   data(){
     return{

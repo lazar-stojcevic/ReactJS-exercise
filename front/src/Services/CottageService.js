@@ -12,6 +12,15 @@ class CottageService{
         };
         return axios.get(URL + '/' + cottageId, {headers});
     }
+
+    getAllCottages(){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL, {headers});
+    }
 }
 
 export default new CottageService()

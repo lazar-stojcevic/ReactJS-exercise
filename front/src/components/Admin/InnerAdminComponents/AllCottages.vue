@@ -4,22 +4,40 @@
     <table class="table table-striped">
       <thead>
       <tr>
-        <td>EMAIL</td>
-        <td>FULL NAME</td>
-        <td>ROLE</td>
+        <td>NAME</td>
         <td>FULL ADDRESS</td>
-        <td>PHONE</td>
-        <td>ENABLED</td>
+        <td>RATING</td>
       </tr>
       </thead>
       <tbody>
+      <tr v-for="cottage in cottages" :key="cottage.id">
+        <td>{{cottage.name}}</td>
+        <td>{{cottage.address.street}} {{cottage.address.city}} {{cottage.address.country}}</td>
+        <td>{{cottage.rating}}</td>
+        <td><button class="btn btn-danger">DELETE</button></td>
+      </tr>
       </tbody>
     </table>
   </div>
 </template>
 
 <script>
+import CottageService from "@/Services/CottageService";
+
 export default {
+  data(){
+    return{
+      cottages: []
+    }
+  },
+  mounted() {
+    CottageService.getAllCottages().then(res => {this.cottages = res.data;}).catch(() => {
+      alert("THERE IS SOME PROBLEM WITH LOADING ALL COTAGES");
+    });
+  },
+  methods:{
+
+  }
 }
 </script>
 
