@@ -34,6 +34,12 @@ public class Cottage {
     @Column
     private String conductRules;
 
+    @Column
+    private String promo;
+
+    @Column
+    private double rating;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address", referencedColumnName = "address_id")
     private Address address;

@@ -8,10 +8,12 @@ import com.example.backend.Repository.BoatOwnerRepository;
 import com.example.backend.Repository.CottageRepository;
 import com.example.backend.Services.Interfaces.ICottageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Service
 public class CottageService implements ICottageService {
 
     @Autowired

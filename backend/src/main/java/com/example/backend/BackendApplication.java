@@ -244,6 +244,8 @@ public class BackendApplication implements CommandLineRunner {
         Cottage cottage1 = new Cottage();
         cottage1.setConductRules("Budite fini");
         cottage1.setName("Mala kuca");
+        cottage1.setPromo("Kod nas ce biti lud provod");
+        cottage1.setRating(4.1);
         Address address6 = new Address();
         address6.setCity("Zlatibor");
         address6.setCountry("Srbija");
@@ -253,11 +255,13 @@ public class BackendApplication implements CommandLineRunner {
         Cottage cottage2 = new Cottage();
         cottage2.setConductRules("Budite fini");
         cottage2.setName("Mala kuca");
+        cottage2.setPromo("Opustena atmosvera u prirodi");
+        cottage2.setRating(3.3);
         Address address7 = new Address();
         address7.setCity("Tara");
         address7.setCountry("Srbija");
         address7.setStreet("Ustanicka");
-        cottage2.setAddress(address6);
+        cottage2.setAddress(address7);
 
         cottageRepository.save(cottage1);
         cottageRepository.save(cottage2);

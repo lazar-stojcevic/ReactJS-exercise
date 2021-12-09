@@ -12,12 +12,14 @@ import com.example.backend.Repository.CustomerRepository;
 import com.example.backend.Services.Interfaces.ICottageOwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 
+@Service
 public class CottageOwnerService implements ICottageOwnerService {
 
     @Autowired
