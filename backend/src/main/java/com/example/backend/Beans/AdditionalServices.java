@@ -1,5 +1,6 @@
 package com.example.backend.Beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ public class AdditionalServices {
 
     @ManyToOne
     @JoinColumn(name = "price_list_price_lis_id")
+    @JsonIgnore
     private PriceList priceList;
 
     @Column(length = 50)
@@ -29,4 +31,7 @@ public class AdditionalServices {
 
     @Column
     private int addPrice;
+
+    @Column
+    private boolean added = false;
 }

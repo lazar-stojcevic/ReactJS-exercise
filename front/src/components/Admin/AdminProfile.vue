@@ -124,8 +124,11 @@
       </form>
     </div>
     <!--PERCENT OF ALL TRANSACTIONS-->
-
     <!--ALL ENTITIES-->
+    <div v-if="mode === 'instructors'">
+      <instructors></instructors>
+      <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
+    </div>
 
   </div>
 </template>
@@ -133,8 +136,11 @@
 <script>
 import AdminService from "@/Services/AdminService";
 import LogInService from "@/Services/LogInService";
-
+import AllInstructors from "@/components/Admin/InnerAdminComponents/AllInstructors";
 export default {
+  components:{
+    'instructors' : AllInstructors
+  },
   data(){
     return{
       user: {
@@ -150,6 +156,10 @@ export default {
     }
   },
   mounted() {
+    if(LogInService.userId === '.' || LogInService.userId === ''){
+      this.$router.push('/')
+      return;
+    }
     AdminService.getAdminById(LogInService.userId).then(res => {this.user = res.data}).catch(() => {
       alert("THERE IS SOME PROBLEM WITH LOADING ADMIN");
     })
@@ -188,11 +198,19 @@ export default {
     },
     changePassword(){
       if( this.newPassword === this.confirmPassword){
-        //CHANGE
+        AdminService.changePassword(this.newPassword).then(() => {LogInService.logout(); this.$router.push('/')})
+            .catch(() => {
+          alert("THERE IS SOME PROBLEM WITH SERVER")
+        });
+      }else {
+        alert("NEW PASSWORD AND CONFIRM PASSWORD MUST BE SAME")
       }
     },
     changeUserInfo(){
-
+      AdminService.changeAdmin(this.newUserInfo).then(res => {this.user = res.data}).catch(() => {
+        alert('THERE IS SOME PROBLEM WITH SERVER')
+      });
+      this.mode = "neutral";
     },
     changeTax(){
 
