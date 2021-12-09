@@ -21,7 +21,6 @@ public class BackendApplication implements CommandLineRunner {
     private AdventureRepository adventureRepository;
     @Autowired
     private AdventureReservationRepository adventureReservationRepository;
-
     @Autowired
     private CottageRepository cottageRepository;
     @Autowired
@@ -259,7 +258,7 @@ public class BackendApplication implements CommandLineRunner {
         address7.setCity("Tara");
         address7.setCountry("Srbija");
         address7.setStreet("Ustanicka");
-        cottage2.setAddress(address6);
+        cottage2.setAddress(address7);
 
         cottageRepository.save(cottage1);
         cottageRepository.save(cottage2);
