@@ -24,6 +24,8 @@ public class BackendApplication implements CommandLineRunner {
 
     @Autowired
     private CottageRepository cottageRepository;
+    @Autowired
+    private AdminRepository adminRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -262,6 +264,23 @@ public class BackendApplication implements CommandLineRunner {
         cottageRepository.save(cottage1);
         cottageRepository.save(cottage2);
 
+        Admin admin = new Admin();
+        Address adminAddress = new Address();
+        adminAddress.setStreet("Svetosavska 10");
+        adminAddress.setCity("Jarkovac");
+        adminAddress.setCountry("Srbija");
+        admin.setFirstTimeCreated(false);
+        admin.setAddress(adminAddress);
+        admin.setRole(role2);
+        admin.setEmail("qwe@gmail.com");
+        admin.setFirstname("Stojan");
+        admin.setLastName("Stojanovic");
+        admin.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
+        admin.setEnabled(true);
+        admin.setPhone("555-333");
+        admin.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
+
+        adminRepository.save(admin);
     }
 
 }
