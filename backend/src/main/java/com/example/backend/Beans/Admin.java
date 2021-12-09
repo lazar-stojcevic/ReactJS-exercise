@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -17,9 +18,13 @@ import java.util.Collection;
 @ToString
 @DiscriminatorValue("ADM")
 public class Admin extends User {
+
+    private boolean firstTimeCreated = true;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        ArrayList<Role> retVal = new ArrayList<Role>();
+        retVal.add(this.getRole());
+        return retVal;
     }
 
     @Override

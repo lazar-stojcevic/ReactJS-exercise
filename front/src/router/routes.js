@@ -21,6 +21,9 @@ import OneBoat from "@/components/Customer/OneBoat";
 import OneInstructor from "@/components/Customer/OneInstructor";
 import OneCottage from "@/components/Customer/OneCottage";
 
+import AdminProfile from "@/components/Admin/AdminProfile";
+import ProfileRequests from "@/components/Admin/ProfileRequests";
+import CreateNewAdmin from "@/components/Admin/CreateNewAdmin";
 
 const routes = [
     {path: '/', component: Home},
@@ -46,6 +49,9 @@ const routes = [
     {path: '/boat/:id', component: OneBoat},
     {path: '/instructor/:id', component: OneInstructor},
     {path: '/cottage/:id', component: OneCottage},
+    {path: '/adminProfile', component: AdminProfile},
+    {path: '/profileRequests', component: ProfileRequests},
+    {path: '/createNewAdmin', component: CreateNewAdmin}
 ]
 
 export default routes;

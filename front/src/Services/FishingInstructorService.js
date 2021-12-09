@@ -5,6 +5,14 @@ const FISHING_INSTRUCTOR_URL = 'http://localhost:8080/fishingInstructor';
 
 class FishingInstructorService{
 
+    getAllFishingInstructors(){
+        const headers = {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(FISHING_INSTRUCTOR_URL, {headers});
+    }
+
     getFishingInstructorById(userId){
         const headers = {
             'Accept': 'application/json',
@@ -39,7 +47,7 @@ class FishingInstructorService{
         data.street = instructor.address.street;
         data.city = instructor.address.city;
         data.country = instructor.address.country;
-        return axios.put(FISHING_INSTRUCTOR_URL, data, {headers});
+        return axios.put(FISHING_INSTRUCTOR_URL, JSON.stringify(data), {headers});
     }
 
     addHoliday(fromDate, toDate, userId){
