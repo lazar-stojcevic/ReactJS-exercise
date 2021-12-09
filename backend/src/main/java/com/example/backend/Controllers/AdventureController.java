@@ -37,7 +37,6 @@ public class AdventureController {
     }
 
     @GetMapping(path = "/instructor/{instructorId}")
-    @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<Collection<Adventure>> getAllAdventuresOfInstructor(@PathVariable long instructorId){
         return new ResponseEntity<>(adventureService.getAllAdventuresOfInstructor(instructorId), HttpStatus.OK);
     }

@@ -45,7 +45,7 @@
         <b-card-text>
           Average mark: {{instructor.mark}}
         </b-card-text>
-        <router-link class="btn btn-secondary" :to="'instructor/'+instructor.id.toString()" style="margin: 5px">See boats</router-link>
+        <router-link class="btn btn-secondary" :to="'instructor/'+instructor.id.toString()" style="margin: 5px">See adventures</router-link>
 
       </b-card>
     </div>
@@ -72,14 +72,14 @@ export default {
   mounted() {
     //DUMMY
     this.instructors = [
-      {id: 1, name : "Milan Milanovic", city : "Beograd" , street : "Ustanicka", country : "Serbia" , description: "Very exciting advanture in amazon jungle", mark: 3.5},
-      {id: 2, name : "Zoran Zoranovic", city : "Novi Sad" , street : "Dositejeva", country : "Serbia", description: "Meet the river Nile", mark: 1.5},
-      {id: 3, name : "Branko Brankovic", city : "Karavukovo" , street : "Karadjodja", country : "Serbia", description: "Fishing in Danube", mark: 4.9},
+      {id: 3, name : "Bojan Lupulov", city : "Beograd" , street : "Ustanicka", country : "Serbia" , description: "Very exciting advanture in amazon jungle", mark: 3.5},
+      {id: 4, name : "Zoran Zoranovic", city : "Novi Sad" , street : "Dositejeva", country : "Serbia", description: "Meet the river Nile", mark: 1.5},
+      {id: 5, name : "Branko Brankovic", city : "Karavukovo" , street : "Karadjodja", country : "Serbia", description: "Fishing in Danube", mark: 4.9},
     ];
     this.filtered = [
-      {id: 1, name : "Milan Milanovic", city : "Beograd" , street : "Ustanicka", country : "Serbia" , description: "Very exciting advanture in amazon jungle", mark: 3.5},
-      {id: 2, name : "Zoran Zoranovic", city : "Novi Sad" , street : "Dositejeva", country : "Serbia", description: "Meet the river Nile", mark: 1.5},
-      {id: 3, name : "Branko Brankovic", city : "Karavukovo" , street : "Karadjodja", country : "Serbia", description: "Fishing in Danube", mark: 4.9},
+      {id: 3, name : "Bojan Lupulov", city : "Beograd" , street : "Ustanicka", country : "Serbia" , description: "Very exciting advanture in amazon jungle", mark: 3.5},
+      {id: 4, name : "Zoran Zoranovic", city : "Novi Sad" , street : "Dositejeva", country : "Serbia", description: "Meet the river Nile", mark: 1.5},
+      {id: 5, name : "Branko Brankovic", city : "Karavukovo" , street : "Karadjodja", country : "Serbia", description: "Fishing in Danube", mark: 4.9},
     ];
     this.filtered.sort((a,b) => (a.city > b.city) ? 1 : ((b.city > a.city) ? -1 : 0))
   },

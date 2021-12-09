@@ -31,7 +31,6 @@ public class FishingInstructorController {
     }
 
     @GetMapping (path = "/{id}")
-    @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<FishingInstructor> getInstructorById(@PathVariable long id){
         return new ResponseEntity<>(fishingInstructorService.findFishingInstructorById(id), HttpStatus.OK);
     }
