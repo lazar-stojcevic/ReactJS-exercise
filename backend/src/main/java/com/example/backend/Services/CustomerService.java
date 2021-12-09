@@ -88,7 +88,7 @@ public class CustomerService implements IUserService {
         u.setPoints(0);
 
         // u primeru se registruju samo obicni korisnici i u skladu sa tim im se i dodeljuje samo rola USER
-        Role roles = roleService.findByName("CUSTOMER_ROLE");
+        Role roles = roleService.findByName("ROLE_CUSTOMER");
         u.setRole(roles);
 
         return this.customerRepository.save(u);

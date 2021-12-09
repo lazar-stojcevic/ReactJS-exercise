@@ -1,16 +1,12 @@
 package com.example.backend.Controllers;
 
 import com.example.backend.Beans.Customer;
-import com.example.backend.Beans.Address;
-import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Beans.User;
 import com.example.backend.Dtos.JwtAuthenticationRequest;
 import com.example.backend.Dtos.UserRegistration;
 import com.example.backend.Dtos.UserTokenState;
 import com.example.backend.Security.util.TokenUtils;
-import com.example.backend.Services.CustomerService;
-import com.example.backend.Services.EmailService;
-import com.example.backend.Services.FishingInstructorService;
+import com.example.backend.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,9 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Objects;
 
 @RestController
@@ -50,6 +43,12 @@ public class AuthenticationController {
 
     @Autowired
     private FishingInstructorService fishingInstructorService;
+
+    @Autowired
+    private CottageOwnerService cottageOwnerService;
+
+    @Autowired
+    private BoatOwnerService boatOwnerService;
 
     //@Autowired
 
@@ -90,6 +89,20 @@ public class AuthenticationController {
             else return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
+        if(Objects.equals(userRequest.getUserType(), "CO")){
+            User user = tryToRegisterCottageOwner(userRequest);
+            if(user != null)
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            else return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        if(Objects.equals(userRequest.getUserType(), "BO")){
+            User user = tryToRegisterBoatOwner(userRequest);
+            if(user != null)
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            else return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+
         User existUser = this.customerService.findByEmail(userRequest.getEmail());
         if (existUser != null) {
             throw new Exception("Doslo je do greske");
@@ -118,6 +131,22 @@ public class AuthenticationController {
     private User tryToRegisterFishingInstructor(UserRegistration userRequest) {
         try {
             return (User)fishingInstructorService.saveFishingInstructor(userRequest);
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    private User tryToRegisterCottageOwner(UserRegistration userRequest) {
+        try {
+            return (User)cottageOwnerService.saveCottageOwner(userRequest);
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    private User tryToRegisterBoatOwner(UserRegistration userRequest) {
+        try {
+            return (User)boatOwnerService.saveBoatOwner(userRequest);
         }catch (Exception e){
             return null;
         }

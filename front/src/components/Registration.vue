@@ -82,6 +82,13 @@
         ></b-form-input>
       </b-form-group>
 
+      <b-form-group id="input-user" label="User type:" label-for="type">
+        <b-form-radio v-model="form.type"  id="type"  name="some-radios" value="CU">Customer</b-form-radio>
+        <b-form-radio v-model="form.type"  name="some-radios" value="FI">Instructor</b-form-radio>
+        <b-form-radio v-model="form.type"  name="some-radios" value="CO">Cottage owner</b-form-radio>
+        <b-form-radio v-model="form.type"  name="some-radios" value="BO">Boat owner</b-form-radio>
+      </b-form-group>
+
       <b-button type="submit" variant="primary">Submit</b-button>
     </b-form>
   </div>
@@ -104,7 +111,8 @@ export default {
         street: '',
         city: '',
         country: '',
-        phone: ''
+        phone: '',
+        type:"CU"
       },
     }
   },
@@ -122,8 +130,19 @@ export default {
         "city": this.form.city,
         "country": this.form.country,
         "phone": this.form.phone,
-        "userType": "CUSTOMER_ROLE"
+        "userType": this.type
       });
+
+      this.form.email =  '';
+      this.form.password =  '';
+      this.form.passwordConf =  '';
+      this.form.firstname =  '';
+      this.form.lastname =  '';
+      this.form.street =  '';
+      this.form.city =  '';
+      this.form.country =  '';
+      this.form.phone =  '';
+      this.form.type =  "CU";
     }
   }
 }
