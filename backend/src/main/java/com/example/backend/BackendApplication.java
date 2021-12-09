@@ -1,10 +1,7 @@
 package com.example.backend;
 
 import com.example.backend.Beans.*;
-import com.example.backend.Repository.AdventureRepository;
-import com.example.backend.Repository.AdventureReservationRepository;
-import com.example.backend.Repository.RoleRepository;
-import com.example.backend.Repository.UserRepository;
+import com.example.backend.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,6 +21,10 @@ public class BackendApplication implements CommandLineRunner {
     private AdventureRepository adventureRepository;
     @Autowired
     private AdventureReservationRepository adventureReservationRepository;
+
+    @Autowired
+    private CottageRepository cottageRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
     }
@@ -39,10 +40,18 @@ public class BackendApplication implements CommandLineRunner {
         Role role3 = new Role();
         role3.setName("ROLE_INSTRUCTOR");
 
+        Role role4 = new Role();
+        role4.setName("BOAT_OWNER_ROLE");
+
+        Role role5 = new Role();
+        role5.setName("COTTAGE_OWNER_ROLE");
+
         //ROLE REPO
         roleRepository.save(role1);
         roleRepository.save(role2);
         roleRepository.save(role3);
+        roleRepository.save(role4);
+        roleRepository.save(role5);
 
         Customer customer1 = new Customer();
         customer1.setEmail("joxy99@gmail.com");
@@ -107,11 +116,72 @@ public class BackendApplication implements CommandLineRunner {
         fishingInstructor1.setRole(roleRepository.findByName("ROLE_INSTRUCTOR").get(0));
         fishingInstructor1.setAddress(address);
 
+
+        CottageOwner cottageOwner1 = new CottageOwner();
+        cottageOwner1.setRole(role4);
+        cottageOwner1.setEmail("teddyjj25@gmail.com");
+        cottageOwner1.setFirstname("Marija");
+        cottageOwner1.setLastName("Markovic");
+        cottageOwner1.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
+        cottageOwner1.setEnabled(true);
+        cottageOwner1.setPhone("0605412876");
+        Address address2 = new Address();
+        address2.setCountry("Srbija");
+        address2.setCity("Sabac");
+        address2.setStreet("Pop Lukina");
+        cottageOwner1.setAddress(address2);
+
+        CottageOwner cottageOwner2 = new CottageOwner();
+        cottageOwner2.setRole(role4);
+        cottageOwner2.setEmail("mejlic55@gmail.com");
+        cottageOwner2.setFirstname("Petar");
+        cottageOwner2.setLastName("Lazic");
+        cottageOwner2.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
+        cottageOwner2.setEnabled(false);
+        cottageOwner2.setPhone("0605412875");
+        Address address3 = new Address();
+        address3.setCountry("Srbija");
+        address3.setCity("Sabac");
+        address3.setStreet("Milosa Stojicevica Pocerca");
+        cottageOwner2.setAddress(address3);
+
+        BoatOwner boatOwner1 = new BoatOwner();
+        boatOwner1.setRole(role5);
+        boatOwner1.setEmail("mejl55@gmail.com");
+        boatOwner1.setFirstname("Marko");
+        boatOwner1.setLastName("Stefanovic");
+        boatOwner1.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
+        boatOwner1.setEnabled(true);
+        boatOwner1.setPhone("0605412412");
+        Address address4 = new Address();
+        address4.setCountry("Srbija");
+        address4.setCity("Sabac");
+        address4.setStreet("Vojvode Misica");
+        boatOwner1.setAddress(address4);
+
+        BoatOwner boatOwner2 = new BoatOwner();
+        boatOwner2.setRole(role5);
+        boatOwner2.setEmail("mejl45@gmail.com");
+        boatOwner2.setFirstname("Milica");
+        boatOwner2.setLastName("Kosanic");
+        boatOwner2.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
+        boatOwner2.setEnabled(false);
+        boatOwner2.setPhone("0605458412");
+        Address address5 = new Address();
+        address5.setCountry("Srbija");
+        address5.setCity("Sabac");
+        address5.setStreet("Jovana Cvijica");
+        boatOwner2.setAddress(address5);
+
         //USER REPO
         repository.save(customer1);
         repository.save(customer2);
         repository.save(fishingInstructor);
         repository.save(fishingInstructor1);
+        repository.save(cottageOwner1);
+        repository.save(cottageOwner2);
+        repository.save(boatOwner1);
+        repository.save(boatOwner2);
 
         //ADVENTURE
         Adventure adventure = new Adventure();
@@ -170,6 +240,28 @@ public class BackendApplication implements CommandLineRunner {
         adventureReservationRepository.save(reservation1);
         adventureReservationRepository.save(reservation);
         adventureReservationRepository.save(reservation2);
+
+        Cottage cottage1 = new Cottage();
+        cottage1.setConductRules("Budite fini");
+        cottage1.setName("Mala kuca");
+        Address address6 = new Address();
+        address6.setCity("Zlatibor");
+        address6.setCountry("Srbija");
+        address6.setStreet("Ustanicka");
+        cottage1.setAddress(address6);
+
+        Cottage cottage2 = new Cottage();
+        cottage2.setConductRules("Budite fini");
+        cottage2.setName("Mala kuca");
+        Address address7 = new Address();
+        address7.setCity("Tara");
+        address7.setCountry("Srbija");
+        address7.setStreet("Ustanicka");
+        cottage2.setAddress(address6);
+
+        cottageRepository.save(cottage1);
+        cottageRepository.save(cottage2);
+
     }
 
 }
