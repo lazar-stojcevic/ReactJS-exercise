@@ -30,28 +30,28 @@
             <button class="btn btn-primary" @click="showPasswordChange">CHANGE PASSWORD</button>
           </td>
           <td>
-            <button class="btn btn-primary" @click="showInfoChange">CHANGE INFO</button>
+            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showInfoChange">CHANGE INFO</button>
           </td>
           <td>
-            <button class="btn btn-primary" @click="showTaxChange">TAX</button>
+            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showTaxChange">TAX</button>
           </td>
           <td>
-            <button class="btn btn-primary" @click="showBoats">BOATS</button>
+            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showBoats">BOATS</button>
           </td>
           <td>
-            <button class="btn btn-primary" @click="showCottages">COTTAGES</button>
+            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showCottages">COTTAGES</button>
           </td>
           <td>
-            <button class="btn btn-primary" @click="showCustomers">CUSTOMERS</button>
+            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showCustomers">CUSTOMERS</button>
           </td>
           <td>
-            <button class="btn btn-primary" @click="showInstructors">INSTRUCTORS</button>
+            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showInstructors">INSTRUCTORS</button>
           </td>
           <td>
-            <button class="btn btn-primary" @click="showBoatOwners">BOAT OWNERS</button>
+            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showBoatOwners">BOAT OWNERS</button>
           </td>
           <td>
-            <button class="btn btn-primary" @click="showCottageOwners">COTTAGE OWNERS</button>
+            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showCottageOwners">COTTAGE OWNERS</button>
           </td>
         </tr>
       </table>
@@ -129,6 +129,14 @@
       <instructors></instructors>
       <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
     </div>
+    <div v-if="mode === 'cottage'">
+      <cottages></cottages>
+      <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
+    </div>
+    <div v-if="mode === 'cottageOwners'">
+      <cottageOwners></cottageOwners>
+      <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
+    </div>
 
   </div>
 </template>
@@ -136,17 +144,23 @@
 <script>
 import AdminService from "@/Services/AdminService";
 import LogInService from "@/Services/LogInService";
+
 import AllInstructors from "@/components/Admin/InnerAdminComponents/AllInstructors";
+import AllCottageOwners from "@/components/Admin/InnerAdminComponents/AllCottageOwners";
+import AllCottages from "@/components/Admin/InnerAdminComponents/AllCottages";
 export default {
   components:{
-    'instructors' : AllInstructors
+    'instructors' : AllInstructors,
+    'cottageOwners': AllCottageOwners,
+    'cottages': AllCottages
   },
   data(){
     return{
       user: {
         address:{
           street: ''
-        }
+        },
+        firstTimeCreated:''
       },
       mode:'neutral',
       newPassword: '',

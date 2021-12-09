@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3><strong>FISHING INSTRUCTORS</strong></h3>
+    <h3><strong>COTTAGE OWNERS</strong></h3>
     <table class="table table-striped">
       <thead>
       <tr>
@@ -28,12 +28,11 @@
 </template>
 
 <script>
-import FishingInstructorService from "@/Services/FishingInstructorService";
-
 export default {
   data(){
     return{
       users:{
+        name:'',
         address: {
           street: ''
         }
@@ -41,9 +40,6 @@ export default {
     }
   },
   mounted() {
-    FishingInstructorService.getAllFishingInstructors().then(res => { this.users = res.data}).catch(() => {
-      alert("THERE IS SOME PROBLEM WITH LOADING INSTRUCTORS")
-    });
   },
   methods:{
 
