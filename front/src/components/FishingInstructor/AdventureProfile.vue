@@ -23,6 +23,64 @@
        </td>
      </tr>
    </table>
+   <!--CHANGE ADVENTURE-->
+   <div v-if="mode === 'change'">
+     <form style="padding: 10px" @submit.prevent="updateAdventure">
+       <div class="input-group mb-lg-4">
+         <span class="input-group-text">ADVENTURE NAME</span>
+         <input type="text" class="form-control" v-model="newAdventure.name" required>
+       </div>
+       <div class="row" style="margin-bottom: 20px">
+         <div class="col">
+           <span class="input-group-text">STREET</span>
+           <input type="text" class="form-control" v-model="newAdventure.address.street" required>
+         </div>
+         <div class="col">
+           <span class="input-group-text">CITY</span>
+           <input type="text" class="form-control" v-model="newAdventure.address.city" required>
+         </div>
+         <div class="col">
+           <span class="input-group-text">COUNTRY</span>
+           <input type="text" class="form-control" v-model="newAdventure.address.country" required>
+         </div>
+       </div>
+       <div class="input-group mb-lg-4">
+         <span class="input-group-text">DESCRIPTION</span>
+         <input type="text" class="form-control" v-model="newAdventure.description" required>
+       </div>
+       <div class="input-group mb-lg-4">
+         <span class="input-group-text">INSTRUCTOR BIOGRAPHY</span>
+         <input type="text" class="form-control" v-model="newAdventure.instructorBiography" required>
+       </div>
+       <div class="input-group mb-lg-4">
+         <span class="input-group-text">EQUIPMENTS(ADDITIONAL EQUIPMENTS IF CUSTOMER DOESNT HAVE ANY)</span>
+         <input type="text" class="form-control" v-model="newAdventure.equipment" required>
+       </div>
+       <div class="input-group mb-lg-4">
+         <span class="input-group-text">CANCELING TERMS</span>
+         <input type="text" class="form-control" v-model="newAdventure.cancelingTerms" required>
+       </div>
+       <div class="input-group mb-lg-4">
+         <span class="input-group-text">CONDUCT RULES</span>
+         <input type="text" class="form-control" v-model="newAdventure.conductRules" required>
+       </div>
+       <div class="input-group mb-1">
+         <span class="input-group-text">MAXIMUM PERSONS</span>
+         <input type="number" class="form-control" v-model="newAdventure.maxPersons" required>
+       </div>
+       <div class="input-group mb-1">
+         <span class="input-group-text">BASE PRICE</span>
+         <input type="number" class="form-control" v-model="newAdventure.priceList.price" required>
+       </div>
+       <!--LOGIKA ZA POPUNJAVANJE CENOVNIKA-->
+       <div class="input-group mb-lg-4">
+         <div class="btn-group-sm">
+           <button type="submit" class="btn-info">CONFIRM</button>
+           <button type="reset" class="btn-danger" @click="changeModeToNeutral">CANCEL</button>
+         </div>
+       </div>
+     </form>
+   </div>
    <!--ADDING ADDITIONAL SERVICES-->
    <div v-if="mode === 'priceList'">
      <form @submit.prevent="addAdditionalServices">
@@ -43,6 +101,7 @@
    </div>
    <!--ADVENTURE DETAILS-->
    <hr/>
+   <!--ADVENTURE DETAILS-->
    <h1><strong>ADVENTURE DETAILS</strong></h1>
    <table class="table table-striped" style="margin: 15px 0 0 0">
      <tbody>
@@ -85,6 +144,7 @@
      </tbody>
    </table>
    <hr/>
+   <!--ADDITIONAL SERVICES-->
    <div v-if="additionalServices.length > 0">
      <h1><strong>ADDITIONAL SERVICES</strong></h1>
      <table class="table table-striped">
@@ -101,6 +161,7 @@
        </tr>
        </tbody>
      </table>
+     <hr/>
    </div>
    <!--FREE FAST RESERVATIONS-->
    <div v-if="fastReservations.length !== 0">
@@ -124,7 +185,6 @@
    </div>
    <div v-else> THERE IS NO FREE FAST RESERVATIONS</div>
    <!--RESERVED TERMS-->
-   <!--OVO TREBA DA VIDE SAMO INSTRUKTORI-->
    <hr style="margin-top: 10px"/>
    <div v-if="LogInService.userRole ==='ROLE_INSTRUCTOR'">
      <div v-if="reservedTerms.length !== 0">
@@ -166,7 +226,8 @@ export default {
       reservedTerms: '',
       mode: 'neutral',
       addService: { name: '', addPrice: ''},
-      additionalServices: []
+      additionalServices: [],
+      newAdventure: {name: '', address:{street: ''}, priceList: {price: ''}}
     }
   },
   mounted() {
@@ -196,7 +257,13 @@ export default {
 
     },
     changeAdventure(){
-
+      this.mode = 'change';
+      this.newAdventure = JSON.parse(JSON.stringify(this.adventure));
+    },
+    updateAdventure(){
+      AdventureService.updateAdventure(this.newAdventure).then(res => {
+        this.adventure = res.data; this.mode = 'neutral';
+      }).catch(() => {alert("THERE IS SOME ERROR WITH CHANGING ADVENTURE")});
     },
     makeCustomReservation(){
 

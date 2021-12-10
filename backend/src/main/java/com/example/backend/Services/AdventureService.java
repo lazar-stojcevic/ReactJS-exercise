@@ -18,9 +18,6 @@ public class AdventureService {
     @Autowired
     private FishingInstructorService fishingInstructorService;
 
-    @Autowired
-    private AdditionalServicesService additionalServicesService;
-
     public AdventureService(AdventureRepository adventureRepository){
         this.adventureRepository = adventureRepository;
     }
@@ -31,6 +28,9 @@ public class AdventureService {
 
     //DTO OBJEKAT ZA IZMENU
     public Adventure updateAdventure(Adventure adventure){
+        PriceList priceList = findAdventureById(adventure.getId()).getPriceList();
+        priceList.setPrice(adventure.getPriceList().getPrice());
+        adventure.setPriceList(priceList);
         return adventureRepository.save(adventure);
     }
 

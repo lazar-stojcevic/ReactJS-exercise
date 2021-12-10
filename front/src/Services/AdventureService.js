@@ -53,7 +53,12 @@ class AdventureService{
         return axios.delete(URL + '/' + adventureId, {headers});
     }
 
-    updateAdventure(adventure, headers){
+    updateAdventure(adventure){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
         let data = JSON.stringify(adventure);
         return axios.put(URL, data, {headers});
     }
