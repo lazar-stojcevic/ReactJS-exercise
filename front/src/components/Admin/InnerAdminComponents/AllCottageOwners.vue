@@ -28,19 +28,17 @@
 </template>
 
 <script>
+import CottageOwnerService from "@/Services/CottageOwnerService";
 export default {
   data(){
     return{
-      users:{
-        name:'',
-        address: {
-          street: ''
-        }
-      }
+      users:[]
     }
   },
   mounted() {
-
+    CottageOwnerService.getAllCottageOwners().then(res => {this.users = res.data}).catch(() => {
+      alert("THERE IS SOME PROBLEM WITH LOADING COTTAGE OWNERS")
+    })
   },
   methods:{
 

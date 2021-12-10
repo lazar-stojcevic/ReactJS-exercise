@@ -33,11 +33,7 @@ import FishingInstructorService from "@/Services/FishingInstructorService";
 export default {
   data(){
     return{
-      users:{
-        address: {
-          street: ''
-        }
-      }
+      users: []
     }
   },
   mounted() {

@@ -8,6 +8,7 @@ class RegistrationService{
             'Accept': 'application/json;charset=utf-8',
             'Content-Type': 'application/json;charset=utf-8'
         };
+        console.log(JSON.stringify(newUser));
         return axios.post(REGISTER_URL, newUser, {headers}).then();
     }
 }

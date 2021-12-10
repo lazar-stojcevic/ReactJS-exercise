@@ -31,17 +31,10 @@ import AdminService from "@/Services/AdminService";
 export default {
   data(){
     return{
-      users: {
-        address: {
-          street: ''
-        }
-      }
+      users: []
     }
   },
   mounted() {
-    //let u = {firstname: 'NIKOLA', lastName: 'NIKOLIC', address: { street: 'DURINA', city: 'ZRENJANIN', country: 'SRBIJA'},
-   //email: 'asff@gmail.com', phone: '555-333', role: 'ROLE_CUSTOMER'}
-    //this.users = [u]
     AdminService.getAllNotEnabledUsers().then(res => {this.users = res.data}).catch(() => {
       alert("THERE IS SOME PROBLEM WITH LOADING USERS")
     });

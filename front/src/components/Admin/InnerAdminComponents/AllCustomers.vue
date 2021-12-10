@@ -31,11 +31,7 @@ import CustomerService from "@/Services/CustomerService";
 export default {
   data(){
     return{
-      users:{
-        address: {
-          street: ''
-        }
-      }
+      users: []
     }
   },
   mounted() {

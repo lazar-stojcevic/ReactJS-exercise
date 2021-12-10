@@ -119,7 +119,10 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault()
-
+      if(this.form.passwordConf !== this.form.password){
+        alert("PASSWORD AND CONFIRM PASSWORD MUST BE SAME")
+        return;
+      }
 
       RegistrationService.register({
         "email": this.form.email,
@@ -130,7 +133,7 @@ export default {
         "city": this.form.city,
         "country": this.form.country,
         "phone": this.form.phone,
-        "userType": this.type
+        "userType": this.form.type
       }).then(res => {this.user = res.data}).catch(() => {
         alert("SERVER ERROR");
       });

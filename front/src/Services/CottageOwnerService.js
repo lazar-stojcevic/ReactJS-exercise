@@ -5,6 +5,14 @@ const COTTAGE_OWNER_URL = 'http://localhost:8080/cottageOwner';
 
 class CottageOwnerService{
 
+    getAllCottageOwners(){
+        const headers = {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(COTTAGE_OWNER_URL, {headers});
+    }
+
     getCottageOwnerById(userId){
         const headers = {
             'Accept': 'application/json',
