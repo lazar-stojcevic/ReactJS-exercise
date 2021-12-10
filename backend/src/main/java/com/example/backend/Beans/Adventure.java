@@ -30,7 +30,7 @@ public class Adventure {
     @JoinColumn(name = "address", referencedColumnName = "address_id")
     private Address address;
 
-    @Column()
+    @Column
     private int maxPersons;
 
     @Column(length = 1000)
@@ -51,7 +51,6 @@ public class Adventure {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
-    //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private FishingInstructor instructor;
 
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

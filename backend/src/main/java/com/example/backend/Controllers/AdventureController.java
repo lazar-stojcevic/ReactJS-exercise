@@ -1,5 +1,6 @@
 package com.example.backend.Controllers;
 
+import com.example.backend.Beans.AdditionalServices;
 import com.example.backend.Beans.Adventure;
 import com.example.backend.Services.AdventureService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @CrossOrigin(allowedHeaders = "*")
 @RestController
@@ -24,6 +26,13 @@ public class AdventureController {
     @GetMapping()
     public ResponseEntity<Collection<Adventure>> getAllAdventure(){
         return new ResponseEntity<>(adventureService.getAllAdventures(), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/additionalServices/{adventureId}")
+    public ResponseEntity<Collection<AdditionalServices>> getAdditionalServicesOfAdventure(
+            @PathVariable long adventureId){
+        return new ResponseEntity<>(adventureService.getAdditionalServicesOfAdventure(adventureId),
+                HttpStatus.OK);
     }
 
     @GetMapping(path = "{id}")
@@ -60,5 +69,4 @@ public class AdventureController {
     public ResponseEntity<Adventure> updateAdventure(@RequestBody Adventure adventure){
         return new ResponseEntity<>(adventureService.updateAdventure(adventure), HttpStatus.OK);
     }
-
 }

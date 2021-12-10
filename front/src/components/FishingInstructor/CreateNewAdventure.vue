@@ -43,6 +43,10 @@
         <span class="input-group-text">MAXIMUM PERSONS</span>
         <input type="number" class="form-control" v-model="maxPersons" required>
       </div>
+    <div class="input-group mb-1">
+      <span class="input-group-text">BASE PRICE</span>
+      <input type="number" class="form-control" v-model="basePrice" required>
+    </div>
     <!--LOGIKA ZA POPUNJAVANJE CENOVNIKA-->
     <div class="input-group mb-lg-4">
       <div class="btn-group-sm">
@@ -71,7 +75,8 @@ export default {
       instructorBiography:'',
       equipment:'',
       cancelingTerms:'',
-      conductRules: ''
+      conductRules: '',
+      basePrice: ''
     }
   },
   methods:{
@@ -96,7 +101,10 @@ export default {
         instructorBiography: this.instructorBiography,
         equipment: this.equipment,
         cancelingTerms: this.cancelingTerms,
-        conductRules: this.conductRules
+        conductRules: this.conductRules,
+        priceList: {
+         price: this.basePrice
+        }
       }
       this.createAdventure();
     }

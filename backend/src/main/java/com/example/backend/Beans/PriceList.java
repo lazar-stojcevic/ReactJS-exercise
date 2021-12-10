@@ -1,5 +1,6 @@
 package com.example.backend.Beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,6 +26,7 @@ public class PriceList {
     private int price;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "priceList", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<AdditionalServices> additionalServices = new HashSet<AdditionalServices>();
 
 }

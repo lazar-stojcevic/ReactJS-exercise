@@ -23,7 +23,6 @@ public class AdditionalServices {
 
     @ManyToOne
     @JoinColumn(name = "price_list_price_lis_id")
-    @JsonIgnore
     private PriceList priceList;
 
     @Column(length = 50)

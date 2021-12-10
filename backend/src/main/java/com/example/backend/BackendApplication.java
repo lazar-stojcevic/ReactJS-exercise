@@ -208,6 +208,9 @@ public class BackendApplication implements CommandLineRunner {
         adventure.setInstructorBiography("Diplomirani biolog i veliki ljubitelj prirode");
         adventure.setConductRules("Strogo je zabranjeno bacanje djubreta van kanti za smece");
         adventure.setEquipment("Dvogledi i durbini");
+        PriceList priceList = new PriceList();
+        priceList.setPrice(4000);
+        adventure.setPriceList(priceList);
 
         Adventure adventure1 = new Adventure();
         Address adventureAddress1 = new Address();
@@ -223,6 +226,9 @@ public class BackendApplication implements CommandLineRunner {
         adventure1.setInstructorBiography("Programer u pokusaju :D");
         adventure1.setConductRules("Strogo je zabranjeno bacanje djubreta van kanti za smece, kao i paljenje vatre u prirodi");
         adventure1.setEquipment("Teleskop i blinker");
+        PriceList priceList1 = new PriceList();
+        priceList1.setPrice(5000);
+        adventure1.setPriceList(priceList1);
 
         adventureRepository.save(adventure);
         adventureRepository.save(adventure1);
