@@ -268,9 +268,9 @@ public class BackendApplication implements CommandLineRunner {
         address6.setStreet("Ustanicka");
         cottage1.setAddress(address6);
         cottage1.setCottageOwner(cottageOwner1);
-        PriceList priceList = new PriceList();
-        priceList.setPrice(5000);
-        cottage1.setPriceList(priceList);
+        PriceList priceList14 = new PriceList();
+        priceList14.setPrice(5000);
+        cottage1.setPriceList(priceList14);
 
         Cottage cottage2 = new Cottage();
         cottage2.setConductRules("Budite fini");
