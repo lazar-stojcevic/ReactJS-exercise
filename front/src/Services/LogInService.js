@@ -40,10 +40,10 @@ class LogInService{
         this.userRole = '';
         this.accessToken = '';
         this.expiresIn = '';
-        localStorage.setItem("userId", '.')
-        localStorage.setItem("userRole", '.')
-        localStorage.setItem("accessToken", '.')
-        localStorage.setItem("expiresIn", '.')
+        localStorage.setItem("userId", '')
+        localStorage.setItem("userRole", '')
+        localStorage.setItem("accessToken", '')
+        localStorage.setItem("expiresIn", '')
     }
 
     tokenIsPresent() {

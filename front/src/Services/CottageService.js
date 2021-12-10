@@ -27,7 +27,6 @@ class CottageService{
             'Content-Type': 'application/json;charset=utf-8',
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
-        alert(LogInService.userId);
         return axios.post(URL, newCottage, {headers}).then();
     }
 
@@ -37,7 +36,6 @@ class CottageService{
             'Content-Type': 'application/json;charset=utf-8',
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
-        alert(LogInService.userId);
         return axios.put(URL, newCottage, {headers}).then();
     }
 

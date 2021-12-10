@@ -3,6 +3,7 @@ package com.example.backend.Beans;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -24,6 +25,6 @@ public class CottageImage {
     @ToString.Exclude
     private Cottage cottage;
 
-    @Column
+    @Column(length = 400000)
     private String base64;
 }

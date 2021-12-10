@@ -10,7 +10,13 @@
             <button @click="changeModeToAddRoom" v-if="mode === 'neutral'" class="btn-info">ADD ROOM</button>
             <button @click="deleteCottage(cottage.id)" v-if="mode === 'neutral'" class="btn-danger">DELETE</button>
           </div>
+
           <div v-if="mode === 'neutral'">
+            <b-card v-for="image in photos" :key="image">
+              <img :src="image" width="200" height="200">
+            </b-card>
+
+            <b-card>
             <h1>Name: {{cottage.name}}</h1>
             <br>
             <h2>Rules: {{cottage.conductRules}} </h2>
@@ -22,13 +28,17 @@
             <h3>Price: {{cottage.priceList.price}} </h3>
             <br>
             <h3>Rating: {{cottage.rating}} </h3>
+          </b-card>
 
+            <h3>Sobe: </h3>
             <div class="container" v-for="room in rooms" :key="room.id">
+              <b-card>
               <p>Price: {{room.roomDescription}} </p>
               <br>
               <p>Rating: {{room.numberOfBeds}} </p>
               <br>
               <button @click="deleteRoom(room.id)" class="btn-info">DELETE</button>
+              </b-card>
             </div>
           </div>
 
@@ -51,7 +61,24 @@
               </div>
             </form>
           </div>
-          <b-form @submit="update" v-if="mode === 'changeInfo'">
+
+            <div v-if="mode === 'addPhoto'" class="container">
+              <form @submit.prevent="addPhoto">
+                <div class="input-group mb-3">
+                  <span class="input-group-text">PHOTO</span>
+                  <br>
+                  <input type="file" accept="image/jpeg/*" @change="uploadImage()"/>
+                </div>
+                <div class="input-group mb-3">
+                  <div class="btn-group-sm">
+                    <button type="submit" class="btn-info">CONFIRM</button>
+                    <button @click="changeModeToNeutral()" type="reset" class="btn-danger">CLOSE</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <b-form @submit="update" v-if="mode === 'changeInfo'">
 
             <b-form-group id="input-name" label="Cottage name:" label-for="name">
               <b-form-input
@@ -123,6 +150,7 @@
 import CottageService from "../../Services/CottageService";
 import RoomService from "../../Services/RoomService";
 import LogInService from "../../Services/LogInService";
+import CottageImageService from "../../Services/CottageImageService";
 
 export default {
   name: "CottageProfile",
@@ -137,13 +165,15 @@ export default {
       priceList:{ price:0}
       },
       rooms:[],
+      photos:[],
       newRoom:{
         description: '',
         number:''
       },
       mode: 'neutral',
       newCottageInfo: '',
-      response:''
+      response:'',
+      photo: []
     }
   },
   mounted() {
@@ -155,6 +185,12 @@ export default {
     RoomService.getRoomById(this.id).then(res=>{
       this.rooms = res.data;
     });
+    CottageImageService.getImageById(this.id).then(res=>{
+      for(let img of res.data){
+        this.photos.push(img.base64.replaceAll('"', ''));
+      }
+    });
+
   },
   methods: {
     changeModeToNeutral(){
@@ -203,7 +239,6 @@ export default {
           this.rooms = res.data;
         });
         this.response=response;
-        alert(response);
       })
     },
 
@@ -229,6 +264,36 @@ export default {
         this.$router.push('/usersCottage');
         this.response=response;
       })
+    },
+    uploadImage() {
+      const file = document.querySelector('input[type=file]').files[0]
+      const reader = new FileReader()
+
+      reader.onloadend = () => {
+        this.photo = reader.result;
+
+      }
+      reader.readAsDataURL(file);
+    },
+
+
+    addPhoto(){
+      CottageImageService.create({
+        "cottageId": this.id,
+        "base64": this.photo
+      }).then(response=>{
+        CottageImageService.getImageById(this.id).then(res=>{
+          for(let img of res.data){
+            this.photos.push(img.base64.replaceAll('"', ''));
+          }
+        });
+        this.response=response;
+      })
+      this.changeModeToNeutral();
+    },
+
+    a(){
+      alert(this.photos[0]);
     }
 
 

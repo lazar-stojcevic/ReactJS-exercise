@@ -1,17 +1,17 @@
 import axios from "axios";
 import LogInService from "@/Services/LogInService";
 
-const URL = 'http://localhost:8080/room';
+const URL = 'http://localhost:8080/cottageImage';
 
-class RoomService{
+class CottageImageService{
 
-    getRoomById(cottageId){
+    getImageById(cottageId){
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
-        return axios.get(URL + '/cottage/' + cottageId, {headers});
+        return axios.get(URL + '/' + cottageId, {headers});
     }
 
     create(newRoom){
@@ -20,7 +20,6 @@ class RoomService{
             'Content-Type': 'application/json;charset=utf-8',
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
-
         return axios.post(URL, newRoom, {headers}).then();
     }
 
@@ -34,4 +33,4 @@ class RoomService{
     }
 }
 
-export default new RoomService()
+export default new CottageImageService()

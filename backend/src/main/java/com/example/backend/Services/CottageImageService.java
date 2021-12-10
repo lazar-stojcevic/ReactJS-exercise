@@ -6,6 +6,8 @@ import com.example.backend.Dtos.CottageImageDto;
 import com.example.backend.Repository.CottageImageRepository;
 import com.example.backend.Services.Interfaces.ICottageImageService;
 import com.example.backend.Services.Interfaces.ICottageService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,7 @@ public class CottageImageService implements ICottageImageService {
         Optional<CottageImage> cottage = cottageImageRepository.findById(id);
         return cottage.orElse(null);
     }
+
 
     @Override
     public CottageImage saveImage(CottageImageDto newImage) {

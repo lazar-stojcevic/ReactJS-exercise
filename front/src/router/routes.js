@@ -31,6 +31,9 @@ import CottageProfile from "../components/CottageOwner/CottageProfile";
 import MyCottageReservation from "../components/CottageOwner/MyCottageReservation";
 import Availability from "../components/CottageOwner/Availability";
 import UserReservationProfile from "../components/CottageOwner/UserReservationProfile";
+import AvailablePeriodsWithBenefits from "../components/CottageOwner/AvailablePeriodsWithBenefits";
+import ReservationReport from "../components/CottageOwner/ReservationReport";
+import CreateReservation from "../components/CottageOwner/CreateReservation";
 
 const routes = [
     {path: '/', component: Home},
@@ -65,7 +68,10 @@ const routes = [
     {path: '/myCottageReservation', component: MyCottageReservation},
     {path: '/availability', component: Availability},
     {path: '/cottageOwnerProfile', component: CottageOwnerProfile},
-    {path: '/userReservationProfile', component: UserReservationProfile}
+    {path: '/userReservationProfile', component: UserReservationProfile},
+    {path: '/availablePeriodsWithBenefits', component: AvailablePeriodsWithBenefits},
+    {path: '/reservationReport', component: ReservationReport},
+    {path: '/createReservationForCustomer', component: CreateReservation}
 ]
 
 export default routes;
