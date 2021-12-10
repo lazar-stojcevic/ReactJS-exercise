@@ -41,4 +41,16 @@ public class CottageController {
     public Cottage save(@RequestBody CottageDto cottage){
         return this.cottageService.saveCottage(cottage);
     }
+
+    @PutMapping(consumes = "application/json")
+    public Cottage update(@RequestBody CottageDto cottage){
+
+        return this.cottageService.updateCottage(cottage);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable long id){
+        cottageService.deleteCottage(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

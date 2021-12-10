@@ -21,6 +21,35 @@ class CottageService{
         };
         return axios.get(URL, {headers});
     }
+    create(newCottage){
+        let headers = {
+            'Accept': 'application/json;charset=utf-8',
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        alert(LogInService.userId);
+        return axios.post(URL, newCottage, {headers}).then();
+    }
+
+    update(newCottage){
+        let headers = {
+            'Accept': 'application/json;charset=utf-8',
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        alert(LogInService.userId);
+        return axios.put(URL, newCottage, {headers}).then();
+    }
+
+    delete(id){
+        let headers = {
+            'Accept': 'application/json;charset=utf-8',
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.delete(URL + '/' + id, {headers}).then();
+
+    }
 }
 
 export default new CottageService()

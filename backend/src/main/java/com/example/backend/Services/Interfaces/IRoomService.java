@@ -11,7 +11,7 @@ import java.util.Collection;
 public interface IRoomService {
     Collection<Room> findAllRooms();
     Room findById(long id);
-    Room saveRoom(Room newRoom);
+    Room saveRoom(RoomDto newRoom);
     Room updateRoom(RoomDto newRoom);
     void deleteRoom(long id);
 }

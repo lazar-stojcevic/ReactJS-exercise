@@ -131,18 +131,11 @@ export default {
         "country": this.form.country,
         "phone": this.form.phone,
         "userType": this.type
+      }).then(res => {this.user = res.data}).catch(() => {
+        alert("SERVER ERROR");
       });
 
-      this.form.email =  '';
-      this.form.password =  '';
-      this.form.passwordConf =  '';
-      this.form.firstname =  '';
-      this.form.lastname =  '';
-      this.form.street =  '';
-      this.form.city =  '';
-      this.form.country =  '';
-      this.form.phone =  '';
-      this.form.type =  "CU";
+      this.$router.push('/login');
     }
   }
 }

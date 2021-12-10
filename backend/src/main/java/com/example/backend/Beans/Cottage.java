@@ -45,12 +45,10 @@ public class Cottage {
     private Address address;
 
     @OneToMany(mappedBy = "cottage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude
     @JsonIgnore
     private Set<CottageImage> images = new HashSet<CottageImage>();
 
     @OneToMany(mappedBy = "cottage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude
     @JsonIgnore
     private Set<Room> rooms = new HashSet<Room>();
 

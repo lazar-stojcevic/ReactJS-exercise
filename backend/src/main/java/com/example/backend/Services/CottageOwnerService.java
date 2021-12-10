@@ -1,10 +1,8 @@
 package com.example.backend.Services;
 
-import com.example.backend.Beans.Address;
-import com.example.backend.Beans.Cottage;
-import com.example.backend.Beans.CottageOwner;
-import com.example.backend.Beans.Customer;
+import com.example.backend.Beans.*;
 import com.example.backend.Dtos.CottageOwnerChangeDto;
+import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Dtos.UserRegistration;
 import com.example.backend.Repository.AddressRepository;
 import com.example.backend.Repository.CottageOwnerRepository;
@@ -59,7 +57,7 @@ public class CottageOwnerService implements ICottageOwnerService {
         cottageOwner.setPassword(passwordEncoder.encode(userRegistration.getPassword()));
         cottageOwner.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         cottageOwner.setEnabled(false);
-        cottageOwner.setRole(roleService.findByName("COTTAGE_OWNER_ROLE"));
+        cottageOwner.setRole(roleService.findByName("ROLE_COTTAGE_OWNER"));
         return  cottageOwnerRepository.save(cottageOwner);
     }
 
@@ -68,6 +66,12 @@ public class CottageOwnerService implements ICottageOwnerService {
         Optional<CottageOwner> cottageOwner = cottageOwnerRepository.findById(id);
         return cottageOwner.orElse(null);
     }
+
+    @Override
+    public CottageOwner getById(long id) {
+        return cottageOwnerRepository.getById(id);
+    }
+
 
     @Override
     public CottageOwner updateCottageOwner(CottageOwnerChangeDto changeDto) {
@@ -85,6 +89,14 @@ public class CottageOwnerService implements ICottageOwnerService {
     public CottageOwner enableCottageOwner(long id) {
         CottageOwner cottageOwner = findCottageOwner(id);
         cottageOwner.setEnabled(true);
+        return cottageOwnerRepository.save(cottageOwner);
+    }
+
+    @Override
+    public CottageOwner changePassword(PasswordChangeDto passwordChangeDto) {
+        CottageOwner cottageOwner = findCottageOwner(passwordChangeDto.getUserId());
+        cottageOwner.setPassword(passwordEncoder.encode(passwordChangeDto.getPassword()));
+        cottageOwner.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         return cottageOwnerRepository.save(cottageOwner);
     }
 

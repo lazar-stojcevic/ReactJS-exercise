@@ -1,10 +1,18 @@
 <template>
   <div class="container">
     <div class="grid">
-      <!--PRVI RED-->
       <div class="row" style="margin-top: 20px">
         <div class="col">
-          <table class="table table-striped">
+          <!--INFO-->
+          <div class="input-group mb-3">
+            <div class="btn-group-sm">
+            <button @click="changeModeToInfo" v-if="mode === 'neutral'" class="btn-info">CHANGE YOUR INFO</button>
+            <button @click="changeModeToPassword" v-if="mode === 'neutral'" class="btn-info">CHANGE PASSWORD</button>
+            <button v-if="mode === 'neutral'" class="btn-danger">SEND REQUEST FOR DELETING</button>
+            </div>
+          </div>
+
+          <table class="table table-striped" v-if="mode === 'neutral'">
             <tbody>
             <tr>
               <td>FULL NAME</td>
@@ -23,28 +31,10 @@
               <td>PHONE</td>
               <td>{{user.phone}}</td>
             </tr>
-            <tr>
-              <td>REWARD POINTS</td>
-              <td>{{user.points}}</td>
-            </tr>
-            <tr v-if="user.points > 100">
-              <td>USER CATEGORY</td>
-              <td>*PLATINUM* - 5% discaunt on all reservations</td>
-            </tr>
-            <tr v-else-if="user.points > 50">
-              <td>USER CATEGORY</td>
-              <td>*GOLD* - 3% discaunt on all reservations</td>
-            </tr>
-            <tr v-else>
-              <td>USER CATEGORY</td>
-              <td>Need more point from price reduction</td>
-            </tr>
             </tbody>
           </table>
-          <div class="btn-group-sm" style="margin: 5px">
-            <button @click="changeModeToInfo" v-if="mode === 'neutral'" class="btn-info">CHANGE YOUR INFO</button>
-            <button @click="changeModeToPassword" v-if="mode === 'neutral'" class="btn-info">CHANGE PASSWORD</button>
-          </div>
+
+          <!--PASSWORD CHANGING-->
           <div v-if="mode === 'changePassword'" class="container">
             <form @submit.prevent="changePassword">
               <div class="input-group mb-3">
@@ -63,6 +53,7 @@
               </div>
             </form>
           </div>
+          <!--INFO CHANGING-->
           <div v-if="mode === 'changeInfo'" class="container">
             <form @submit.prevent="changeUserInfo">
               <div class="input-group mb-3">
@@ -104,9 +95,9 @@
 </template>
 
 <script>
-import LogInService from "@/Services/LogInService";
-import CustomerService from "@/Services/CustomerService";
-//validacija teksta
+import CottageOwnerService from "../../Services/CottageOwnerService";
+import LogInService from "../../Services/LogInService";
+
 export default {
   data(){
     return{
@@ -119,52 +110,57 @@ export default {
       newPassword: '',
       confirmPassword: '',
       newUserInfo: '',
+      fromDate: ' ',
+      toDate: ''
     }
   },
   mounted() {
     if(LogInService.userRole === '')
       this.$router.push('/login');
-    CustomerService.getCustomerId(LogInService.userId).then(res => {
+    CottageOwnerService.getCottageOwnerById(LogInService.userId).then(res => {
       this.user = res.data;
       this.newUserInfo = res.data;
     });
   },
   methods: {
-    changeModeToNeutral(){
-      if(this.mode === 'changePassword'){
+    changeModeToNeutral() {
+      if (this.mode === 'changePassword') {
         this.newPassword = '';
         this.confirmPassword = '';
       }
       this.mode = 'neutral';
     },
-    changeModeToInfo(){
+    changeModeToInfo() {
       this.mode = 'changeInfo';
       this.newUserInfo = JSON.parse(JSON.stringify(this.user));
     },
-    changeModeToPassword(){
+    changeModeToPassword() {
       this.mode = 'changePassword'
     },
-    changePassword(){
-      if(this.newPassword !== this.confirmPassword && this.newPassword.trim() !== ''){
+    changePassword() {
+      if (this.newPassword !== this.confirmPassword && this.newPassword.trim() !== '') {
         alert("NEW PASSWORD IS NOT MATCHING WITH CONFIRM PASSWORD");
         return;
       }
-      CustomerService.changePassword(this.confirmPassword, this.user.id)
+      CottageOwnerService.changePassword(this.confirmPassword, this.user.id)
           .then(() => {
             LogInService.logout();
             this.$router.push('/login');
           })
-          .catch(err => { alert("SERVER ERROR: " + err)});
+          .catch(err => {
+            alert("SERVER ERROR: " + err)
+          });
     },
     //TODO: VALIDACIJA
-    changeUserInfo(){
-      CustomerService.changeCustomer(this.newUserInfo).then(res => {this.user = res.data}).catch(() => {
+    changeUserInfo() {
+      CottageOwnerService.changeOwner(this.newUserInfo).then(res => {
+        this.user = res.data
+      }).catch(() => {
         alert("SERVER ERROR");
       });
       this.mode = 'neutral';
     },
   }
-
 }
 </script>
 

@@ -55,7 +55,7 @@ public class BoatOwnerService implements IBoatOwnerService {
         boatOwner.setPassword(passwordEncoder.encode(userRegistration.getPassword()));
         boatOwner.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         boatOwner.setEnabled(false);
-        boatOwner.setRole(roleService.findByName("BOAT_OWNER_ROLE"));
+        boatOwner.setRole(roleService.findByName("ROLE_BOAT_OWNER"));
         return  boatOwnerRepository.save(boatOwner);
     }
 

@@ -16,4 +16,6 @@ public class CottageDto {
     private String street;
     private String city;
     private String country;
+    private String promo;
+    private int price;
 }

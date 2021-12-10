@@ -42,10 +42,10 @@ public class BackendApplication implements CommandLineRunner {
         role3.setName("ROLE_INSTRUCTOR");
 
         Role role4 = new Role();
-        role4.setName("BOAT_OWNER_ROLE");
+        role4.setName("ROLE_BOAT_OWNER");
 
         Role role5 = new Role();
-        role5.setName("COTTAGE_OWNER_ROLE");
+        role5.setName("ROLE_COTTAGE_OWNER");
 
         //ROLE REPO
         roleRepository.save(role1);
@@ -62,6 +62,11 @@ public class BackendApplication implements CommandLineRunner {
         customer1.setEnabled(true);
         customer1.setPhone("555-333");
         customer1.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
+        Address address8 = new Address();
+        address8.setStreet("Nikole Tesle");
+        address8.setCity("Karavukovo");
+        address8.setCountry("Srbija");
+        customer1.setAddress(address8);
         customer1.setRole(role1);
         customer1.setPoints(150);
         customer1.setPenaltyPoints(0);
@@ -119,13 +124,14 @@ public class BackendApplication implements CommandLineRunner {
 
 
         CottageOwner cottageOwner1 = new CottageOwner();
-        cottageOwner1.setRole(role4);
+        cottageOwner1.setRole(role5);
         cottageOwner1.setEmail("teddyjj25@gmail.com");
         cottageOwner1.setFirstname("Marija");
         cottageOwner1.setLastName("Markovic");
         cottageOwner1.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
         cottageOwner1.setEnabled(true);
         cottageOwner1.setPhone("0605412876");
+        cottageOwner1.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         Address address2 = new Address();
         address2.setCountry("Srbija");
         address2.setCity("Sabac");
@@ -133,12 +139,13 @@ public class BackendApplication implements CommandLineRunner {
         cottageOwner1.setAddress(address2);
 
         CottageOwner cottageOwner2 = new CottageOwner();
-        cottageOwner2.setRole(role4);
+        cottageOwner2.setRole(role5);
         cottageOwner2.setEmail("mejlic55@gmail.com");
         cottageOwner2.setFirstname("Petar");
         cottageOwner2.setLastName("Lazic");
         cottageOwner2.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
         cottageOwner2.setEnabled(false);
+        cottageOwner2.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         cottageOwner2.setPhone("0605412875");
         Address address3 = new Address();
         address3.setCountry("Srbija");
@@ -147,13 +154,14 @@ public class BackendApplication implements CommandLineRunner {
         cottageOwner2.setAddress(address3);
 
         BoatOwner boatOwner1 = new BoatOwner();
-        boatOwner1.setRole(role5);
+        boatOwner1.setRole(role4);
         boatOwner1.setEmail("mejl55@gmail.com");
         boatOwner1.setFirstname("Marko");
         boatOwner1.setLastName("Stefanovic");
         boatOwner1.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
         boatOwner1.setEnabled(true);
         boatOwner1.setPhone("0605412412");
+        boatOwner1.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         Address address4 = new Address();
         address4.setCountry("Srbija");
         address4.setCity("Sabac");
@@ -161,13 +169,14 @@ public class BackendApplication implements CommandLineRunner {
         boatOwner1.setAddress(address4);
 
         BoatOwner boatOwner2 = new BoatOwner();
-        boatOwner2.setRole(role5);
+        boatOwner2.setRole(role4);
         boatOwner2.setEmail("mejl45@gmail.com");
         boatOwner2.setFirstname("Milica");
         boatOwner2.setLastName("Kosanic");
         boatOwner2.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
         boatOwner2.setEnabled(false);
         boatOwner2.setPhone("0605458412");
+        boatOwner2.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         Address address5 = new Address();
         address5.setCountry("Srbija");
         address5.setCity("Sabac");
@@ -252,6 +261,10 @@ public class BackendApplication implements CommandLineRunner {
         address6.setCountry("Srbija");
         address6.setStreet("Ustanicka");
         cottage1.setAddress(address6);
+        cottage1.setCottageOwner(cottageOwner1);
+        PriceList priceList = new PriceList();
+        priceList.setPrice(5000);
+        cottage1.setPriceList(priceList);
 
         Cottage cottage2 = new Cottage();
         cottage2.setConductRules("Budite fini");
@@ -263,6 +276,7 @@ public class BackendApplication implements CommandLineRunner {
         address7.setCountry("Srbija");
         address7.setStreet("Ustanicka");
         cottage2.setAddress(address7);
+        cottage2.setCottageOwner(cottageOwner2);
 
         cottageRepository.save(cottage1);
         cottageRepository.save(cottage2);

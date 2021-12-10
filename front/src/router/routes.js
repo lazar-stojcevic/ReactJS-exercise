@@ -24,6 +24,13 @@ import OneCottage from "@/components/Customer/OneCottage";
 import AdminProfile from "@/components/Admin/AdminProfile";
 import ProfileRequests from "@/components/Admin/ProfileRequests";
 import CreateNewAdmin from "@/components/Admin/CreateNewAdmin";
+import CottageOwnerProfile from "../components/CottageOwner/CottageOwnerProfile";
+import CreateCottage from "../components/CottageOwner/CreateCottage";
+import UsersCottage from "../components/CottageOwner/UsersCottage";
+import CottageProfile from "../components/CottageOwner/CottageProfile";
+import MyCottageReservation from "../components/CottageOwner/MyCottageReservation";
+import Availability from "../components/CottageOwner/Availability";
+import UserReservationProfile from "../components/CottageOwner/UserReservationProfile";
 
 const routes = [
     {path: '/', component: Home},
@@ -51,7 +58,14 @@ const routes = [
     {path: '/cottage/:id', component: OneCottage},
     {path: '/adminProfile', component: AdminProfile},
     {path: '/profileRequests', component: ProfileRequests},
-    {path: '/createNewAdmin', component: CreateNewAdmin}
+    {path: '/createNewAdmin', component: CreateNewAdmin},
+    {path: '/createCottage', component: CreateCottage},
+    {path: '/usersCottage', component: UsersCottage},
+    {path: '/cottageProfile/:id', component: CottageProfile},
+    {path: '/myCottageReservation', component: MyCottageReservation},
+    {path: '/availability', component: Availability},
+    {path: '/cottageOwnerProfile', component: CottageOwnerProfile},
+    {path: '/userReservationProfile', component: UserReservationProfile}
 ]
 
 export default routes;

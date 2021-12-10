@@ -6,10 +6,12 @@ import com.example.backend.Dtos.RoomDto;
 import com.example.backend.Repository.RoomRepository;
 import com.example.backend.Services.Interfaces.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Service
 public class RoomService implements IRoomService {
 
     @Autowired
@@ -32,8 +34,12 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public Room saveRoom(Room newRoom) {
-        return roomRepository.save(newRoom);
+    public Room saveRoom(RoomDto newRoom) {
+        Room room = new Room();
+        room.setCottage(cottageService.findById(newRoom.getCottageId()));
+        room.setRoomDescription(newRoom.getRoomDescription());
+        room.setNumberOfBeds(newRoom.getNumberOfBeds());
+        return roomRepository.save(room);
     }
 
     @Override
@@ -47,6 +53,6 @@ public class RoomService implements IRoomService {
 
     @Override
     public void deleteRoom(long id) {
-        roomRepository.deleteById(id);
+        roomRepository.delete(findById(id));
     }
 }
