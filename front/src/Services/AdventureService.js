@@ -3,7 +3,7 @@ import LogInService from "@/Services/LogInService";
 
 const URL = 'http://localhost:8080/adventure';
 const URL_AS = 'http://localhost:8080/additionalServices';
-
+const URL_IMG = 'http://localhost:8080/images';
 
 class AdventureService{
     adventureId = ''
@@ -80,6 +80,25 @@ class AdventureService{
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
         return axios.get(URL + '/additionalServices/' + adventureId, {headers});
+    }
+
+    getAllImagesOfAdventure(adventureId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/images/' + adventureId, {headers});
+    }
+
+    addImage(image, adventureId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.post(URL_IMG + '/' + adventureId, JSON.stringify(image),
+            {headers});
     }
 
     setAdventureId(id){

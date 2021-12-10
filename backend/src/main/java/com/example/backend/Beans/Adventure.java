@@ -1,13 +1,14 @@
 package com.example.backend.Beans;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -60,5 +61,8 @@ public class Adventure {
 
     @OneToOne(cascade = CascadeType.ALL)
     private PriceList priceList;
-    //SLIKE
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "adventure", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Image> images = new ArrayList<>();
 }

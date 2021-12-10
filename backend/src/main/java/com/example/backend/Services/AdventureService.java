@@ -1,14 +1,12 @@
 package com.example.backend.Services;
 
-import com.example.backend.Beans.AdditionalServices;
-import com.example.backend.Beans.Adventure;
-import com.example.backend.Beans.FishingInstructor;
-import com.example.backend.Beans.PriceList;
+import com.example.backend.Beans.*;
 import com.example.backend.Repository.AdventureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class AdventureService {
@@ -55,5 +53,10 @@ public class AdventureService {
 
     public Collection<AdditionalServices> getAdditionalServicesOfAdventure(long adventureId) {
         return findAdventureById(adventureId).getPriceList().getAdditionalServices();
+    }
+
+    public List<Image> getAllImagesOfAdventure(long adventureId){
+        Adventure adventure = findAdventureById(adventureId);
+        return adventure.getImages();
     }
 }

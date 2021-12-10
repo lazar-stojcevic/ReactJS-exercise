@@ -2,6 +2,7 @@ package com.example.backend.Controllers;
 
 import com.example.backend.Beans.AdditionalServices;
 import com.example.backend.Beans.Adventure;
+import com.example.backend.Beans.Image;
 import com.example.backend.Services.AdventureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,11 @@ public class AdventureController {
             @PathVariable long adventureId){
         return new ResponseEntity<>(adventureService.getAdditionalServicesOfAdventure(adventureId),
                 HttpStatus.OK);
+    }
+
+    @GetMapping(path="/images/{adventureId}")
+    public ResponseEntity<List<Image>> getAllImagesOfAdventure(@PathVariable long adventureId){
+        return new ResponseEntity<>(adventureService.getAllImagesOfAdventure(adventureId), HttpStatus.OK);
     }
 
     @GetMapping(path = "{id}")

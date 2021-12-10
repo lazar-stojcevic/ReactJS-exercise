@@ -10,7 +10,7 @@
          <button class="btn-sm btn-primary" @click="makeFastReservation">MAKE FAST RESERVATION</button>
        </td>
        <td>
-         <button class="btn-sm btn-primary" @click="makeCustomReservation">MAKE CUSTOM RESERVATION</button>
+         <button class="btn-sm btn-primary" @click="showImage">MAKE CUSTOM RESERVATION</button>
        </td>
        <td>
          <button class="btn-sm btn-primary" @click="changeAdventure">CHANGE ADVENTURE</button>
@@ -21,8 +21,26 @@
        <td>
          <button class="btn-sm btn-primary" @click="addPriceList">ADD ADDITIONAL SERVICES</button>
        </td>
+       <td>
+         <button class="btn-sm btn-primary" @click="addImage">ADD IMAGE</button>
+       </td>
      </tr>
    </table>
+   <!--DODAVANJE SLIKA-->
+   <div v-if="mode === 'image'">
+     <form @submit.prevent="saveImage">
+       <div class="input-group mb-lg-2">
+         <span class="input-group-text">IMAGE</span>
+         <input type="file" class="form-control" @change="uploadImage" required/>
+       </div>
+       <div class="input-group mb-lg-2">
+         <div class="btn-group-sm">
+           <button type="reset" class="btn btn-danger" @click="changeModeToNeutral">CANCEL</button>
+           <button type="submit" class="btn btn-success">SUBMIT</button>
+         </div>
+       </div>
+     </form>
+   </div>
    <!--CHANGE ADVENTURE-->
    <div v-if="mode === 'change'">
      <form style="padding: 10px" @submit.prevent="updateAdventure">
@@ -99,7 +117,6 @@
        </div>
      </form>
    </div>
-   <!--ADVENTURE DETAILS-->
    <hr/>
    <!--ADVENTURE DETAILS-->
    <h1><strong>ADVENTURE DETAILS</strong></h1>
@@ -143,6 +160,14 @@
      </tr>
      </tbody>
    </table>
+   <!--IMAGES-->
+   <div>
+     <table>
+       <tr v-for="image in imagesToShow" :key="image">
+         <td><img :src="image" width="200" height="200"/></td>
+       </tr>
+     </table>
+   </div>
    <hr/>
    <!--ADDITIONAL SERVICES-->
    <div v-if="additionalServices.length > 0">
@@ -227,7 +252,9 @@ export default {
       mode: 'neutral',
       addService: { name: '', addPrice: ''},
       additionalServices: [],
-      newAdventure: {name: '', address:{street: ''}, priceList: {price: ''}}
+      newAdventure: {name: '', address:{street: ''}, priceList: {price: ''}},
+      newImage: '',
+      imagesToShow: []
     }
   },
   mounted() {
@@ -245,8 +272,16 @@ export default {
     AdventureReservationService.getAllReservedTerms(AdventureService.getAdventureId()).then(res => {
       this.reservedTerms = res.data;
     }).catch(() => {alert("THERE IS SOME PROBLEM WITH LOADING RESERVED TERMS")});
+
     AdventureService.getAdditionalServicesOfAdventure(AdventureService.getAdventureId()).then(res => {this.additionalServices = res.data})
-    .catch(() => {alert("THERE IS SOME ERROR WITH LOADING ADDITIONAL SERVICES")})
+    .catch(() => {alert("THERE IS SOME ERROR WITH LOADING ADDITIONAL SERVICES")});
+
+    AdventureService.getAllImagesOfAdventure(AdventureService.adventureId).then(res => {
+      for(let img of res.data){
+        this.imagesToShow.push(img.image.replaceAll('"', ''));
+      }
+    })
+    .catch(() => {alert("THERE IS SOME ERROR WITH LOADING IMAGES")});
   },
   methods:{
     deleteAdventure(){
@@ -292,6 +327,33 @@ export default {
         this.additionalServices = res.data;
       }).catch(() => {alert("THERE IS SOME PROBLEM WITH LOADING ADDITIONAL SERVICES")});
       this.addService = {name: '', addPrice: ''};
+    },
+    addImage(){
+      this.mode = 'image';
+      this.newImage = '';
+    },
+    uploadImage(event){
+      let file = event.target.files[0];
+      let reader = new FileReader();
+
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        //alert('RESULT: ' + reader.result)
+        this.newImage = reader.result
+        //alert(this.newImage)
+      }
+      reader.onerror = function (error) {
+        console.log('Error: ', error)
+      }
+    },
+    saveImage(){
+      AdventureService.addImage(this.newImage, AdventureService.getAdventureId()).then(() => {
+        this.newImage = '';
+      }).catch(() => {alert("THERE IS SOME PROBLEM WITH SENDING IMAGE")});
+    },
+    showImage(){
+      alert(this.imagesToShow[0].image.replaceAll('"', ''))
     }
   }
 }
