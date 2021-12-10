@@ -4,22 +4,43 @@
    <table style="margin: 10px">
      <tr>
        <td>
-         <button class="btn btn-danger" @click="deleteAdventure">DELETE ADVENTURE</button>
+         <button class="btn-sm btn-danger" @click="deleteAdventure">DELETE ADVENTURE</button>
        </td>
        <td>
-         <button class="btn btn-primary" @click="makeFastReservation">MAKE FAST RESERVATION</button>
+         <button class="btn-sm btn-primary" @click="makeFastReservation">MAKE FAST RESERVATION</button>
        </td>
        <td>
-         <button class="btn btn-primary" @click="makeCustomReservation">MAKE CUSTOM RESERVATION</button>
+         <button class="btn-sm btn-primary" @click="makeCustomReservation">MAKE CUSTOM RESERVATION</button>
        </td>
        <td>
-         <button class="btn btn-primary" @click="changeAdventure">CHANGE ADVENTURE</button>
+         <button class="btn-sm btn-primary" @click="changeAdventure">CHANGE ADVENTURE</button>
        </td>
        <td>
-         <button class="btn btn-primary" @click="goToMyAdventures">GO TO MY ADVENTURES</button>
+         <button class="btn-sm btn-primary" @click="goToMyAdventures">GO TO MY ADVENTURES</button>
+       </td>
+       <td>
+         <button class="btn-sm btn-primary" @click="addPriceList">ADD ADDITIONAL SERVICES</button>
        </td>
      </tr>
    </table>
+   <!--ADDING ADDITIONAL SERVICES-->
+   <div v-if="mode === 'priceList'">
+     <form @submit.prevent="addAdditionalServices">
+       <div class="input-group mb-lg-2">
+         <span class="input-group-text">NAME OF SERVICE</span>
+         <input type="text" class="form-control" v-model="addService.name">
+
+         <span class="input-group-text">PRICE</span>
+         <input type="number" class="form-control" v-model="addService.addPrice">
+       </div>
+       <div class="input-group mb-lg-2">
+         <div class="btn-group-sm">
+           <button type="reset" class="btn btn-danger" @click="changeModeToNeutral">CANCEL</button>
+           <button type="submit" class="btn btn-success">SUBMIT</button>
+         </div>
+       </div>
+     </form>
+   </div>
    <!--ADVENTURE DETAILS-->
    <hr/>
    <h1><strong>ADVENTURE DETAILS</strong></h1>
@@ -57,10 +78,31 @@
        <td>CONDUCT RULES</td>
        <td>{{adventure.conductRules}}</td>
      </tr>
+     <tr>
+       <td>BASE PRICE</td>
+       <td>{{adventure.priceList.price}}</td>
+     </tr>
      </tbody>
    </table>
-   <!--FREE FAST RESERVATIONS-->
    <hr/>
+   <div v-if="additionalServices.length > 0">
+     <h1><strong>ADDITIONAL SERVICES</strong></h1>
+     <table class="table table-striped">
+       <thead>
+       <tr>
+         <td>NAME</td>
+         <td>ADDITIONAL PRICE</td>
+       </tr>
+       </thead>
+       <tbody>
+       <tr v-for="as in additionalServices" :key="as.id">
+         <td>{{ as.name }}</td>
+         <td>{{as.addPrice}}</td>
+       </tr>
+       </tbody>
+     </table>
+   </div>
+   <!--FREE FAST RESERVATIONS-->
    <div v-if="fastReservations.length !== 0">
      <h2 style="margin-top: 10px"><strong>FREE FAST RESERVATIONS</strong></h2>
      <table class="table table-striped" style="margin-top: 10px">
@@ -119,13 +161,12 @@ export default {
     return{
       LogInService,
       AdventureService,
-      adventure: {
-        address: {
-          street: ''
-        }
-      },
+      adventure: { address: { street: ''}, priceList:''},
       fastReservations: '',
-      reservedTerms: ''
+      reservedTerms: '',
+      mode: 'neutral',
+      addService: { name: '', addPrice: ''},
+      additionalServices: []
     }
   },
   mounted() {
@@ -143,10 +184,13 @@ export default {
     AdventureReservationService.getAllReservedTerms(AdventureService.getAdventureId()).then(res => {
       this.reservedTerms = res.data;
     }).catch(() => {alert("THERE IS SOME PROBLEM WITH LOADING RESERVED TERMS")});
+    AdventureService.getAdditionalServicesOfAdventure(AdventureService.getAdventureId()).then(res => {this.additionalServices = res.data})
+    .catch(() => {alert("THERE IS SOME ERROR WITH LOADING ADDITIONAL SERVICES")})
   },
   methods:{
     deleteAdventure(){
-
+      AdventureService.deleteAdventure(this.adventure.id).then(() => this.$router.push('/myAdventures')).catch(() =>
+      { alert("THERE IS SOME PROBLEM WITH DELETING")});
     },
     makeFastReservation(){
 
@@ -159,6 +203,28 @@ export default {
     },
     goToMyAdventures(){
       this.$router.push('/myAdventures');
+    },
+    addPriceList(){
+      this.mode = 'priceList'
+      this.addService = {name: '', addPrice: ''};
+    },
+    changeModeToNeutral(){
+      this.mode = 'neutral'
+    },
+    addAdditionalServices(){
+      if(this.addService.addPrice === '' || this.addService.name === ''){
+        alert("PRICE AND NAME MUST BE FILLED")
+        return;
+      }
+      AdventureService.addAdditionalServices(this.addService, this.adventure.id).then(() => {
+        this.restartAdditionalService();
+      }).catch(() => {alert("THERE IS SOME PROBLEM WITH ADDING ADDITIONAL SERVICES")});
+    },
+    restartAdditionalService(){
+      AdventureService.getAdditionalServicesOfAdventure(AdventureService.getAdventureId()).then(res => {
+        this.additionalServices = res.data;
+      }).catch(() => {alert("THERE IS SOME PROBLEM WITH LOADING ADDITIONAL SERVICES")});
+      this.addService = {name: '', addPrice: ''};
     }
   }
 }

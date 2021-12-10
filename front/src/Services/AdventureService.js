@@ -2,6 +2,8 @@ import axios from "axios";
 import LogInService from "@/Services/LogInService";
 
 const URL = 'http://localhost:8080/adventure';
+const URL_AS = 'http://localhost:8080/additionalServices';
+
 
 class AdventureService{
     adventureId = ''
@@ -43,7 +45,11 @@ class AdventureService{
         return axios.post(URL + '/' + userId, data, {headers});
     }
 
-    deleteAdventure(adventureId, headers){
+    deleteAdventure(adventureId){
+        const headers = {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
         return axios.delete(URL + '/' + adventureId, {headers});
     }
 
@@ -51,9 +57,30 @@ class AdventureService{
         let data = JSON.stringify(adventure);
         return axios.put(URL, data, {headers});
     }
+
+    addAdditionalServices(additionalService, adventureId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.post(URL_AS + '/' + adventureId, JSON.stringify(additionalService),
+            {headers});
+    }
+
+    getAdditionalServicesOfAdventure(adventureId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/additionalServices/' + adventureId, {headers});
+    }
+
     setAdventureId(id){
         this.adventureId = id;
     }
+
     getAdventureId(){
         return this.adventureId;
     }
