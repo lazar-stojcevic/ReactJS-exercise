@@ -2,7 +2,7 @@ package com.example.backend.Controllers;
 
 import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Dtos.FishingInstructorChangeDto;
-import com.example.backend.Dtos.HolidayTimespanDto;
+import com.example.backend.Dtos.AvailableTimespanDto;
 import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Services.FishingInstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class FishingInstructorController {
     @PutMapping(path = "/holiday/{id}", consumes = "application/json")
     @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<FishingInstructor> addHolidayToFishingInstructor(@PathVariable long id,
-                                                                           @RequestBody HolidayTimespanDto holiday){
+                                                                           @RequestBody AvailableTimespanDto holiday){
         return new ResponseEntity<>(fishingInstructorService.addHolidayToFishingInstructor(id, holiday),
                 HttpStatus.CREATED);
     }

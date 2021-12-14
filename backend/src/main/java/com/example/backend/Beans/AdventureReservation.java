@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,6 +24,10 @@ public class AdventureReservation {
 
     @Column(nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd hh:mm")
+    private LocalDateTime lastDateToReserve;
+
+    @Column(nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm")
     private LocalDateTime reservationStart;
 
     @Column(nullable = false)
@@ -35,12 +40,9 @@ public class AdventureReservation {
     @JoinColumn(name = "adventure_id")
     private Adventure adventure;
 
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String report;
 
     @Column
     private boolean isReserved;
-
-    @Column
-    private boolean isCanceled;
 }

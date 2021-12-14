@@ -21,8 +21,8 @@ public class FishingInstructor extends User {
     private Set<Adventure> adventures = new HashSet<Adventure>();
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "holiday", referencedColumnName = "holiday_id")
-    private HolidayTimespan holiday;
+    @JoinColumn(name = "available", referencedColumnName = "available_id")
+    private AvailableTimespan available;
 
     @Column
     private boolean isForDeleting = false;

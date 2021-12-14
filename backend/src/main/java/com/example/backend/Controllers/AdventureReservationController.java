@@ -1,10 +1,12 @@
 package com.example.backend.Controllers;
 
 import com.example.backend.Beans.AdventureReservation;
+import com.example.backend.Dtos.MakeFastReservationDto;
 import com.example.backend.Services.AdventureReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -47,21 +49,21 @@ public class AdventureReservationController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<AdventureReservation> findAdventureReservationById(@PathVariable long id){
+    public ResponseEntity<AdventureReservation> findAdventureReservationById(@PathVariable long id) {
         AdventureReservation adventureReservation = adventureReservationService.findAdventureReservationById(id);
-        if(adventureReservation != null)
+        if (adventureReservation != null)
             return new ResponseEntity<>(adventureReservation, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity<AdventureReservation> saveAdventureReservation(@RequestBody AdventureReservation
-                                                                                     adventureReservation){
-        AdventureReservation reservation = adventureReservationService.saveAdventureReservation(adventureReservation);
-        if(reservation != null)
-            return new ResponseEntity<>(reservation, HttpStatus.CREATED);
-        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    @PostMapping(path = "/makeFastReservation")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    public ResponseEntity<AdventureReservation> makeFastReservation(@RequestBody MakeFastReservationDto dto){
+        AdventureReservation adventureReservation = adventureReservationService.createFreeFastReservation(dto);
+        if(adventureReservation == null)
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(adventureReservation, HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/{id}")

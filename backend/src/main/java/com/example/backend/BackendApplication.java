@@ -8,7 +8,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @SpringBootApplication
@@ -102,10 +101,10 @@ public class BackendApplication implements CommandLineRunner {
         address1.setCity("Jarkovac");
         address1.setCountry("Srbija");
         fishingInstructor.setAddress(address1);
-        HolidayTimespan holidayTimespan = new HolidayTimespan();
-        holidayTimespan.setFromDate(LocalDate.of(2021, 12, 25));
-        holidayTimespan.setToDate(LocalDate.of(2022, 1, 10));
-        fishingInstructor.setHoliday(holidayTimespan);
+        AvailableTimespan availableTimespan = new AvailableTimespan();
+        availableTimespan.setFromDate(LocalDateTime.of(2022, 10, 10, 8, 0));
+        availableTimespan.setToDate(LocalDateTime.of(2022, 2, 10, 15, 0));
+        fishingInstructor.setAvailable(availableTimespan);
 
         Address address = new Address();
         address.setStreet("Dostojevskog");

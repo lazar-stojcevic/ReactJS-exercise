@@ -29,13 +29,13 @@
           <div class="btn-group-sm" style="margin: 10px">
             <button @click="changeModeToInfo" v-if="mode === 'neutral'" class="btn-info">CHANGE YOUR INFO</button>
             <button @click="changeModeToPassword" v-if="mode === 'neutral'" class="btn-info">CHANGE PASSWORD</button>
-            <button @click="changeModeToHoliday" v-if="mode === 'neutral'" class="btn-info">ADD HOLIDAY</button>
+            <button @click="changeModeToHoliday" v-if="mode === 'neutral'" class="btn-info">ADD AVAILABLE TIMESPAN</button>
             <button @click="myAdventures" v-if="mode === 'neutral'" class="btn-info">MY ADVENTURES</button>
             <button @click="requestForDeleting" v-if="mode === 'neutral'" class="btn-danger">SEND REQUEST FOR DELETING</button>
           </div>
           <!--CALENDAR-->
-          <div v-if="user.holiday !== null" style="text-align: center">
-            <strong style="margin: 10px">YOUR HOLIDAY TIMESPAN</strong>
+          <div v-if="user.available !== null" style="text-align: center">
+            <strong style="margin: 10px">YOUR AVAILABLE TIMESPAN</strong>
           <table class="table table-striped">
             <thead>
             <tr>
@@ -45,8 +45,8 @@
             </thead>
             <tbody>
             <tr>
-              <td>{{user.holiday.fromDate}}</td>
-              <td>{{user.holiday.toDate}}</td>
+              <td>{{user.available.fromDate}}</td>
+              <td>{{user.available.toDate}}</td>
             </tr>
             </tbody>
           </table>
@@ -105,9 +105,9 @@
               </div>
             </form>
           </div>
-          <!--ADDING HOLIDAY-->
+          <!--ADDING AVAILABLE TIMESPAN-->
           <div v-if="mode === 'addHoliday'" class="container">
-            <form @submit.prevent="addHoliday">
+            <form @submit.prevent="addAvailableTimespan">
               <div class="input-group mb-3">
                 <span class="input-group-text">FROM DATE</span>
                 <input type="date" class="form-control" v-model="fromDate">
@@ -142,7 +142,7 @@ export default {
         address: {
           street: ''
         },
-        holiday: {
+        available: {
           fromDate: ''
         }
       },
@@ -203,7 +203,7 @@ export default {
       });
       this.mode = 'neutral';
     },
-    addHoliday(){
+    addAvailableTimespan(){
       if(this.toDate === '' && this.fromDate === ''){
         alert("BOTH OF FIELDS MUST BE FILLED")
         return;

@@ -26,6 +26,8 @@
        </td>
      </tr>
    </table>
+   <!--FAST RESERVATIONS-->
+
    <!--DODAVANJE SLIKA-->
    <div v-if="mode === 'image'">
      <form @submit.prevent="saveImage">
@@ -161,12 +163,10 @@
      </tbody>
    </table>
    <!--IMAGES-->
-   <div>
-     <table>
-       <tr v-for="image in imagesToShow" :key="image">
-         <td><img :src="image" width="200" height="200"/></td>
-       </tr>
-     </table>
+   <div style="display: flex">
+     <div v-for="image in imagesToShow" :key="image" style="margin: 5px">
+       <img :src="image" width="300" height="300"/>
+     </div>
    </div>
    <hr/>
    <!--ADDITIONAL SERVICES-->
@@ -350,10 +350,19 @@ export default {
     saveImage(){
       AdventureService.addImage(this.newImage, AdventureService.getAdventureId()).then(() => {
         this.newImage = '';
+        this.loadImages();
       }).catch(() => {alert("THERE IS SOME PROBLEM WITH SENDING IMAGE")});
     },
     showImage(){
       alert(this.imagesToShow[0].image.replaceAll('"', ''))
+    },
+    loadImages(){
+      AdventureService.getAllImagesOfAdventure(this.adventure.id).then(res => {
+        this.imagesToShow = []
+        for(let img of res.data){
+          this.imagesToShow.push(img.image.replaceAll('"', ''));
+        }
+      }).catch(() => {alert("THERE IS SOME ERROR WITH LOADING IMAGES")});
     }
   }
 }

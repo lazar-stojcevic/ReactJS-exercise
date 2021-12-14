@@ -1,6 +1,8 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.AdventureReservation;
+import com.example.backend.Beans.FishingInstructor;
+import com.example.backend.Dtos.MakeFastReservationDto;
 import com.example.backend.Repository.AdventureReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,12 @@ public class AdventureReservationService {
 
     @Autowired
     private final AdventureReservationRepository adventureReservationRepository;
+
+    @Autowired
+    private AdventureService adventureService;
+
+    @Autowired
+    private FishingInstructorService fishingInstructorService;
 
     public AdventureReservationService(AdventureReservationRepository repository){
         this.adventureReservationRepository = repository;
@@ -47,7 +55,8 @@ public class AdventureReservationService {
         List<AdventureReservation> pastAdventure = new ArrayList<>();
         for (AdventureReservation ar: adventureReservationRepository.findAll()) {
             LocalDateTime reservationEnd = ar.getReservationStart().plusHours(ar.getLength());
-            if(reservationEnd.isBefore(LocalDateTime.now()) && ar.isReserved()){
+            if(reservationEnd.isBefore(LocalDateTime.now()) && ar.isReserved() &&
+                    ar.getAdventure().getInstructor().getId() == instructorId){
                 pastAdventure.add(ar);
             }
         }
@@ -58,9 +67,15 @@ public class AdventureReservationService {
         return adventureReservationRepository.findById(id).orElse(null);
     }
 
-    //TODO: PROVERA DA LI JE FI SLOBODAN U MOMENTU KADA SE REZERVISE TERMIN
-    public AdventureReservation saveAdventureReservation(AdventureReservation adventureReservation){
-        return adventureReservationRepository.save(adventureReservation);
+    public AdventureReservation createFreeFastReservation(MakeFastReservationDto dto){
+        for(AdventureReservation ar : getAllNextReservationsOfInstructor(dto.getInstructorId())){
+            if(!isReservationInAvailableTimespanOfInstructor(dto.getAdventureReservation(), dto.getInstructorId()))
+                return null;
+            if(isReservationsOverlap(ar, dto.getAdventureReservation()))
+                return null;
+        }
+        dto.getAdventureReservation().setAdventure(adventureService.findAdventureById(dto.getAdventureId()));
+        return adventureReservationRepository.save(dto.getAdventureReservation());
     }
 
     public boolean deleteAdventureReservation(long id){
@@ -73,7 +88,7 @@ public class AdventureReservationService {
 
     public AdventureReservation cancelAdventureReservation(long id){
         AdventureReservation adventureReservation = findAdventureReservationById(id);
-        adventureReservation.setCanceled(true);
+        adventureReservation.setReserved(false);
         return adventureReservationRepository.save(adventureReservation);
     }
 
@@ -82,6 +97,41 @@ public class AdventureReservationService {
         adventureReservation.setReport(report);
         return adventureReservationRepository.save(adventureReservation);
     }
-    //TODO: BRZA REZERVACIJA ZA KLIJENTE, param clientId, adventureId
-    //TODO: SVE AVANTURE JEDNOG KLIJENTA param clientId
+
+    private Collection<AdventureReservation> getAllNextReservationsOfInstructor(long instructorId){
+        List<AdventureReservation> allNextReservations = new ArrayList<>();
+        for(AdventureReservation ar : getAllAdventureReservations())
+            if(ar.getAdventure().getInstructor().getId() == instructorId &&
+                    ar.getReservationStart().isAfter(LocalDateTime.now()))
+                allNextReservations.add(ar);
+
+        return allNextReservations;
+    }
+
+    //METODA PROVERAVA DA LI SE DVA TERMINA PREKLAPAJU
+    private boolean isReservationsOverlap(
+            AdventureReservation existingReservation, AdventureReservation newReservation){
+        LocalDateTime existingReservationEndTime = existingReservation.getReservationStart()
+                .plusHours(existingReservation.getLength());
+        LocalDateTime newReservationEndTime = newReservation.getReservationStart()
+                .plusHours(newReservation.getLength());
+        if(newReservation.getReservationStart().isAfter(existingReservation.getReservationStart()) &&
+                newReservation.getReservationStart().isBefore(existingReservationEndTime))
+            return true;
+        else if(newReservationEndTime.isAfter(existingReservation.getReservationStart()) &&
+                newReservationEndTime.isBefore(existingReservationEndTime))
+            return true;
+        else return newReservation.getReservationStart().isBefore(existingReservation.getReservationStart()) &&
+                    newReservationEndTime.isAfter(existingReservationEndTime);
+    }
+
+    private boolean isReservationInAvailableTimespanOfInstructor(
+            AdventureReservation adventureReservation, long instructorId) {
+        LocalDateTime reservationEnd = adventureReservation.getReservationStart()
+                .plusHours(adventureReservation.getLength());
+        FishingInstructor instructor = fishingInstructorService.findFishingInstructorById(instructorId);
+
+        return adventureReservation.getReservationStart().isAfter(instructor.getAvailable().getFromDate()) &&
+                reservationEnd.isBefore(instructor.getAvailable().getToDate());
+    }
 }
