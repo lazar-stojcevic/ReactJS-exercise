@@ -112,7 +112,7 @@ public class BackendApplication implements CommandLineRunner {
         address.setCity("Jarkovac");
         address.setCountry("Srbija");
         FishingInstructor fishingInstructor1 = new FishingInstructor();
-        fishingInstructor1.setEmail("nekiMejl@org.com");
+        fishingInstructor1.setEmail("bojanlupulov0909@gmail.com");
         fishingInstructor1.setFirstname("Milan");
         fishingInstructor1.setLastName("Mikic");
         fishingInstructor1.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");

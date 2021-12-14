@@ -18,8 +18,8 @@
           <td>{{user.role.name}}</td>
           <td>{{user.address.street}} {{user.address.city}} {{user.address.country}}</td>
           <td>{{user.phone}}</td>
-          <td><button class="btn btn-success">ENABLE</button></td>
-          <td><button class="btn btn-danger">DISABLE</button></td>
+          <td><button class="btn btn-success" @click="enableUser(user.id)">ENABLE</button></td>
+          <td><button class="btn btn-danger" @click="deleteUser(user.id)">DELETE</button></td>
         </tr>
       </tbody>
     </table>
@@ -35,16 +35,25 @@ export default {
     }
   },
   mounted() {
-    AdminService.getAllNotEnabledUsers().then(res => {this.users = res.data}).catch(() => {
-      alert("THERE IS SOME PROBLEM WITH LOADING USERS")
-    });
+    this.loadUserRequests();
   },
   methods:{
-    enable(){
-
+    enableUser(userId){
+      AdminService.acceptUserRequest(userId).then(() => {
+        alert('USER IS ENABLED');
+        this.loadUserRequests();
+      }).catch(() => {alert('THERE IS SOME ERROR WITH ENABLING USER')});
     },
-    disable(){
-
+    deleteUser(userId){
+      AdminService.notAcceptUserRequest(userId).then(() => {
+        alert('USER IS DELETED');
+        this.loadUserRequests();
+      }).catch(() => {alert('THERE IS SOME ERROR WITH DELETING USER')});
+    },
+    loadUserRequests(){
+      AdminService.getAllNotEnabledUsers().then(res => {this.users = res.data}).catch(()=>{
+        alert("THERE IS SOME PROBLEM WITH LOADING USERS")
+      })
     }
   }
 }

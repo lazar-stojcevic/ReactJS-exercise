@@ -12,6 +12,5 @@ public interface IFishingInstructorService {
     FishingInstructor saveFishingInstructor(UserRegistration userRegistration) throws Exception;
     FishingInstructor findFishingInstructorById(long id);
     FishingInstructor enableFishingInstructor(long id);
-    void disableDisableFishingInstructor(long id);
     void deleteFishingInstructor(long id);
 }

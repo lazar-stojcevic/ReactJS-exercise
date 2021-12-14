@@ -2,7 +2,7 @@ import axios from "axios";
 import LogInService from "@/Services/LogInService";
 
 const URL = 'http://localhost:8080/admin';
-const AUTH_URL = 'http://localhost:8080/auth';
+const USER_URL = 'http://localhost:8080/user';
 
 class AdminService{
 
@@ -19,7 +19,7 @@ class AdminService{
             'Accept': 'application/json',
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
-        return axios.get(AUTH_URL + '/notEnabled', {headers});
+        return axios.get(USER_URL + '/notEnabled', {headers});
     }
 
     saveAdmin(admin){
@@ -56,6 +56,24 @@ class AdminService{
         };
         let data = {userId: LogInService.userId, password: newPassword};
         return axios.put(URL+ '/changePassword' ,JSON.stringify(data) ,{headers});
+    }
+
+    acceptUserRequest(userId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.put(USER_URL+ '/enable/' + userId, null ,{headers});
+    }
+
+    notAcceptUserRequest(userId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.delete(USER_URL+ '/disable/' + userId ,{headers});
     }
 }
 export default new AdminService()

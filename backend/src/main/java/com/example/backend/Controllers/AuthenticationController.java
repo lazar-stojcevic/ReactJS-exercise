@@ -135,12 +135,6 @@ public class AuthenticationController {
         return new ResponseEntity<>("User verified", HttpStatus.CREATED);
     }
 
-    @GetMapping("/notEnabled")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Collection<User>> allUsersForEnabling(){
-        return new ResponseEntity<>(userService.getAllNotEnabledUsers(), HttpStatus.OK);
-    }
-
     private User tryToRegisterFishingInstructor(UserRegistration userRequest) {
         try {
             return (User)fishingInstructorService.saveFishingInstructor(userRequest);

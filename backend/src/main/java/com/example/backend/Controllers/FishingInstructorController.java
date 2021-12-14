@@ -34,18 +34,6 @@ public class FishingInstructorController {
     public ResponseEntity<FishingInstructor> getInstructorById(@PathVariable long id){
         return new ResponseEntity<>(fishingInstructorService.findFishingInstructorById(id), HttpStatus.OK);
     }
-    @PutMapping(path = "/enable/{id}")
-    public ResponseEntity<?> enableFishingInstructor(@PathVariable long id){
-        FishingInstructor instructor = fishingInstructorService.enableFishingInstructor(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    //TODO: AKO TREBA I NEKO POSEBNO OBRAZLOZENJE DA SE DODA?
-    @DeleteMapping(path = "/disable/{id}")
-    public ResponseEntity<?> disableFishingInstructor(@PathVariable long id){
-        fishingInstructorService.disableDisableFishingInstructor(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteFishingInstructor(@PathVariable long id){

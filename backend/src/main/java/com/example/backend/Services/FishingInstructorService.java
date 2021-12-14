@@ -2,7 +2,6 @@ package com.example.backend.Services;
 
 import com.example.backend.Beans.Address;
 import com.example.backend.Beans.FishingInstructor;
-import com.example.backend.Beans.HolidayTimespan;
 import com.example.backend.Dtos.FishingInstructorChangeDto;
 import com.example.backend.Dtos.HolidayTimespanDto;
 import com.example.backend.Dtos.PasswordChangeDto;
@@ -17,7 +16,6 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -31,7 +29,6 @@ public class FishingInstructorService implements IFishingInstructorService {
 
     @Autowired
     private RoleService roleService;
-
 
     public FishingInstructorService(FishingInstructorRepository fishingInstructorRepository) {
         this.fishingInstructorRepository = fishingInstructorRepository;
@@ -50,16 +47,11 @@ public class FishingInstructorService implements IFishingInstructorService {
         Optional<FishingInstructor> instructor = fishingInstructorRepository.findById(id);
         return instructor.orElse(null);
     }
-    //TODO: DODATI SLANJE POTVRDNOG MEJLA
-    public FishingInstructor enableFishingInstructor(long id){
+
+    public FishingInstructor enableFishingInstructor(long id) {
         FishingInstructor instructor = findFishingInstructorById(id);
         instructor.setEnabled(true);
         return fishingInstructorRepository.save(instructor);
-    }
-    //TODO: DODATI SLANJE NEGATIVNOG MEJLA, SA OBRAZLOZENJEM DA PROBA PONOVO
-    public void disableDisableFishingInstructor(long id){
-        FishingInstructor instructor = findFishingInstructorById(id);
-        fishingInstructorRepository.delete(instructor);
     }
 
     public void deleteFishingInstructor(long id){
