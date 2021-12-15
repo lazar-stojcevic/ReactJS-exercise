@@ -1,6 +1,8 @@
 package com.example.backend.Services;
 
+import com.example.backend.Beans.AdditionalServices;
 import com.example.backend.Beans.AdventureReservation;
+import com.example.backend.Beans.Customer;
 import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Dtos.MakeFastReservationDto;
 import com.example.backend.Repository.AdventureReservationRepository;
@@ -24,6 +26,9 @@ public class AdventureReservationService {
     @Autowired
     private FishingInstructorService fishingInstructorService;
 
+    @Autowired
+    private EmailService emailService;
+
     public AdventureReservationService(AdventureReservationRepository repository){
         this.adventureReservationRepository = repository;
     }
@@ -43,12 +48,11 @@ public class AdventureReservationService {
     }
 
     public Collection<AdventureReservation> getAllFreeFastReservations(long adventureId){
-        List<AdventureReservation> adventureReservations = new ArrayList<>();
-        for (AdventureReservation ar: getAllAdventureReservations())
-            if(!ar.isReserved() && ar.getAdventure().getId() == adventureId)
-                adventureReservations.add(ar);
-
-        return adventureReservations;
+        List<AdventureReservation> reservations = new ArrayList<>();
+        for(AdventureReservation ar : adventureService.findAdventureById(adventureId).getReservations())
+            if(!ar.isReserved() && ar.getReservationStart().isAfter(LocalDateTime.now()))
+                reservations.add(ar);
+        return reservations;
     }
 
     public Collection<AdventureReservation> getAllPastReservationOfInstructor(long instructorId){
@@ -68,14 +72,27 @@ public class AdventureReservationService {
     }
 
     public AdventureReservation createFreeFastReservation(MakeFastReservationDto dto){
+        AdventureReservation adventureReservation = makeAdventureReservation(dto);
         for(AdventureReservation ar : getAllNextReservationsOfInstructor(dto.getInstructorId())){
-            if(!isReservationInAvailableTimespanOfInstructor(dto.getAdventureReservation(), dto.getInstructorId()))
+            if(!isReservationInAvailableTimespanOfInstructor(adventureReservation, dto.getInstructorId()))
                 return null;
-            if(isReservationsOverlap(ar, dto.getAdventureReservation()))
+            if(isReservationsOverlap(ar, adventureReservation))
                 return null;
         }
-        dto.getAdventureReservation().setAdventure(adventureService.findAdventureById(dto.getAdventureId()));
-        return adventureReservationRepository.save(dto.getAdventureReservation());
+        adventureReservation.setAdventure(adventureService.findAdventureById(dto.getAdventureId()));
+        calculateFullPriceOfReservation(adventureReservation, dto.getAddServices());
+        sendNotificationMailToAllPrepaidCustomers(dto.getAdventureId());
+        return adventureReservationRepository.save(adventureReservation);
+    }
+
+    private void calculateFullPriceOfReservation(
+            AdventureReservation reservation, List<AdditionalServices> addServices){
+        int price = reservation.getAdventure().getPriceList().getPrice();
+        for(AdditionalServices as : addServices){
+            price += as.getAddPrice();
+        }
+        reservation.setPrice(price);
+        //TODO DODATI LOGIKU ZA DODATNE SERVISE
     }
 
     public boolean deleteAdventureReservation(long id){
@@ -88,11 +105,14 @@ public class AdventureReservationService {
 
     public AdventureReservation cancelAdventureReservation(long id){
         AdventureReservation adventureReservation = findAdventureReservationById(id);
+        LocalDateTime lastDateForCanceling = adventureReservation.getReservationStart().minusDays(3);
+        if(LocalDateTime.now().isAfter(lastDateForCanceling))
+            return null;
         adventureReservation.setReserved(false);
         return adventureReservationRepository.save(adventureReservation);
     }
 
-    public AdventureReservation makeReportOfAdventure(long id, String report){
+    public AdventureReservation makeReportOfAdventureReservation(long id, String report){
         AdventureReservation adventureReservation = findAdventureReservationById(id);
         adventureReservation.setReport(report);
         return adventureReservationRepository.save(adventureReservation);
@@ -133,5 +153,21 @@ public class AdventureReservationService {
 
         return adventureReservation.getReservationStart().isAfter(instructor.getAvailable().getFromDate()) &&
                 reservationEnd.isBefore(instructor.getAvailable().getToDate());
+    }
+
+    private AdventureReservation makeAdventureReservation(MakeFastReservationDto dto){
+        AdventureReservation adventureReservation = new AdventureReservation();
+        adventureReservation.setReservationStart(dto.getAdventureStart());
+        adventureReservation.setLastDateToReserve(dto.getLastDateToReserve());
+        adventureReservation.setLength(dto.getLength());
+        return adventureReservation;
+    }
+
+    private void sendNotificationMailToAllPrepaidCustomers(long adventureId){
+        for(Customer customer : adventureService.findAdventureById(adventureId).getPrepaidCustomers()){
+            try {
+                emailService.sendNotificationForCreatingNewAdventureReservation(customer);
+            }catch (Exception e){System.out.println(e.toString());}
+        }
     }
 }

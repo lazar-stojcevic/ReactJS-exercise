@@ -75,12 +75,15 @@ public class AdventureReservationController {
 
     @PutMapping(path = "/cancel/{id}")
     public ResponseEntity<AdventureReservation> cancelAdventureReservation(@PathVariable long id){
+        AdventureReservation adventureReservation = adventureReservationService.cancelAdventureReservation(id);
+        if(adventureReservation == null)
+            return new ResponseEntity<>(new AdventureReservation(), HttpStatus.NOT_ACCEPTABLE);
        return new ResponseEntity<>(adventureReservationService.cancelAdventureReservation(id), HttpStatus.OK);
     }
 
     @PutMapping(path = "/report/{id}/{report}")
     public ResponseEntity<AdventureReservation> addReportToAdventureReservation(@PathVariable long id,
                                                                                 @PathVariable String report){
-        return new ResponseEntity<>(adventureReservationService.makeReportOfAdventure(id, report), HttpStatus.OK);
+        return new ResponseEntity<>(adventureReservationService.makeReportOfAdventureReservation(id, report), HttpStatus.OK);
     }
 }

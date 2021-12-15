@@ -30,7 +30,4 @@ public class AdditionalServices {
 
     @Column
     private int addPrice;
-
-    @Column
-    private boolean added = false;
 }

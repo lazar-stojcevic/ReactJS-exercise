@@ -4,13 +4,10 @@
    <table style="margin: 10px">
      <tr>
        <td>
-         <button class="btn-sm btn-danger" @click="deleteAdventure">DELETE ADVENTURE</button>
-       </td>
-       <td>
          <button class="btn-sm btn-primary" @click="makeFastReservation">MAKE FAST RESERVATION</button>
        </td>
        <td>
-         <button class="btn-sm btn-primary" @click="showImage">MAKE CUSTOM RESERVATION</button>
+         <button class="btn-sm btn-primary" @click="makeCustomReservation">MAKE CUSTOM RESERVATION</button>
        </td>
        <td>
          <button class="btn-sm btn-primary" @click="changeAdventure">CHANGE ADVENTURE</button>
@@ -19,14 +16,40 @@
          <button class="btn-sm btn-primary" @click="goToMyAdventures">GO TO MY ADVENTURES</button>
        </td>
        <td>
-         <button class="btn-sm btn-primary" @click="addPriceList">ADD ADDITIONAL SERVICES</button>
+         <button class="btn-sm btn-primary" @click="showAdditionalServicesForm">ADD ADDITIONAL SERVICES</button>
        </td>
        <td>
          <button class="btn-sm btn-primary" @click="addImage">ADD IMAGE</button>
        </td>
+       <td>
+         <button class="btn-sm btn-danger" @click="deleteAdventure">DELETE ADVENTURE</button>
+       </td>
      </tr>
    </table>
-   <!--FAST RESERVATIONS-->
+
+   <!--MAKE FAST RESERVATIONS-->
+    <div v-if="mode === 'makeFastReservation'">
+      <form @submit.prevent="saveFastReservation">
+        <div class="input-group mb-lg-2">
+          <span class="input-group-text">LAST DATE FOR RESERVATION</span>
+          <input type="datetime-local" class="form-control" v-model="newReservation.lastDateToReserve" required/>
+        </div>
+        <div class="input-group mb-lg-2">
+          <span class="input-group-text">START DATE AND TIME</span>
+          <input type="datetime-local" class="form-control" v-model="newReservation.reservationStart" required/>
+        </div>
+        <div class="input-group mb-lg-2">
+          <span class="input-group-text">LENGTH (IN HOURS)</span>
+          <input type="number" class="form-control" v-model="newReservation.length" required/>
+        </div>
+        <div class="input-group mb-lg-2">
+          <div class="btn-group-sm">
+            <button type="reset" class="btn btn-danger" @click="changeModeToNeutral">CANCEL</button>
+            <button type="submit" class="btn btn-success">SUBMIT</button>
+          </div>
+        </div>
+      </form>
+    </div>
 
    <!--DODAVANJE SLIKA-->
    <div v-if="mode === 'image'">
@@ -43,6 +66,7 @@
        </div>
      </form>
    </div>
+
    <!--CHANGE ADVENTURE-->
    <div v-if="mode === 'change'">
      <form style="padding: 10px" @submit.prevent="updateAdventure">
@@ -101,6 +125,7 @@
        </div>
      </form>
    </div>
+
    <!--ADDING ADDITIONAL SERVICES-->
    <div v-if="mode === 'priceList'">
      <form @submit.prevent="addAdditionalServices">
@@ -119,6 +144,7 @@
        </div>
      </form>
    </div>
+
    <hr/>
    <!--ADVENTURE DETAILS-->
    <h1><strong>ADVENTURE DETAILS</strong></h1>
@@ -162,6 +188,7 @@
      </tr>
      </tbody>
    </table>
+
    <!--IMAGES-->
    <div style="display: flex">
      <div v-for="image in imagesToShow" :key="image" style="margin: 5px">
@@ -169,6 +196,7 @@
      </div>
    </div>
    <hr/>
+
    <!--ADDITIONAL SERVICES-->
    <div v-if="additionalServices.length > 0">
      <h1><strong>ADDITIONAL SERVICES</strong></h1>
@@ -188,6 +216,7 @@
      </table>
      <hr/>
    </div>
+
    <!--FREE FAST RESERVATIONS-->
    <div v-if="fastReservations.length !== 0">
      <h2 style="margin-top: 10px"><strong>FREE FAST RESERVATIONS</strong></h2>
@@ -209,6 +238,7 @@
      </table>
    </div>
    <div v-else> THERE IS NO FREE FAST RESERVATIONS</div>
+
    <!--RESERVED TERMS-->
    <hr style="margin-top: 10px"/>
    <div v-if="LogInService.userRole ==='ROLE_INSTRUCTOR'">
@@ -234,6 +264,7 @@
      </div>
      <div v-else>THERE IS NO RESERVED TERMS</div>
      </div>
+
  </div>
 </template>
 
@@ -254,7 +285,8 @@ export default {
       additionalServices: [],
       newAdventure: {name: '', address:{street: ''}, priceList: {price: ''}},
       newImage: '',
-      imagesToShow: []
+      imagesToShow: [],
+      newReservation: {reservationStart: '', lastDateToReserve: ''}
     }
   },
   mounted() {
@@ -283,36 +315,48 @@ export default {
     })
     .catch(() => {alert("THERE IS SOME ERROR WITH LOADING IMAGES")});
   },
+
   methods:{
     deleteAdventure(){
-      AdventureService.deleteAdventure(this.adventure.id).then(() => this.$router.push('/myAdventures')).catch(() =>
-      { alert("THERE IS SOME PROBLEM WITH DELETING")});
+      if(confirm("Do you really want to delete?")){
+        AdventureService.deleteAdventure(this.adventure.id).then(() => this.$router.push('/myAdventures')).catch(() =>
+        { alert("THERE IS SOME PROBLEM WITH DELETING")});
+      }
     },
-    makeFastReservation(){
 
+    makeFastReservation(){
+      this.mode = 'makeFastReservation';
+      this.newReservation = {reservationStart: '', lastDateToReserve: ''}
     },
+
     changeAdventure(){
       this.mode = 'change';
       this.newAdventure = JSON.parse(JSON.stringify(this.adventure));
     },
+
     updateAdventure(){
       AdventureService.updateAdventure(this.newAdventure).then(res => {
         this.adventure = res.data; this.mode = 'neutral';
       }).catch(() => {alert("THERE IS SOME ERROR WITH CHANGING ADVENTURE")});
     },
+
     makeCustomReservation(){
 
     },
+
     goToMyAdventures(){
       this.$router.push('/myAdventures');
     },
-    addPriceList(){
+
+    showAdditionalServicesForm(){
       this.mode = 'priceList'
       this.addService = {name: '', addPrice: ''};
     },
+
     changeModeToNeutral(){
       this.mode = 'neutral'
     },
+
     addAdditionalServices(){
       if(this.addService.addPrice === '' || this.addService.name === ''){
         alert("PRICE AND NAME MUST BE FILLED")
@@ -322,40 +366,39 @@ export default {
         this.restartAdditionalService();
       }).catch(() => {alert("THERE IS SOME PROBLEM WITH ADDING ADDITIONAL SERVICES")});
     },
+
     restartAdditionalService(){
       AdventureService.getAdditionalServicesOfAdventure(AdventureService.getAdventureId()).then(res => {
         this.additionalServices = res.data;
       }).catch(() => {alert("THERE IS SOME PROBLEM WITH LOADING ADDITIONAL SERVICES")});
       this.addService = {name: '', addPrice: ''};
     },
+
     addImage(){
       this.mode = 'image';
       this.newImage = '';
     },
+
     uploadImage(event){
       let file = event.target.files[0];
       let reader = new FileReader();
 
       reader.readAsDataURL(file);
-
       reader.onload = () => {
-        //alert('RESULT: ' + reader.result)
         this.newImage = reader.result
-        //alert(this.newImage)
       }
       reader.onerror = function (error) {
         console.log('Error: ', error)
       }
     },
+
     saveImage(){
       AdventureService.addImage(this.newImage, AdventureService.getAdventureId()).then(() => {
         this.newImage = '';
         this.loadImages();
       }).catch(() => {alert("THERE IS SOME PROBLEM WITH SENDING IMAGE")});
     },
-    showImage(){
-      alert(this.imagesToShow[0].image.replaceAll('"', ''))
-    },
+
     loadImages(){
       AdventureService.getAllImagesOfAdventure(this.adventure.id).then(res => {
         this.imagesToShow = []
@@ -363,6 +406,28 @@ export default {
           this.imagesToShow.push(img.image.replaceAll('"', ''));
         }
       }).catch(() => {alert("THERE IS SOME ERROR WITH LOADING IMAGES")});
+    },
+
+    saveFastReservation(){
+      if(this.newReservation.reservationStart < this.newReservation.lastDateToReserve){
+        alert('START TIME MUST BE LATER THEN LAST DATE FOR RESERVATION')
+        return;
+      }
+      AdventureReservationService.saveFastReservation(this.newReservation, LogInService.userId,
+          AdventureService.adventureId).then(() => {
+            alert('RESERVATION IS CREATED');
+            this.loadFreeFastReservations();
+          }).catch(() => {
+            alert('RESERVATION IS NOT CREATED, PROBABLY YOU HAVE RESERVATION IN THIS TERM')
+      })
+    },
+
+    loadFreeFastReservations(){
+      AdventureReservationService.getAllFreeFastReservations(AdventureService.adventureId).then(res => {
+        this.fastReservations = res.data;
+      }).catch(() => {
+        alert('THERE IS SOME PROBLEM WITH LOADING FREE FAST RESERVATIONS');
+      })
     }
   }
 }

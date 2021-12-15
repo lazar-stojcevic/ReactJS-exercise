@@ -31,5 +31,22 @@ class AdventureReservationService {
         };
         return axios.get(URL + '/pastReservation/' + instructorId, {headers});
     }
+
+    saveFastReservation(reservation, instructorId, adventureId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.instructorId = instructorId;
+        data.adventureId = adventureId;
+        data.lastDateToReserve = reservation.lastDateToReserve.replaceAll('T', ' ');
+        data.adventureStart = reservation.reservationStart.replaceAll('T', ' ');
+        data.length = reservation.length;
+
+        return axios.post(URL + '/makeFastReservation', JSON.stringify(data), {headers});
+    }
+
 }
 export default new AdventureReservationService()

@@ -23,11 +23,11 @@ public class AdventureReservation {
     private long id;
 
     @Column(nullable = false)
-    @JsonFormat(pattern="yyyy-MM-dd hh:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private LocalDateTime lastDateToReserve;
 
     @Column(nullable = false)
-    @JsonFormat(pattern="yyyy-MM-dd hh:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private LocalDateTime reservationStart;
 
     @Column(nullable = false)
