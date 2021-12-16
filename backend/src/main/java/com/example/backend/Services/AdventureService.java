@@ -5,6 +5,7 @@ import com.example.backend.Repository.AdventureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,9 +42,18 @@ public class AdventureService {
         return adventureRepository.save(adventure);
     }
 
-    //provere da li ima rezervisanih termina
     public void deleteAdventure(long id){
         adventureRepository.deleteById(id);
+    }
+
+    //TODO: NEMOGUCE JE OBRISATI AVANTURU DOK GOD IMA SLOBODNIH BRZIH REZERVACIJA
+    public boolean canAdventureBeDeleted(long id){
+        for(AdventureReservation ar : findAdventureById(id).getReservations())
+            if(ar.getReservationStart().isAfter(LocalDateTime.now()))
+                return false;
+
+        deleteAdventure(id);
+        return true;
     }
 
     public Collection<Adventure> getAllAdventuresOfInstructor(long instructorId) {

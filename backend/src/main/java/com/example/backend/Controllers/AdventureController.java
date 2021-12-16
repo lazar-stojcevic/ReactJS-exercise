@@ -66,8 +66,9 @@ public class AdventureController {
     @DeleteMapping(path = "/{id}")
     @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<?> deleteAdventure(@PathVariable long id){
-        adventureService.deleteAdventure(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if(adventureService.canAdventureBeDeleted(id))
+            return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping(consumes = "application/json")
