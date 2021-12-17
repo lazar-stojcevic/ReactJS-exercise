@@ -66,7 +66,7 @@ public class Adventure {
     @JsonIgnore
     private List<Image> images = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinTable(name = "have_prepaid_on_adventures",
             joinColumns = @JoinColumn(name = "adventure_id", referencedColumnName = "adventure_id"),

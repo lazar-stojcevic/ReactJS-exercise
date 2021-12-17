@@ -17,6 +17,9 @@ public class AdventureService {
     @Autowired
     private FishingInstructorService fishingInstructorService;
 
+    @Autowired
+    private CustomerService customerService;
+
     public AdventureService(AdventureRepository adventureRepository){
         this.adventureRepository = adventureRepository;
     }
@@ -46,7 +49,7 @@ public class AdventureService {
         adventureRepository.deleteById(id);
     }
 
-    //TODO: NEMOGUCE JE OBRISATI AVANTURU DOK GOD IMA SLOBODNIH BRZIH REZERVACIJA
+    //TODO: NEMOGUCE JE OBRISATI AVANTURU DOK GOD IMA SLOBODNIH REZERVACIJA
     public boolean canAdventureBeDeleted(long id){
         for(AdventureReservation ar : findAdventureById(id).getReservations())
             if(ar.getReservationStart().isAfter(LocalDateTime.now()))
@@ -68,5 +71,12 @@ public class AdventureService {
     public List<Image> getAllImagesOfAdventure(long adventureId){
         Adventure adventure = findAdventureById(adventureId);
         return adventure.getImages();
+    }
+
+    public Adventure prepaidCustomerToAdventure(long customerId, long adventureId){
+        Customer customer = customerService.findCustomerById(customerId);
+        Adventure adventure = findAdventureById(adventureId);
+        adventure.getPrepaidCustomers().add(customer);
+        return adventureRepository.save(adventure);
     }
 }

@@ -76,4 +76,10 @@ public class AdventureController {
     public ResponseEntity<Adventure> updateAdventure(@RequestBody Adventure adventure){
         return new ResponseEntity<>(adventureService.updateAdventure(adventure), HttpStatus.OK);
     }
+
+    @PutMapping(path = "/prepaid/{customerId}/{adventureId}")
+    public ResponseEntity<Adventure> prepaidCustomerToAdventure(
+            @PathVariable long customerId, @PathVariable long adventureId){
+        return new ResponseEntity<>(adventureService.prepaidCustomerToAdventure(customerId, adventureId), HttpStatus.OK);
+    }
 }

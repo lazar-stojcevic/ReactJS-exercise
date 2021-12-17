@@ -2,6 +2,7 @@ package com.example.backend;
 
 import com.example.backend.Beans.*;
 import com.example.backend.Repository.*;
+import com.example.backend.Services.AdventureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,6 +25,8 @@ public class BackendApplication implements CommandLineRunner {
     private CottageRepository cottageRepository;
     @Autowired
     private AdminRepository adminRepository;
+    @Autowired
+    private AdventureService adventureService;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -211,26 +214,7 @@ public class BackendApplication implements CommandLineRunner {
         priceList.setPrice(4000);
         adventure.setPriceList(priceList);
 
-        Adventure adventure1 = new Adventure();
-        Address adventureAddress1 = new Address();
-        adventureAddress1.setStreet("Svetosavska 5");
-        adventureAddress1.setCity("Jarkovac");
-        adventureAddress1.setCountry("Srbija");
-        adventure1.setAddress(adventureAddress1);
-        adventure1.setName("Pecanje na kanalu DTD");
-        adventure1.setInstructor((FishingInstructor) repository.findByEmail("asd@gmail.com"));
-        adventure1.setMaxPersons(4);
-        adventure1.setDescription("Izlet pokraj prelepog kanala Dunav-Tisa-Dunav, uz sve cari pecanja i uzivanja u prirodi i vodi");
-        adventure1.setCancelingTerms("15% uplate zadrzava instruktor");
-        adventure1.setInstructorBiography("Programer u pokusaju :D");
-        adventure1.setConductRules("Strogo je zabranjeno bacanje djubreta van kanti za smece, kao i paljenje vatre u prirodi");
-        adventure1.setEquipment("Teleskop i blinker");
-        PriceList priceList1 = new PriceList();
-        priceList1.setPrice(5000);
-        adventure1.setPriceList(priceList1);
-
         adventureRepository.save(adventure);
-        adventureRepository.save(adventure1);
 
         AdventureReservation reservation2 = new AdventureReservation();
         reservation2.setAdventure(adventure);
@@ -289,6 +273,46 @@ public class BackendApplication implements CommandLineRunner {
         admin.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
 
         adminRepository.save(admin);
+
+        //TESTIRANJE PRETPLATE NA ODREDJENU AVANTURU OD STRANE KORISNIKA
+        Customer prepaidCustomer = new Customer();
+        prepaidCustomer.setEmail("mihatufa@gmail.com");
+        prepaidCustomer.setFirstname("Mihajlo");
+        prepaidCustomer.setLastName("Tufic");
+        prepaidCustomer.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
+        prepaidCustomer.setEnabled(true);
+        prepaidCustomer.setPhone("555-333");
+        prepaidCustomer.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
+        Address prepaidAddress = new Address();
+        prepaidAddress.setStreet("Nikole Tesle");
+        prepaidAddress.setCity("Dobanovci");
+        prepaidAddress.setCountry("Srbija");
+        prepaidCustomer.setAddress(prepaidAddress);
+        prepaidCustomer.setRole(role1);
+        prepaidCustomer.setPoints(100);
+        prepaidCustomer.setPenaltyPoints(0);
+        repository.save(prepaidCustomer);
+
+        Adventure adventure1 = new Adventure();
+        Address adventureAddress1 = new Address();
+        adventureAddress1.setStreet("Svetosavska 5");
+        adventureAddress1.setCity("Jarkovac");
+        adventureAddress1.setCountry("Srbija");
+        adventure1.setAddress(adventureAddress1);
+        adventure1.setName("Pecanje na kanalu DTD");
+        adventure1.setInstructor((FishingInstructor) repository.findByEmail("asd@gmail.com"));
+        adventure1.setMaxPersons(4);
+        adventure1.setDescription("Izlet pokraj prelepog kanala Dunav-Tisa-Dunav, uz sve cari pecanja i uzivanja u prirodi i vodi");
+        adventure1.setCancelingTerms("15% uplate zadrzava instruktor");
+        adventure1.setInstructorBiography("Programer u pokusaju :D");
+        adventure1.setConductRules("Strogo je zabranjeno bacanje djubreta van kanti za smece, kao i paljenje vatre u prirodi");
+        adventure1.setEquipment("Teleskop i blinker");
+        PriceList priceList1 = new PriceList();
+        priceList1.setPrice(5000);
+        adventure1.setPriceList(priceList1);
+        adventure1.getPrepaidCustomers().add(prepaidCustomer);
+        adventureRepository.save(adventure1);
+        //adventureService.prepaidCustomerToAdventure(10, 1);
     }
 
 }

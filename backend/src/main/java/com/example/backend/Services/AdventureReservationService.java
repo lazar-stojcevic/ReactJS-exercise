@@ -141,6 +141,8 @@ public class AdventureReservationService {
         else if(newReservationEndTime.isAfter(existingReservation.getReservationStart()) &&
                 newReservationEndTime.isBefore(existingReservationEndTime))
             return true;
+        else if(newReservation.getReservationStart().isEqual(existingReservation.getReservationStart()))
+            return true;
         else return newReservation.getReservationStart().isBefore(existingReservation.getReservationStart()) &&
                     newReservationEndTime.isAfter(existingReservationEndTime);
     }
