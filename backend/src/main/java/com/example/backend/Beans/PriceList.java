@@ -27,6 +27,6 @@ public class PriceList {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "priceList", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<AdditionalServices> additionalServices = new HashSet<AdditionalServices>();
+    private Set<AdditionalService> additionalServices = new HashSet<AdditionalService>();
 
 }

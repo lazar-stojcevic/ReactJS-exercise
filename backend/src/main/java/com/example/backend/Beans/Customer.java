@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,6 +34,10 @@ public class Customer extends User {
     @ManyToMany(mappedBy = "prepaidCustomers", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Adventure> prepaidAdventures = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+    @JsonIgnore
+    List<AdventureReservation> adventureReservations = new ArrayList<>();
 
     @Override
     public String getUsername() {

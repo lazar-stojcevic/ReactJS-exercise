@@ -1,6 +1,6 @@
 package com.example.backend.Dtos;
 
-import com.example.backend.Beans.AdditionalServices;
+import com.example.backend.Beans.AdditionalService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,5 +23,5 @@ public class MakeFastReservationDto {
     private LocalDateTime adventureStart;
     private int length;
 
-    List<AdditionalServices> addServices = new ArrayList<>();
+    List<AdditionalService> addServices = new ArrayList<>();
 }

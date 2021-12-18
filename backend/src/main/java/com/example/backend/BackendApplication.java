@@ -221,7 +221,6 @@ public class BackendApplication implements CommandLineRunner {
         reservation2.setLength(4);
         reservation2.setPrice(2500);
         reservation2.setReservationStart(LocalDateTime.of(2022, 1,10,10,20));
-        reservation2.setReserved(true);
         reservation2.setLastDateToReserve(LocalDateTime.of(2021, 12, 31, 15, 0));
 
         adventureReservationRepository.save(reservation2);

@@ -1,6 +1,6 @@
 package com.example.backend.Controllers;
 
-import com.example.backend.Beans.AdditionalServices;
+import com.example.backend.Beans.AdditionalService;
 import com.example.backend.Beans.Adventure;
 import com.example.backend.Beans.Image;
 import com.example.backend.Services.AdventureService;
@@ -30,7 +30,7 @@ public class AdventureController {
     }
 
     @GetMapping(path = "/additionalServices/{adventureId}")
-    public ResponseEntity<Collection<AdditionalServices>> getAdditionalServicesOfAdventure(
+    public ResponseEntity<Collection<AdditionalService>> getAdditionalServicesOfAdventure(
             @PathVariable long adventureId){
         return new ResponseEntity<>(adventureService.getAdditionalServicesOfAdventure(adventureId),
                 HttpStatus.OK);

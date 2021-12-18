@@ -64,7 +64,7 @@ public class AdventureService {
         return instructor.getAdventures();
     }
 
-    public Collection<AdditionalServices> getAdditionalServicesOfAdventure(long adventureId) {
+    public Collection<AdditionalService> getAdditionalServicesOfAdventure(long adventureId) {
         return findAdventureById(adventureId).getPriceList().getAdditionalServices();
     }
 

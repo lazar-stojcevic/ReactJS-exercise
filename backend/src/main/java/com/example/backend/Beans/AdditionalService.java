@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -14,11 +16,11 @@ import javax.persistence.*;
 @ToString
 @Table(name = "additional_services")
 @Entity
-public class AdditionalServices {
+public class AdditionalService {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myGen_add_services")
     @SequenceGenerator(name = "myGen_add_services", sequenceName = "mySeq_add_services")
-    @Column(name = "id", nullable = false)
+    @Column(name = "add_service_id", nullable = false)
     private Long id;
 
     @ManyToOne
@@ -30,4 +32,8 @@ public class AdditionalServices {
 
     @Column
     private int addPrice;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "services")
+    @JsonIgnore
+    private List<AdventureReservation> adventureReservations = new ArrayList<>();
 }

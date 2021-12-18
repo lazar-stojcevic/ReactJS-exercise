@@ -1,10 +1,11 @@
 package com.example.backend.Services;
 
-import com.example.backend.Beans.AdditionalServices;
+import com.example.backend.Beans.AdditionalService;
 import com.example.backend.Beans.AdventureReservation;
 import com.example.backend.Beans.Customer;
 import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Dtos.MakeFastReservationDto;
+import com.example.backend.Dtos.ReserveAdventureDto;
 import com.example.backend.Repository.AdventureReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,12 @@ public class AdventureReservationService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private CustomerService customerService;
+
+    @Autowired
+    private AdditionalServiceService additionalServiceService;
 
     public AdventureReservationService(AdventureReservationRepository repository){
         this.adventureReservationRepository = repository;
@@ -82,17 +89,7 @@ public class AdventureReservationService {
         adventureReservation.setAdventure(adventureService.findAdventureById(dto.getAdventureId()));
         calculateFullPriceOfReservation(adventureReservation, dto.getAddServices());
         sendNotificationMailToAllPrepaidCustomers(dto.getAdventureId());
-        return adventureReservationRepository.save(adventureReservation);
-    }
-
-    private void calculateFullPriceOfReservation(
-            AdventureReservation reservation, List<AdditionalServices> addServices){
-        int price = reservation.getAdventure().getPriceList().getPrice();
-        for(AdditionalServices as : addServices){
-            price += as.getAddPrice();
-        }
-        reservation.setPrice(price);
-        //TODO DODATI LOGIKU ZA DODATNE SERVISE
+        return save(adventureReservation);
     }
 
     public boolean deleteAdventureReservation(long id){
@@ -108,14 +105,34 @@ public class AdventureReservationService {
         LocalDateTime lastDateForCanceling = adventureReservation.getReservationStart().minusDays(3);
         if(LocalDateTime.now().isAfter(lastDateForCanceling))
             return null;
-        adventureReservation.setReserved(false);
-        return adventureReservationRepository.save(adventureReservation);
+        adventureReservation.setCustomer(null);
+        return save(adventureReservation);
     }
 
     public AdventureReservation makeReportOfAdventureReservation(long id, String report){
         AdventureReservation adventureReservation = findAdventureReservationById(id);
         adventureReservation.setReport(report);
-        return adventureReservationRepository.save(adventureReservation);
+        return save(adventureReservation);
+    }
+
+    public AdventureReservation reserveAdventure(ReserveAdventureDto dto){
+        return save(prepareReservationForSaving(dto));
+    }
+
+    private AdventureReservation prepareReservationForSaving(ReserveAdventureDto dto){
+        AdventureReservation reservation = findAdventureReservationById(dto.getAdventureReservationId());
+        Customer customer = this.customerService.findCustomerById(dto.getCustomerId());
+        List<AdditionalService> services = findAllSelectedAdditionalServices(dto.getSelectedAdditionalServicesIds());
+        reservation.setCustomer(customer);
+        calculateFullPriceOfReservation(reservation, services);
+        return reservation;
+    }
+
+    private List<AdditionalService> findAllSelectedAdditionalServices(List<Long> ids){
+        List<AdditionalService> services = new ArrayList<>();
+        for(long id : ids)
+            services.add(this.additionalServiceService.fidAdditionalServiceById(id));
+        return services;
     }
 
     private Collection<AdventureReservation> getAllNextReservationsOfInstructor(long instructorId){
@@ -171,5 +188,20 @@ public class AdventureReservationService {
                 emailService.sendNotificationForCreatingNewAdventureReservation(customer);
             }catch (Exception e){System.out.println(e.toString());}
         }
+    }
+
+    private AdventureReservation save(AdventureReservation adventureReservation){
+        return this.adventureReservationRepository.save(adventureReservation);
+    }
+
+    //TODO: MENJANO NAKNADNO U SLUCAJU BAGOVA
+    private void calculateFullPriceOfReservation(
+            AdventureReservation reservation, List<AdditionalService> addServices){
+        int price = reservation.getAdventure().getPriceList().getPrice();
+        for(AdditionalService as : addServices){
+            price += as.getAddPrice();
+            reservation.addAdditionalService(as);
+        }
+        reservation.setPrice(price);
     }
 }
