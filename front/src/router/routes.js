@@ -20,6 +20,8 @@ import HistoryOfReservations from "@/components/FishingInstructor/HistoryOfReser
 import OneBoat from "@/components/Customer/OneBoat";
 import OneInstructor from "@/components/Customer/OneInstructor";
 import OneCottage from "@/components/Customer/OneCottage";
+import ReserveAdventure from "@/components/Customer/Reserve/ReserveAvanture"
+import NewAdventureReservation from "@/components/Customer/Reserve/NewAdventureReservation"
 
 import AdminProfile from "@/components/Admin/AdminProfile";
 import ProfileRequests from "@/components/Admin/ProfileRequests";
@@ -34,6 +36,8 @@ import UserReservationProfile from "../components/CottageOwner/UserReservationPr
 import AvailablePeriodsWithBenefits from "../components/CottageOwner/AvailablePeriodsWithBenefits";
 import ReservationReport from "../components/CottageOwner/ReservationReport";
 import CreateReservation from "../components/CottageOwner/CreateReservation";
+
+
 
 const routes = [
     {path: '/', component: Home},
@@ -71,7 +75,9 @@ const routes = [
     {path: '/userReservationProfile', component: UserReservationProfile},
     {path: '/availablePeriodsWithBenefits', component: AvailablePeriodsWithBenefits},
     {path: '/reservationReport', component: ReservationReport},
-    {path: '/createReservationForCustomer', component: CreateReservation}
+    {path: '/createReservationForCustomer', component: CreateReservation},
+    {path: '/reserveAdventure', component: ReserveAdventure},
+    {path: '/newAdventureReservation/:id', component: NewAdventureReservation},
 ]
 
 export default routes;

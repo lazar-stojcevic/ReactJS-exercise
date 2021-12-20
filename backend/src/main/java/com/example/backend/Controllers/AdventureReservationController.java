@@ -1,7 +1,9 @@
 package com.example.backend.Controllers;
 
 import com.example.backend.Beans.AdventureReservation;
+import com.example.backend.Dtos.CustomerReserveTermDto;
 import com.example.backend.Dtos.MakeFastReservationDto;
+import com.example.backend.Dtos.ReservationSearchDto;
 import com.example.backend.Services.AdventureReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @CrossOrigin(allowedHeaders = "*")
@@ -31,6 +34,27 @@ public class AdventureReservationController {
     public ResponseEntity<Collection<AdventureReservation>> getAllNextReservedTermsOfAdventure(
             @PathVariable long adventureId){
         return new ResponseEntity<>(adventureReservationService.getAllNextReservedTermsOfAdventure(adventureId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/term/{termId}")
+    public ResponseEntity<AdventureReservation> getAdventureReservation(
+            @PathVariable long termId){
+        return new ResponseEntity<>(adventureReservationService.getAdventureReservationById(termId),
+                HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/reserveTerm/")
+    public ResponseEntity<AdventureReservation> ReserveTerm(@RequestBody CustomerReserveTermDto reservation){
+        AdventureReservation adventureReservation = adventureReservationService.makeNewAppointment(reservation);
+        if (adventureReservation == null)
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(adventureReservation, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/availableAdventures/")
+    public ResponseEntity<Collection<AdventureReservation>> getAllAvailableAdventures(@RequestBody ReservationSearchDto search){
+        return new ResponseEntity<>(adventureReservationService.getAllAvailableReservationsForSearch(search),
                 HttpStatus.OK);
     }
 

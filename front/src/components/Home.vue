@@ -36,6 +36,9 @@
       <br>
       <br>
       <router-link class="btn btn-secondary" to="/allinstructors" style="margin: 5px">See advantures!</router-link>
+      <router-link class="btn btn-secondary" :hidden="LogInService.userRole.trim() !== 'ROLE_CUSTOMER'" to="/reserveAdventure" style="margin: 5px">
+        Reserve adventure
+      </router-link>
     </b-card>
     <br>
 
@@ -65,12 +68,14 @@
 import slika1 from "@/assets/vikendica.jpg";
 import slika2 from "@/assets/fishing.jpg";
 import slika3 from "@/assets/boat.jpg";
+import LogInService from "@/Services/LogInService";
 export default {
   data() {
     return {
       slika1 : slika1,
       slika2 : slika2,
-      slika3 : slika3
+      slika3 : slika3,
+      LogInService
     }
   },
   mounted() {

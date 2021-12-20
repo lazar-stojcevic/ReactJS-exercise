@@ -4,7 +4,9 @@ import com.example.backend.Beans.AdditionalService;
 import com.example.backend.Beans.AdventureReservation;
 import com.example.backend.Beans.Customer;
 import com.example.backend.Beans.FishingInstructor;
+import com.example.backend.Dtos.CustomerReserveTermDto;
 import com.example.backend.Dtos.MakeFastReservationDto;
+import com.example.backend.Dtos.ReservationSearchDto;
 import com.example.backend.Dtos.ReserveAdventureDto;
 import com.example.backend.Repository.AdventureReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +42,29 @@ public class AdventureReservationService {
         this.adventureReservationRepository = repository;
     }
 
+    public AdventureReservation getAdventureReservationById(long id){
+        return adventureReservationRepository.findById(id).get();
+    }
+
     public Collection<AdventureReservation> getAllAdventureReservations(){
         return adventureReservationRepository.findAll();
+    }
+
+    public AdventureReservation makeNewAppointment(CustomerReserveTermDto reservation){
+       Customer customer = customerService.findCustomerById(reservation.getUserId());
+       AdventureReservation adventureReservation = getAdventureReservationById(reservation.getReservationId());
+       for (AdventureReservation ar : adventureReservationRepository.findAll()){
+           if(ar.getCustomer() == null)
+               continue;
+           if (!ar.isReserved() && ar.getCustomer().getId() == reservation.getUserId()){
+               if (isReservationsOverlap(ar, adventureReservation))
+                   return null;
+           }
+       }
+       adventureReservation.setCustomer(customer);
+       adventureReservationRepository.save(adventureReservation);
+       return adventureReservation;
+
     }
 
     public Collection<AdventureReservation> getAllNextReservedTermsOfAdventure(long adventureId){
@@ -76,6 +99,16 @@ public class AdventureReservationService {
 
     public AdventureReservation findAdventureReservationById(long id){
         return adventureReservationRepository.findById(id).orElse(null);
+    }
+
+    public Collection<AdventureReservation> getAllAvailableReservationsForSearch(ReservationSearchDto search){
+        List<AdventureReservation> reservations = new ArrayList<>();
+        for (AdventureReservation ar: adventureReservationRepository.findByreservationStartBetween(search.getDateFrom(), search.getDateTo())){
+            if (!ar.isReserved() && ar.getAdventure().getMaxPersons() >= search.getPersons() && ar.getLastDateToReserve().isAfter(LocalDateTime.now().plusDays(3))){
+                reservations.add(ar);
+            }
+        }
+        return reservations;
     }
 
     public AdventureReservation createFreeFastReservation(MakeFastReservationDto dto){
@@ -114,7 +147,7 @@ public class AdventureReservationService {
         adventureReservation.setReport(report);
         return save(adventureReservation);
     }
-
+    //TODO: Rezervacija avanture
     public AdventureReservation reserveAdventure(ReserveAdventureDto dto){
         return save(prepareReservationForSaving(dto));
     }

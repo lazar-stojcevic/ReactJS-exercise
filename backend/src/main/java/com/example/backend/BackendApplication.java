@@ -222,8 +222,23 @@ public class BackendApplication implements CommandLineRunner {
         reservation2.setPrice(2500);
         reservation2.setReservationStart(LocalDateTime.of(2022, 1,10,10,20));
         reservation2.setLastDateToReserve(LocalDateTime.of(2021, 12, 31, 15, 0));
-
         adventureReservationRepository.save(reservation2);
+
+        AdventureReservation reservation3 = new AdventureReservation();
+        reservation3.setAdventure(adventure);
+        reservation3.setLength(4);
+        reservation3.setPrice(2500);
+        reservation3.setReservationStart(LocalDateTime.of(2021, 10,10,10,20));
+        reservation3.setLastDateToReserve(LocalDateTime.of(2021, 9, 30, 15, 0));
+        adventureReservationRepository.save(reservation3);
+
+        AdventureReservation reservation4 = new AdventureReservation();
+        reservation4.setAdventure(adventure);
+        reservation4.setLength(4);
+        reservation4.setPrice(2500);
+        reservation4.setReservationStart(LocalDateTime.of(2022, 1,15,10,20));
+        reservation4.setLastDateToReserve(LocalDateTime.of(2021, 12, 25, 15, 0));
+        adventureReservationRepository.save(reservation4);
 
         Cottage cottage1 = new Cottage();
         cottage1.setConductRules("Budite fini");
