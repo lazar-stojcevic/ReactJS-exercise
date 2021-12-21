@@ -4,6 +4,7 @@ import com.example.backend.Beans.AdventureReservation;
 import com.example.backend.Dtos.CustomerReserveTermDto;
 import com.example.backend.Dtos.MakeFastReservationDto;
 import com.example.backend.Dtos.ReservationSearchDto;
+import com.example.backend.Dtos.ReserveAdventureDto;
 import com.example.backend.Services.AdventureReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -109,5 +110,14 @@ public class AdventureReservationController {
     public ResponseEntity<AdventureReservation> addReportToAdventureReservation(@PathVariable long id,
                                                                                 @PathVariable String report){
         return new ResponseEntity<>(adventureReservationService.makeReportOfAdventureReservation(id, report), HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/fastReserve")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<AdventureReservation> fastReserve(@RequestBody ReserveAdventureDto dto){
+        AdventureReservation reservation = adventureReservationService.fastReserveAdventure(dto);
+        if(reservation == null)
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
 }

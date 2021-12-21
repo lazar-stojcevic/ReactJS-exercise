@@ -148,7 +148,7 @@ public class AdventureReservationService {
         return save(adventureReservation);
     }
     //TODO: Rezervacija avanture
-    public AdventureReservation reserveAdventure(ReserveAdventureDto dto){
+    public AdventureReservation fastReserveAdventure(ReserveAdventureDto dto){
         return save(prepareReservationForSaving(dto));
     }
 

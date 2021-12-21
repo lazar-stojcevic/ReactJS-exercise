@@ -10,6 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @SpringBootApplication
 public class BackendApplication implements CommandLineRunner {
@@ -213,13 +217,20 @@ public class BackendApplication implements CommandLineRunner {
         PriceList priceList = new PriceList();
         priceList.setPrice(4000);
         adventure.setPriceList(priceList);
+        AdditionalService additionalService = new AdditionalService();
+        additionalService.setName("Prvi dodatni servis");
+        additionalService.setAddPrice(1000);
+        additionalService.setPriceList(priceList);
+        Set<AdditionalService> serviceList = new HashSet<>();
+        serviceList.add(additionalService);
+        priceList.setAdditionalServices(serviceList);
 
         adventureRepository.save(adventure);
 
         AdventureReservation reservation2 = new AdventureReservation();
         reservation2.setAdventure(adventure);
         reservation2.setLength(4);
-        reservation2.setPrice(2500);
+        //reservation2.setPrice(2500);
         reservation2.setReservationStart(LocalDateTime.of(2022, 1,10,10,20));
         reservation2.setLastDateToReserve(LocalDateTime.of(2021, 12, 31, 15, 0));
         adventureReservationRepository.save(reservation2);
