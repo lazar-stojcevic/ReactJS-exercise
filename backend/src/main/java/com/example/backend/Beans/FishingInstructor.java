@@ -27,6 +27,10 @@ public class FishingInstructor extends User {
     @Column
     private boolean isForDeleting = false;
 
+    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Grade> grades = new ArrayList<>();
+
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

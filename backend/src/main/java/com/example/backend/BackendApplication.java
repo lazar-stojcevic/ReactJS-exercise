@@ -2,7 +2,6 @@ package com.example.backend;
 
 import com.example.backend.Beans.*;
 import com.example.backend.Repository.*;
-import com.example.backend.Services.AdventureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,9 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @SpringBootApplication
@@ -30,7 +27,7 @@ public class BackendApplication implements CommandLineRunner {
     @Autowired
     private AdminRepository adminRepository;
     @Autowired
-    private AdventureService adventureService;
+    private GradeRepository gradeRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -338,6 +335,20 @@ public class BackendApplication implements CommandLineRunner {
         adventure1.getPrepaidCustomers().add(prepaidCustomer);
         adventureRepository.save(adventure1);
         //adventureService.prepaidCustomerToAdventure(10, 1);
+
+        //TESTIRANJE OCENJIVANJA INSTRUKTORA
+        Grade grade = new Grade();
+        grade.setRating(3);
+        grade.setRevision("Dobar je ");
+        grade.setInstructor(fishingInstructor1);
+
+        Grade grade1 = new Grade();
+        grade1.setRating(5);
+        grade1.setRevision("Dobar je ");
+        grade1.setInstructor(fishingInstructor);
+
+        gradeRepository.save(grade);
+        gradeRepository.save(grade1);
     }
 
 }
