@@ -80,7 +80,7 @@ public class AdventureReservationService {
     public Collection<AdventureReservation> getAllFreeFastReservations(long adventureId){
         List<AdventureReservation> reservations = new ArrayList<>();
         for(AdventureReservation ar : adventureService.findAdventureById(adventureId).getReservations())
-            if(!ar.isReserved() && ar.getReservationStart().isAfter(LocalDateTime.now()))
+            if(!ar.isReserved() && ar.getLastDateToReserve().isAfter(LocalDateTime.now()))
                 reservations.add(ar);
         return reservations;
     }
@@ -95,6 +95,17 @@ public class AdventureReservationService {
             }
         }
         return pastAdventure;
+    }
+
+    public Collection<AdventureReservation> getAllReservationOfCustomerForEvaluation(long customerId){
+        return adventureReservationRepository.getAllReservationOfCustomerForEvaluation(customerId,
+                LocalDateTime.now());
+    }
+
+    public void markReservationAsEvaluated(long reservationId){
+        AdventureReservation adventureReservation = findAdventureReservationById(reservationId);
+        adventureReservation.setRated(true);
+        save(adventureReservation);
     }
 
     public AdventureReservation findAdventureReservationById(long id){

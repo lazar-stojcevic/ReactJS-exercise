@@ -351,6 +351,15 @@ public class BackendApplication implements CommandLineRunner {
 
         gradeRepository.save(grade);
         gradeRepository.save(grade1);
+
+        AdventureReservation reservationForEvaluating = new AdventureReservation();
+        reservationForEvaluating.setAdventure(adventure);
+        reservationForEvaluating.setLength(4);
+        reservationForEvaluating.setReservationStart(LocalDateTime.of(2021, 10,15,10,0));
+        reservationForEvaluating.setLastDateToReserve(LocalDateTime.of(2021, 10, 15, 15, 0));
+        reservationForEvaluating.setCustomer(customer1);
+        adventureReservationRepository.save(reservationForEvaluating);
+
     }
 
 }

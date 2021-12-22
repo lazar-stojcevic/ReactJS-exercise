@@ -56,6 +56,8 @@ public class AdventureReservation {
             inverseJoinColumns = @JoinColumn(name = "add_service_id", referencedColumnName = "add_service_id"))
     private List<AdditionalService> services = new ArrayList<>();
 
+    private boolean rated = false;
+
     public boolean isReserved(){
         return this.customer != null;
     }

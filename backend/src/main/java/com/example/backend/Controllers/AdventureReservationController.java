@@ -31,6 +31,14 @@ public class AdventureReservationController {
         return new ResponseEntity<>(adventureReservationService.getAllAdventureReservations(), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/reservationOfCustomerForEvaluate/{customerId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<Collection<AdventureReservation>> getAllReservationOfCustomerForEvaluate(
+            @PathVariable long customerId){
+        return new ResponseEntity<>(
+                adventureReservationService.getAllReservationOfCustomerForEvaluation(customerId), HttpStatus.OK);
+    }
+
     @GetMapping(path = "/nextReservations/{adventureId}")
     public ResponseEntity<Collection<AdventureReservation>> getAllNextReservedTermsOfAdventure(
             @PathVariable long adventureId){
