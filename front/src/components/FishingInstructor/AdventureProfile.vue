@@ -26,7 +26,36 @@
        </td>
      </tr>
    </table>
-
+    <div v-if="mode === 'makeCustomReservation'" style="margin-top: 15px">
+      <form @submit.prevent="saveCustomReservation">
+        <div class="input-group mb-lg-2">
+          <span class="input-group-text">CUSTOMER EMAIL</span>
+          <input disabled type="text" class="form-control"
+                 v-model="currentReservationOwner" required/>
+        </div>
+        <div class="input-group mb-lg-2">
+          <span class="input-group-text">START DATE AND TIME</span>
+          <input type="datetime-local" class="form-control" v-model="newCustomReservation.reservationStart" required/>
+        </div>
+        <div class="input-group mb-lg-2">
+          <span class="input-group-text">LENGTH (IN HOURS)</span>
+          <input type="number" class="form-control" v-model="newCustomReservation.length" required/>
+        </div>
+        <div class="input-group mb-lg-2">
+          <p><strong>SELECT ADDITIONAL SERVICES</strong></p>
+          <div class="form-group form-check" v-for="item in additionalServices" v-bind:key="item.id">
+            <input type="checkbox"  v-model="selectedAddServices" :id="item.id" :value="item.id">
+            <label class="form-check-label" :for="item.id">{{item.name}}, {{item.addPrice}}</label>
+          </div>
+        </div>
+        <div class="input-group mb-lg-2">
+          <div class="btn-group-sm">
+            <button type="reset" class="btn btn-danger" @click="changeModeToNeutral">CANCEL</button>
+            <button type="submit" class="btn btn-success">SUBMIT</button>
+          </div>
+        </div>
+      </form>
+    </div>
    <!--MAKE FAST RESERVATIONS-->
     <div v-if="mode === 'makeFastReservation'">
       <form @submit.prevent="saveFastReservation">
@@ -286,7 +315,10 @@ export default {
       newAdventure: {name: '', address:{street: ''}, priceList: {price: ''}},
       newImage: '',
       imagesToShow: [],
-      newReservation: {reservationStart: '', lastDateToReserve: ''}
+      newReservation: {reservationStart: '', lastDateToReserve: ''},
+      currentReservationOwner: '',
+      newCustomReservation: {},
+      selectedAddServices: []
     }
   },
   mounted() {
@@ -341,7 +373,14 @@ export default {
     },
 
     makeCustomReservation(){
-
+      this.mode = 'makeCustomReservation'
+      AdventureReservationService.getCurrentReservationOfInstructor(LogInService.userId).then(res => {
+        this.currentReservationOwner = res.data;
+      }).catch(() => {
+        alert('THERE IS NOT CURRENT RESERVATION');
+        this.mode = 'neutral';
+      })
+      this.selectedAddServices = []
     },
 
     goToMyAdventures(){
@@ -428,6 +467,27 @@ export default {
       }).catch(() => {
         alert('THERE IS SOME PROBLEM WITH LOADING FREE FAST RESERVATIONS');
       })
+    },
+
+    saveCustomReservation(){
+      this.newCustomReservation.customerMail = this.currentReservationOwner;
+      this.newCustomReservation.selectedAdditionalServicesIds = this.selectedAddServices;
+      this.newCustomReservation.adventureId = this.adventure.id;
+      this.newCustomReservation.reservationStart =
+          this.newCustomReservation.reservationStart.replaceAll('T', ' ');
+      AdventureReservationService.makeCustomReserve(this.newCustomReservation).then(() => {
+        alert("SUCCESSFUL")
+        this.loadReservedTerms();
+      }).catch(() => {
+        alert("THERE IS SOME PROBLEM WITH SAVING CUSTOM RESERVATION");
+      })
+      this.mode = 'neutral'
+    },
+
+    loadReservedTerms(){
+      AdventureReservationService.getAllReservedTerms(AdventureService.getAdventureId()).then(res => {
+        this.reservedTerms = res.data;
+      }).catch(() => {alert("THERE IS SOME PROBLEM WITH LOADING RESERVED TERMS")});
     }
   }
 }

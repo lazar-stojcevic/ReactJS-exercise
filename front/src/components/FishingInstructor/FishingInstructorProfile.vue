@@ -23,6 +23,10 @@
               <td>PHONE</td>
               <td>{{user.phone}}</td>
             </tr>
+            <tr>
+              <td>AVERAGE RATING OF SERVICES</td>
+              <td>{{gradesToShow.avgRating}}</td>
+            </tr>
             </tbody>
           </table>
           <!--BUTTONS-->
@@ -127,6 +131,19 @@
         </div>
       </div>
       <!--OVDE IDE KALENDAR ZAUZETOSTI-->
+      <!--ODOBRENI KOMENTARI ZA PRIKAZ, SA PROSECNOM OCENOM-->
+      <div>
+        <hr style="margin-top: 15px">
+        <h2>CUSTOMER COMMENTS OF YOU:</h2>
+        <table class="table table-striped">
+          <tbody>
+          <tr v-for="(comment, index) in gradesToShow.comments" :key="index">
+            <td>{{index+=1}}</td>
+            <td>{{comment}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -134,7 +151,7 @@
 <script>
 import FishingInstructorService from "@/Services/FishingInstructorService";
 import LogInService from "@/Services/LogInService";
-
+import GradeService from "@/Services/GradeService";
 export default {
   data(){
     return{
@@ -151,7 +168,8 @@ export default {
       confirmPassword: '',
       newUserInfo: '',
       fromDate: ' ',
-      toDate: ''
+      toDate: '',
+      gradesToShow: []
       }
     },
   mounted() {
@@ -161,6 +179,9 @@ export default {
       this.user = res.data;
       this.newUserInfo = res.data;
     });
+    GradeService.getAllGradeOfInstructor(LogInService.userId).then(res => {
+      this.gradesToShow = res.data;
+    }).catch(() => {alert("THERE IS SOME PROBLEM WITH LOADING GRADES")});
   },
   methods: {
     changeModeToHoliday(){

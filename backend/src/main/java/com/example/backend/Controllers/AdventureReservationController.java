@@ -28,6 +28,15 @@ public class AdventureReservationController {
         return new ResponseEntity<>(adventureReservationService.getAllAdventureReservations(), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/current/{instructorId}")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    public ResponseEntity<String> getOwnerOfCurrentReservationOfInstructor(@PathVariable long instructorId){
+        AdventureReservation reservation = adventureReservationService.getCurrentReservationOfInstructor(instructorId);
+        if(reservation == null)
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(reservation.getCustomer().getEmail(), HttpStatus.OK);
+    }
+
     @GetMapping(path = "/reservationOfCustomerForEvaluate/{customerId}")
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<Collection<AdventureReservation>> getAllReservationOfCustomerForEvaluate(
@@ -132,11 +141,10 @@ public class AdventureReservationController {
         return new ResponseEntity<>(adventureReservationService.makeReportOfAdventureReservation(id, report), HttpStatus.OK);
     }
 
-    @PutMapping(path = "/fastReserve")
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/customReserve")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<AdventureReservation> fastReserve(@RequestBody ReserveAdventureDto dto){
-
-        AdventureReservation reservation = adventureReservationService.fastReserveAdventure(dto);
+        AdventureReservation reservation = adventureReservationService.customReserveAdventure(dto);
         if(reservation == null)
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(reservation, HttpStatus.OK);

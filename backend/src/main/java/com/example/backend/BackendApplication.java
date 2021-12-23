@@ -365,6 +365,13 @@ public class BackendApplication implements CommandLineRunner {
         grade1.setInstructor(fishingInstructor);
         grade1.setEnabled(true);
 
+        Grade grade2 = new Grade();
+        grade2.setRating(5);
+        grade2.setRevision("Dobar je ");
+        grade2.setInstructor(fishingInstructor);
+        grade2.setEnabled(false);
+
+        gradeRepository.save(grade2);
         gradeRepository.save(grade);
         gradeRepository.save(grade1);
 
@@ -376,6 +383,14 @@ public class BackendApplication implements CommandLineRunner {
         reservationForEvaluating.setCustomer(customer1);
         adventureReservationRepository.save(reservationForEvaluating);
 
+        //TESTIRANJE CUSTOM REZERVACIJE
+        AdventureReservation currentReservation = new AdventureReservation();
+        currentReservation.setAdventure(adventure);
+        currentReservation.setLength(10);
+        currentReservation.setReservationStart(LocalDateTime.of(2021, 12,23,10,0));
+        currentReservation.setLastDateToReserve(LocalDateTime.of(2021, 10, 15, 15, 0));
+        currentReservation.setCustomer(customer1);
+        adventureReservationRepository.save(currentReservation);
     }
 
 }

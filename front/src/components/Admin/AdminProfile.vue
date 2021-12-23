@@ -27,31 +27,34 @@
       <table style="margin: 10px">
         <tr>
           <td>
-            <button class="btn btn-primary" @click="showPasswordChange">CHANGE PASSWORD</button>
+            <button class="btn-sm btn-primary" @click="showPasswordChange">CHANGE PASSWORD</button>
           </td>
           <td>
-            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showInfoChange">CHANGE INFO</button>
+            <button class="btn-sm btn-primary" v-if="!user.firstTimeCreated" @click="showInfoChange">CHANGE INFO</button>
           </td>
           <td>
-            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showTaxChange">TAX</button>
+            <button class="btn-sm btn-primary" v-if="!user.firstTimeCreated" @click="showTaxChange">TAX</button>
           </td>
           <td>
-            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showBoats">BOATS</button>
+            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showBoats">BOATS</button>
           </td>
           <td>
-            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showCottages">COTTAGES</button>
+            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showCottages">COTTAGES</button>
           </td>
           <td>
-            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showCustomers">CUSTOMERS</button>
+            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showCustomers">CUSTOMERS</button>
           </td>
           <td>
-            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showInstructors">INSTRUCTORS</button>
+            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showInstructors">INSTRUCTORS</button>
           </td>
           <td>
-            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showBoatOwners">BOAT OWNERS</button>
+            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showBoatOwners">BOAT OWNERS</button>
           </td>
           <td>
-            <button class="btn btn-primary" v-if="!user.firstTimeCreated" @click="showCottageOwners">COTTAGE OWNERS</button>
+            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showCottageOwners">COTTAGE OWNERS</button>
+          </td>
+          <td>
+            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showGradesForRevision">REVISION GRADE</button>
           </td>
         </tr>
       </table>
@@ -141,6 +144,10 @@
       <customers></customers>
       <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
     </div>
+    <div v-if="mode === 'revision'">
+      <revision></revision>
+      <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
+    </div>
 
   </div>
 </template>
@@ -153,12 +160,14 @@ import AllInstructors from "@/components/Admin/InnerAdminComponents/AllInstructo
 import AllCottageOwners from "@/components/Admin/InnerAdminComponents/AllCottageOwners";
 import AllCottages from "@/components/Admin/InnerAdminComponents/AllCottages";
 import AllCustomers from "@/components/Admin/InnerAdminComponents/AllCustomers";
+import GradesForRevision from "@/components/Admin/InnerAdminComponents/GradesForRevision";
 export default {
   components:{
     'instructors' : AllInstructors,
     'cottageOwners': AllCottageOwners,
     'cottages': AllCottages,
-    'customers': AllCustomers
+    'customers': AllCustomers,
+    'revision': GradesForRevision
   },
   data(){
     return{
@@ -188,34 +197,48 @@ export default {
     changeModeToNeutral(){
       this.mode = 'neutral';
     },
+
     showPasswordChange(){
       this.mode = 'password';
     },
+
     showInfoChange(){
       this.mode = 'info';
       this.newUserInfo = JSON.parse(JSON.stringify(this.user));
     },
+
     showTaxChange(){
       this.mode = 'tax';
     },
+
     showBoats(){
       this.mode = 'boats';
     },
+
     showCottages(){
       this.mode = 'cottage';
     },
+
     showInstructors(){
       this.mode = 'instructors';
     },
+
     showBoatOwners(){
       this.mode = 'boatOwners';
     },
+
     showCottageOwners(){
       this.mode = 'cottageOwners';
     },
+
     showCustomers(){
       this.mode = 'customers';
     },
+
+    showGradesForRevision(){
+      this.mode = 'revision';
+    },
+
     changePassword(){
       if( this.newPassword === this.confirmPassword){
         AdminService.changePassword(this.newPassword).then(() => {LogInService.logout(); this.$router.push('/')})
@@ -226,12 +249,14 @@ export default {
         alert("NEW PASSWORD AND CONFIRM PASSWORD MUST BE SAME")
       }
     },
+
     changeUserInfo(){
       AdminService.changeAdmin(this.newUserInfo).then(res => {this.user = res.data}).catch(() => {
         alert('THERE IS SOME PROBLEM WITH SERVER')
       });
       this.mode = "neutral";
     },
+
     changeTax(){
 
     }
