@@ -14,6 +14,15 @@ class AdventureReservationService {
         return axios.get(URL + '/fast/' + adventureId, {headers});
     }
 
+    getCurrentReservationOfInstructor(instructorId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/current/' + instructorId, {headers})
+    }
+
     getAllAvailableAdventureTerms(dateFromPar, dateToPar, persons){
 
             let headers = {
@@ -85,5 +94,14 @@ class AdventureReservationService {
         return axios.put(URL + '/reserveTerm/', JSON.stringify(data), {headers});
     }
 
+    async makeCustomReserve(reserveDto){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = JSON.stringify(reserveDto);
+        return axios.post(URL + '/customReserve', data, {headers});
+    }
 }
 export default new AdventureReservationService()

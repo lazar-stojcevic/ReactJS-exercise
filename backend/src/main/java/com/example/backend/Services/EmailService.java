@@ -80,4 +80,17 @@ public class EmailService {
                 "\n\nS poštovanjem admin tim.");
         javaMailSender.send(mail);
     }
+
+    @Async
+    public void sendNotificationMailForCreatingCustomReservationToCustomer(Customer customer) throws MailException,
+            InterruptedException{
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(customer.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Obaveštenje o kreiranju nove rezervacije.");
+        mail.setText("Pozdrav " + customer.getFirstname() + ", \n\nobaveštavamo vas da" +
+                " je upravo kreirana nova rezervacija u okviru avanture/časova precanja." +
+                "\n\nS poštovanjem admin tim.");
+        javaMailSender.send(mail);
+    }
 }

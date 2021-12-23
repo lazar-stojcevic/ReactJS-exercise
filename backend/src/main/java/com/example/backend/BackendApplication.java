@@ -367,6 +367,14 @@ public class BackendApplication implements CommandLineRunner {
         reservationForEvaluating.setCustomer(customer1);
         adventureReservationRepository.save(reservationForEvaluating);
 
+        //TESTIRANJE CUSTOM REZERVACIJE
+        AdventureReservation currentReservation = new AdventureReservation();
+        currentReservation.setAdventure(adventure);
+        currentReservation.setLength(10);
+        currentReservation.setReservationStart(LocalDateTime.of(2021, 12,23,10,0));
+        currentReservation.setLastDateToReserve(LocalDateTime.of(2021, 10, 15, 15, 0));
+        currentReservation.setCustomer(customer1);
+        adventureReservationRepository.save(currentReservation);
     }
 
 }
