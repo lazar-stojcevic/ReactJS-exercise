@@ -349,6 +349,13 @@ public class BackendApplication implements CommandLineRunner {
         grade1.setInstructor(fishingInstructor);
         grade1.setEnabled(true);
 
+        Grade grade2 = new Grade();
+        grade2.setRating(5);
+        grade2.setRevision("Dobar je ");
+        grade2.setInstructor(fishingInstructor);
+        grade2.setEnabled(false);
+
+        gradeRepository.save(grade2);
         gradeRepository.save(grade);
         gradeRepository.save(grade1);
 
