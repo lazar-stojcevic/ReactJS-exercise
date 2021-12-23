@@ -73,13 +73,13 @@ class AdventureService{
             {headers});
     }
 
-    getAdditionalServicesOfAdventure(adventureId){
+    getAdditionalServicesOfReservation(reservationId){
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
-        return axios.get(URL + '/additionalServices/' + adventureId, {headers});
+        return axios.get(URL + '/additionalServices/' + reservationId, {headers});
     }
 
     getAllImagesOfAdventure(adventureId){

@@ -9,7 +9,7 @@
         <b-dropdown-item href="#/boatReservations">Boats</b-dropdown-item>
       </b-nav-item-dropdown>
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole.trim() !== 'ROLE_CUSTOMER'"
-                   to="/bookedReservations">Booked reservations</router-link>
+                   to="/bookedReservations">Booked adventures</router-link>
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole.trim() !== 'ROLE_CUSTOMER'"
                    to="/customerProfile">Profile</router-link>
 

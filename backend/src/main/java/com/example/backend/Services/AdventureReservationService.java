@@ -4,10 +4,7 @@ import com.example.backend.Beans.AdditionalService;
 import com.example.backend.Beans.AdventureReservation;
 import com.example.backend.Beans.Customer;
 import com.example.backend.Beans.FishingInstructor;
-import com.example.backend.Dtos.CustomerReserveTermDto;
-import com.example.backend.Dtos.MakeFastReservationDto;
-import com.example.backend.Dtos.ReservationSearchDto;
-import com.example.backend.Dtos.ReserveAdventureDto;
+import com.example.backend.Dtos.*;
 import com.example.backend.Repository.AdventureReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,28 +40,25 @@ public class AdventureReservationService {
     }
 
     public AdventureReservation getAdventureReservationById(long id){
-        return adventureReservationRepository.findById(id).get();
+        return findAdventureReservationById(id);
     }
 
     public Collection<AdventureReservation> getAllAdventureReservations(){
         return adventureReservationRepository.findAll();
     }
 
-    public AdventureReservation makeNewAppointment(CustomerReserveTermDto reservation){
+    public AdventureReservation makeNewAppointment(CustomerReserveTermDto reservation) throws InterruptedException {
        Customer customer = customerService.findCustomerById(reservation.getUserId());
        AdventureReservation adventureReservation = getAdventureReservationById(reservation.getReservationId());
-       for (AdventureReservation ar : adventureReservationRepository.findAll()){
-           if(ar.getCustomer() == null)
-               continue;
-           if (!ar.isReserved() && ar.getCustomer().getId() == reservation.getUserId()){
-               if (isReservationsOverlap(ar, adventureReservation))
-                   return null;
-           }
-       }
-       adventureReservation.setCustomer(customer);
-       adventureReservationRepository.save(adventureReservation);
-       return adventureReservation;
-
+        for (AdventureReservation ar : customer.getAdventureReservations()){
+            if (isReservationsOverlap(ar, adventureReservation))
+                return null;
+        }
+        List<AdditionalService> services = findAllSelectedAdditionalServices(reservation.getServices());
+        adventureReservation.setCustomer(customer);
+        calculateFullPriceOfReservation(adventureReservation, services);
+        emailService.sendAdventureReservationConfirm(customer);
+        return save(adventureReservation);
     }
 
     public Collection<AdventureReservation> getAllNextReservedTermsOfAdventure(long adventureId){
@@ -115,7 +109,9 @@ public class AdventureReservationService {
     public Collection<AdventureReservation> getAllAvailableReservationsForSearch(ReservationSearchDto search){
         List<AdventureReservation> reservations = new ArrayList<>();
         for (AdventureReservation ar: adventureReservationRepository.findByreservationStartBetween(search.getDateFrom(), search.getDateTo())){
-            if (!ar.isReserved() && ar.getAdventure().getMaxPersons() >= search.getPersons() && ar.getLastDateToReserve().isAfter(LocalDateTime.now().plusDays(3))){
+            if (!ar.isReserved() && ar.getAdventure().getMaxPersons() >= search.getPersons() &&
+                    ar.getLastDateToReserve().isAfter(LocalDateTime.now().plusDays(3)) &&
+                    !IsForbiddenToCustomer(ar, search.getId())){
                 reservations.add(ar);
             }
         }
@@ -163,6 +159,19 @@ public class AdventureReservationService {
         return save(prepareReservationForSaving(dto));
     }
 
+    public Collection<AdventureReservation> getAllFutureTermsByCustomerId(long id){
+        return adventureReservationRepository.getAllReservationOfCustomerInFuture(id,
+                LocalDateTime.now());
+    }
+
+    public AdventureReservation cancelTerm(CancelTermDto data){
+        Customer customer = this.customerService.findCustomerById(data.getUserId());
+        AdventureReservation reservation = adventureReservationRepository.getById(data.getReservationId());
+        reservation.getForbidenCustomers().add(customer);
+        reservation.setCustomer(null);
+        return adventureReservationRepository.save(reservation);
+    }
+
     private AdventureReservation prepareReservationForSaving(ReserveAdventureDto dto){
         AdventureReservation reservation = findAdventureReservationById(dto.getAdventureReservationId());
         Customer customer = this.customerService.findCustomerById(dto.getCustomerId());
@@ -175,7 +184,7 @@ public class AdventureReservationService {
     private List<AdditionalService> findAllSelectedAdditionalServices(List<Long> ids){
         List<AdditionalService> services = new ArrayList<>();
         for(long id : ids)
-            services.add(this.additionalServiceService.fidAdditionalServiceById(id));
+            services.add(this.additionalServiceService.findAdditionalServiceById(id));
         return services;
     }
 
@@ -236,6 +245,15 @@ public class AdventureReservationService {
 
     private AdventureReservation save(AdventureReservation adventureReservation){
         return this.adventureReservationRepository.save(adventureReservation);
+    }
+
+
+    //PROVERA DA LI JE ZABRANJENO KORISNIKU DA ZAKAZUJE PONOVO OVAJ TERMIN
+    private boolean IsForbiddenToCustomer(AdventureReservation ar, long id){
+        Customer customer = customerService.findCustomerById(id);
+        if (ar.getForbidenCustomers().contains(customer))
+            return true;
+        return false;
     }
 
     //TODO: MENJANO NAKNADNO U SLUCAJU BAGOVA

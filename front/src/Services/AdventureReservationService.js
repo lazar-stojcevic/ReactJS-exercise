@@ -24,7 +24,8 @@ class AdventureReservationService {
             let body = {
                 dateFrom: dateFromPar.replaceAll('T', ' '),
                 dateTo: dateToPar.replaceAll('T', ' '),
-                persons: persons
+                persons: persons,
+                id: LogInService.userId
             }
         return axios.post(URL + '/availableAdventures/', JSON.stringify(body), {headers});
     }
@@ -72,7 +73,7 @@ class AdventureReservationService {
         return axios.post(URL + '/makeFastReservation', JSON.stringify(data), {headers});
     }
 
-    reserveAdventure(reservationId){
+    reserveAdventure(reservationId, selectedServices){
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -81,8 +82,31 @@ class AdventureReservationService {
         let data = {};
         data.reservationId = reservationId;
         data.userId = LogInService.userId;
+        data.services = selectedServices;
 
         return axios.put(URL + '/reserveTerm/', JSON.stringify(data), {headers});
+    }
+
+    getAllFutureTermsByCustomerId(customerId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/futureCustomerReservation/' + customerId, {headers});
+    }
+
+    cancelReservation(adventure){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.reservationId = adventure.id;
+        data.userId = LogInService.userId;
+
+        return axios.put(URL + '/cancelTerm/', JSON.stringify(data), {headers});
     }
 
 }

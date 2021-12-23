@@ -2,7 +2,9 @@ package com.example.backend.Controllers;
 
 import com.example.backend.Beans.AdditionalService;
 import com.example.backend.Beans.Adventure;
+import com.example.backend.Beans.AdventureReservation;
 import com.example.backend.Beans.Image;
+import com.example.backend.Services.AdventureReservationService;
 import com.example.backend.Services.AdventureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +22,12 @@ public class AdventureController {
     @Autowired
     private final AdventureService adventureService;
 
-    public AdventureController(AdventureService adventureService){
+    @Autowired
+    private final AdventureReservationService adventureReservationService;
+
+    public AdventureController(AdventureService adventureService, AdventureReservationService adventureReservationService){
         this.adventureService = adventureService;
+        this.adventureReservationService = adventureReservationService;
     }
 
     @GetMapping()
@@ -29,10 +35,10 @@ public class AdventureController {
         return new ResponseEntity<>(adventureService.getAllAdventures(), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/additionalServices/{adventureId}")
+    @GetMapping(path = "/additionalServices/{reservationId}")
     public ResponseEntity<Collection<AdditionalService>> getAdditionalServicesOfAdventure(
-            @PathVariable long adventureId){
-        return new ResponseEntity<>(adventureService.getAdditionalServicesOfAdventure(adventureId),
+            @PathVariable long reservationId){
+        return new ResponseEntity<>(adventureReservationService.getAdventureReservationById(reservationId).getAdventure().getPriceList().getAdditionalServices(),
                 HttpStatus.OK);
     }
 

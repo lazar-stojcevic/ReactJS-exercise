@@ -1,35 +1,30 @@
 <template>
   <div class="container w-100">
     <br>
-    <p>Future reservations</p>
-    <div v-for="reservation in reservations" :key="reservation.id">
+    <p>Future adventure adventures</p>
+    <div v-for="reservation in adventures" :key="reservation.id">
       <b-card
           tag="adventure"
           style="max-width: 20rem;"
           class="mb-2"
       >
         <b-card-title>
-          {{reservation.name}}
+          {{reservation.adventure.name}}
         </b-card-title>
         <br>
-        <b-card-sub-title v-if="reservation.type === 'ADVENTURE'">
-          Instructor name: {{reservation.instructorName}}
+        <b-card-sub-title>
+          Description: {{reservation.adventure.instructorName}}
         </b-card-sub-title>
-        <b-card-sub-title v-if="reservation.type === 'COTTAGE'">
-          Cottage location: {{reservation.location}}
-        </b-card-sub-title>
-        <b-card-sub-title v-if="reservation.type === 'BOAT'">
-          Boat owner: {{reservation.boatOwner}}
-        </b-card-sub-title>
+
         <b-card-text>
-          {{ reservation.dateFrom | formatDate}} - {{ reservation.dateTo | formatDate}}
+          {{ reservation.reservationStart | formatDate}} - length in hours: {{ reservation.length}}
         </b-card-text>
         <br>
         <b-card-text>
           PRICE:  {{ reservation.price }}
         </b-card-text>
         <br>
-        <b-button v-if="isInNext3Days(reservation.dateFrom)" variant="danger">Cancel</b-button>
+        <b-button v-if="isInNext3Days(reservation.reservationStart)" @click="cancelReservation(reservation)" variant="danger">Cancel</b-button>
       </b-card>
     </div>
   </div>
@@ -38,12 +33,14 @@
 <script>
 
 import moment from "moment";
+import AdventureReservationService from "@/Services/AdventureReservationService";
+import LogInService from "@/Services/LogInService";
 
 export default {
-  name: "BookedReservations",data() {
+  name: "BookedReservations",
+  data() {
     return {
-      reservations : [],
-      filtered : [],
+      adventures : [],
       filter: {
         dateFrom: new Date(),
         dateTo: new Date(),
@@ -54,17 +51,18 @@ export default {
     }
   },
   mounted() {
-    //DUMMY
-    this.reservations = [
-      {id: 1, dateFrom: new Date(2022, 1,1, 5, 0, 0, 0), dateTo: new Date(2022, 1,3, 12, 0, 0, 0), price: 500, type: "BOAT", name: "Yamato battleship imitation", length: 2, boatOwner: "Taisuke Yamaguci"},
-      {id: 2, dateFrom: new Date(2022, 0,1,1, 0, 0, 0), dateTo: new Date(2022, 0,2, 3, 0 ,0, 0), price: 150, type: "COTTAGE",name: "Zlatibor cottage",location: "Zlatibor" ,length: 4},
-      {id: 3, dateFrom: new Date(2021, 11,9,0, 0, 0,0), dateTo: new Date(2021, 11,12, 0, 0, 0, 0), price: 100, type: "ADVENTURE" ,name: "Fishing on DTD", instructorName: "Momcilo Ivanovic", length: 48},
-    ];
+    AdventureReservationService.getAllFutureTermsByCustomerId(LogInService.userId).then(res =>  {
+      console.log(res.data)
+      this.adventures = res.data;
+    });
   },
   methods:{
     isInNext3Days(date){
       let inThreeDays = new Date(new Date().getTime()+(3*24*60*60*1000));
       return moment(inThreeDays).isBefore(moment(date));
+    },
+    cancelReservation(adventure){
+      AdventureReservationService.cancelReservation(adventure);
     }
   }
 }

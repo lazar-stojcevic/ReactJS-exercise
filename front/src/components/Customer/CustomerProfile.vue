@@ -29,11 +29,11 @@
             </tr>
             <tr v-if="user.points > 100">
               <td>USER CATEGORY</td>
-              <td>*PLATINUM* - 5% discaunt on all reservations</td>
+              <td>*PLATINUM* - 5% discaunt on all adventures</td>
             </tr>
             <tr v-else-if="user.points > 50">
               <td>USER CATEGORY</td>
-              <td>*GOLD* - 3% discaunt on all reservations</td>
+              <td>*GOLD* - 3% discaunt on all adventures</td>
             </tr>
             <tr v-else>
               <td>USER CATEGORY</td>

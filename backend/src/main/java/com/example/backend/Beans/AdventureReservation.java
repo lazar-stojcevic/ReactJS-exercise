@@ -56,6 +56,13 @@ public class AdventureReservation {
             inverseJoinColumns = @JoinColumn(name = "add_service_id", referencedColumnName = "add_service_id"))
     private List<AdditionalService> services = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinTable(name = "forbiden_to_reserve",
+            joinColumns = @JoinColumn(name = "adventure_reservation_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id"))
+    private List<Customer> forbidenCustomers = new ArrayList<>();
+
     private boolean rated = false;
 
     public boolean isReserved(){

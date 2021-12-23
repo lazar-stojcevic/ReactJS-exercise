@@ -15,4 +15,5 @@ public class ReservationSearchDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dateTo;
     private int persons;
+    private long id;
 }
