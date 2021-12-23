@@ -32,5 +32,14 @@ class GradeService{
         return axios.delete(URL + '/' + gradeId, {headers});
     }
 
+    async getAllGradeOfInstructor(instructorId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/instructor/' + instructorId, {headers});
+    }
+
 }
 export default new GradeService()
