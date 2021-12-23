@@ -103,13 +103,13 @@ public class GradeService {
     }
 
     public Grade makeGradeForSaving(GradeToSaveDto dto) {
-        if(Objects.equals(dto.getEntityName(), "I"))
+        if(Objects.equals(dto.getEntityType(), "I"))
             return makeGradeForInstructor(dto);
-        else if(Objects.equals(dto.getEntityName(), "CO"))
+        else if(Objects.equals(dto.getEntityType(), "CO"))
             return mageGradeForCottageOwner(dto);
-        else if(Objects.equals(dto.getEntityName(), "BO"))
+        else if(Objects.equals(dto.getEntityType(), "BO"))
             return mageGradeForBoatOwner(dto);
-        else if(Objects.equals(dto.getEntityName(), "C"))
+        else if(Objects.equals(dto.getEntityType(), "C"))
             return mageGradeForCottage(dto);
         else return mageGradeForBoat(dto);
     }
