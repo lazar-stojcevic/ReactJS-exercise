@@ -44,6 +44,7 @@
           <div class="btn-group-sm" style="margin: 5px">
             <button @click="changeModeToInfo" v-if="mode === 'neutral'" class="btn-info">CHANGE YOUR INFO</button>
             <button @click="changeModeToPassword" v-if="mode === 'neutral'" class="btn-info">CHANGE PASSWORD</button>
+            <button @click="deleteProfileRequest" v-if="mode === 'neutral'" class="btn-danger">DELETE PASSWORD</button>
           </div>
           <div v-if="mode === 'changePassword'" class="container">
             <form @submit.prevent="changePassword">
@@ -97,6 +98,23 @@
               </div>
             </form>
           </div>
+
+          <div v-if="mode === 'deleteProfile'" class="container">
+            <form @submit.prevent="sendProfileDeleteRequest">
+              <div class="input-group mb-3">
+                <span class="input-group-text">REQUEST TEXT:</span>
+                <input type="text" class="form-control" v-model="deleteRequest">
+              </div>
+              <div class="input-group mb-3">
+                <div class="btn-group-sm">
+                  <button type="submit" class="btn-info">CONFIRM</button>
+                  <button @click="changeModeToNeutral()" type="reset" class="btn-danger">CLOSE</button>
+                </div>
+              </div>
+
+            </form>
+          </div>
+
         </div>
       </div>
     </div>
@@ -115,10 +133,11 @@ export default {
           street: ''
         }
       },
-      mode: 'neutral', //changePassword, changeInfo
+      mode: 'neutral', //changePassword, changeInfo, deleteProfile
       newPassword: '',
       confirmPassword: '',
       newUserInfo: '',
+      deleteRequest: '',
     }
   },
   mounted() {
@@ -144,6 +163,9 @@ export default {
     changeModeToPassword(){
       this.mode = 'changePassword'
     },
+    deleteProfileRequest(){
+      this.mode = 'deleteProfile'
+    },
     changePassword(){
       if(this.newPassword !== this.confirmPassword && this.newPassword.trim() !== ''){
         alert("NEW PASSWORD IS NOT MATCHING WITH CONFIRM PASSWORD");
@@ -159,6 +181,13 @@ export default {
     //TODO: VALIDACIJA
     changeUserInfo(){
       CustomerService.changeCustomer(this.newUserInfo).then(res => {this.user = res.data}).catch(() => {
+        alert("SERVER ERROR");
+      });
+      this.mode = 'neutral';
+    },
+
+    sendProfileDeleteRequest(){
+      CustomerService.deleteCustomerRequest(this.deleteRequest).then(() => alert("Request sent!")).catch(() => {
         alert("SERVER ERROR");
       });
       this.mode = 'neutral';
