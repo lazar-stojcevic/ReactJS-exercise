@@ -1,5 +1,6 @@
 package com.example.backend.Services;
 
+import com.example.backend.Beans.AdventureReservation;
 import com.example.backend.Beans.Grade;
 import com.example.backend.Dtos.GradeToSaveDto;
 import com.example.backend.Dtos.GradeToShowDto;
@@ -103,38 +104,38 @@ public class GradeService {
     }
 
     public Grade makeGradeForSaving(GradeToSaveDto dto) {
-        if(Objects.equals(dto.getEntityName(), "I"))
+        if(Objects.equals(dto.getEntityType(), "I"))
             return makeGradeForInstructor(dto);
-        else if(Objects.equals(dto.getEntityName(), "CO"))
-            return mageGradeForCottageOwner(dto);
-        else if(Objects.equals(dto.getEntityName(), "BO"))
-            return mageGradeForBoatOwner(dto);
-        else if(Objects.equals(dto.getEntityName(), "C"))
-            return mageGradeForCottage(dto);
-        else return mageGradeForBoat(dto);
+        else if(Objects.equals(dto.getEntityType(), "CO"))
+            return makeGradeForCottageOwner(dto);
+        else if(Objects.equals(dto.getEntityType(), "BO"))
+            return makeGradeForBoatOwner(dto);
+        else if(Objects.equals(dto.getEntityType(), "C"))
+            return makeGradeForCottage(dto);
+        else return makeGradeForBoat(dto);
     }
 
-    private Grade mageGradeForBoat(GradeToSaveDto dto) {
+    private Grade makeGradeForBoat(GradeToSaveDto dto) {
         return new Grade();
     }
 
-    private Grade mageGradeForCottage(GradeToSaveDto dto) {
+    private Grade makeGradeForCottage(GradeToSaveDto dto) {
         return new Grade();
     }
 
-    private Grade mageGradeForBoatOwner(GradeToSaveDto dto) {
+    private Grade makeGradeForBoatOwner(GradeToSaveDto dto) {
         return new Grade();
     }
 
-    private Grade mageGradeForCottageOwner(GradeToSaveDto dto) {
+    private Grade makeGradeForCottageOwner(GradeToSaveDto dto) {
         return new Grade();
     }
 
     private Grade makeGradeForInstructor(GradeToSaveDto dto){
         Grade grade = new Grade();
         makeBaseGrade(grade, dto);
-        grade.setInstructor(fishingInstructorService.findFishingInstructorById(dto.getEntityId()));
-        reservationService.markReservationAsEvaluated(dto.getReservationId());
+        AdventureReservation reservation = reservationService.markReservationAsEvaluated(dto.getEntityId());
+        grade.setInstructor(reservation.getAdventure().getInstructor());
         return saveGrade(grade);
     }
 
