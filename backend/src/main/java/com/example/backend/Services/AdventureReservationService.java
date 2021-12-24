@@ -190,7 +190,7 @@ public class AdventureReservationService {
         reservation.getForbidenCustomers().add(customer);
         reservation.setCustomer(null);
         return adventureReservationRepository.save(reservation);
-        
+    }
     public AdventureReservation markReservationAsReported(long id){
         AdventureReservation reservation = findAdventureReservationById(id);
         reservation.setReported(true);
