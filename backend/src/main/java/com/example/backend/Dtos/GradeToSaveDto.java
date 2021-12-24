@@ -13,6 +13,4 @@ public class GradeToSaveDto {
     private long entityId;
     //I-instructor, BO-boatOwner, CO-cottageOwner, C-cottage, B-boat
     private String entityType;
-    //OVO JE SAMO ZA INSTRUKTORA, MA DA MOZE I ZA OSTALE ENTITETE ZAVISI OD LOGIKE
-    private long reservationId;
 }

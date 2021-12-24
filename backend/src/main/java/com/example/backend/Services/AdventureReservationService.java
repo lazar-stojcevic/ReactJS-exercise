@@ -112,10 +112,10 @@ public class AdventureReservationService {
                 LocalDateTime.now());
     }
 
-    public void markReservationAsEvaluated(long reservationId){
+    public AdventureReservation markReservationAsEvaluated(long reservationId){
         AdventureReservation adventureReservation = findAdventureReservationById(reservationId);
         adventureReservation.setRated(true);
-        save(adventureReservation);
+        return save(adventureReservation);
     }
 
     public AdventureReservation findAdventureReservationById(long id){
