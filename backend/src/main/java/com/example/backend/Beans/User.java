@@ -1,12 +1,10 @@
 package com.example.backend.Beans;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 
 @Entity

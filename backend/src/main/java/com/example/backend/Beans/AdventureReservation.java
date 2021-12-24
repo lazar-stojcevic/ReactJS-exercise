@@ -42,9 +42,6 @@ public class AdventureReservation {
     @JoinColumn(name = "adventure_id")
     private Adventure adventure;
 
-    @Column(length = 2000)
-    private String report;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -67,7 +64,11 @@ public class AdventureReservation {
             inverseJoinColumns = @JoinColumn(name = "customer_id"))
     private List<Customer> forbidenCustomers = new ArrayList<>();
 
+    @Column()
     private boolean rated = false;
+
+    @Column()
+    private boolean reported = false;
 
     public boolean isReserved(){
         return this.customer != null;

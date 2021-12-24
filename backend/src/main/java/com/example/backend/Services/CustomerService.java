@@ -153,4 +153,14 @@ public class CustomerService implements IUserService {
         saveVal.setReviewed(false);
         return saveVal;
     }
+
+     public Customer addPenaltyPointToCustomer(long id) {
+        Customer customer = findCustomerById(id);
+        customer.setPenaltyPoints(customer.getPenaltyPoints() + 1);
+        return saveCustomer(customer);
+    }
+
+    private Customer saveCustomer(Customer customer){
+        return customerRepository.save(customer);
+    }
 }

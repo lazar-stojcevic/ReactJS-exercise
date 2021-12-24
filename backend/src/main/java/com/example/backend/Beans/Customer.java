@@ -37,7 +37,11 @@ public class Customer extends User {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     @JsonIgnore
-    List<AdventureReservation> adventureReservations = new ArrayList<>();
+    private List<AdventureReservation> adventureReservations = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+    @JsonIgnore
+    private List<Report> reports = new ArrayList<>();
 
     @Override
     public String getUsername() {

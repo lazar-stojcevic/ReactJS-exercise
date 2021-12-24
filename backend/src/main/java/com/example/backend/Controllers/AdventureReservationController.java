@@ -142,12 +142,6 @@ public class AdventureReservationController {
        return new ResponseEntity<>(adventureReservationService.cancelAdventureReservation(id), HttpStatus.OK);
     }
 
-    @PutMapping(path = "/report/{id}/{report}")
-    public ResponseEntity<AdventureReservation> addReportToAdventureReservation(@PathVariable long id,
-                                                                                @PathVariable String report){
-        return new ResponseEntity<>(adventureReservationService.makeReportOfAdventureReservation(id, report), HttpStatus.OK);
-    }
-
     @PostMapping(path = "/customReserve")
     @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<AdventureReservation> fastReserve(@RequestBody ReserveAdventureDto dto){
