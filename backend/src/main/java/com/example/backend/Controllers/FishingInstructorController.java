@@ -63,14 +63,4 @@ public class FishingInstructorController {
         return new ResponseEntity<>(fishingInstructorService.updateFishingInstructor(fishingInstructorChangeDto),
                 HttpStatus.CREATED);
     }
-
-    @PutMapping(path = "/deletingRequest/{id}")
-    @PreAuthorize("hasRole('INSTRUCTOR')")
-    public ResponseEntity<?> requestForDeleting(@PathVariable long id){
-        FishingInstructor instructor = fishingInstructorService.requestForDeleting(id);
-        if(instructor == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }

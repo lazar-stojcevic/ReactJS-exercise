@@ -24,9 +24,6 @@ public class FishingInstructor extends User {
     @JoinColumn(name = "available", referencedColumnName = "available_id")
     private AvailableTimespan available;
 
-    @Column
-    private boolean isForDeleting = false;
-
     @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Grade> grades = new ArrayList<>();
@@ -38,10 +35,6 @@ public class FishingInstructor extends User {
         retVal.add(this.getRole());
         return retVal;
     }
-
-    public boolean getIsForDeleting() { return  this.isForDeleting; }
-
-    public void setIsForDeleting(boolean value) { this.isForDeleting = value; }
 
     @Override
     public String getUsername() {

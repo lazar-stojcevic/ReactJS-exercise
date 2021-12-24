@@ -132,4 +132,14 @@ public class CustomerService implements IUserService {
     public void deleteCustomer(long id){
         customerRepository.deleteById(id);
     }
+
+    public Customer addPenaltyPointToCustomer(long id) {
+        Customer customer = findCustomerById(id);
+        customer.setPenaltyPoints(customer.getPenaltyPoints() + 1);
+        return saveCustomer(customer);
+    }
+
+    private Customer saveCustomer(Customer customer){
+        return customerRepository.save(customer);
+    }
 }

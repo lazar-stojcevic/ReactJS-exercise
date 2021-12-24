@@ -82,14 +82,6 @@ public class FishingInstructorService implements IFishingInstructorService {
         fishingInstructorRepository.save(instructor);
     }
 
-    public FishingInstructor requestForDeleting(long id){
-        FishingInstructor instructor = findFishingInstructorById(id);
-        if(instructor.getIsForDeleting())
-            return null;
-        instructor.setIsForDeleting(true);
-        return fishingInstructorRepository.save(instructor);
-    }
-
     private FishingInstructor createFishingInstructor(UserRegistration user) {
         FishingInstructor instructor =  new FishingInstructor();
         instructor.setAddress(createAddress(user));

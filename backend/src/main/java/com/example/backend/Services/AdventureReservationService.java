@@ -161,17 +161,18 @@ public class AdventureReservationService {
         return save(adventureReservation);
     }
 
-    public AdventureReservation makeReportOfAdventureReservation(long id, String report){
-        AdventureReservation adventureReservation = findAdventureReservationById(id);
-        adventureReservation.setReport(report);
-        return save(adventureReservation);
-    }
 
     //TODO: Rezervacija avanture
     public AdventureReservation customReserveAdventure(ReserveAdventureDto dto){
         AdventureReservation reservation = prepareCustomReservationForSaving(dto);
         if(reservation != null)
             sendNotificationMailForCreatingCustomReservationToCustomer(reservation.getCustomer());
+        return save(reservation);
+    }
+
+    public AdventureReservation markReservationAsReported(long id){
+        AdventureReservation reservation = findAdventureReservationById(id);
+        reservation.setReported(true);
         return save(reservation);
     }
 
