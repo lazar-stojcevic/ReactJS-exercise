@@ -49,6 +49,10 @@ public class AdventureReservation {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adventure_complaint_id")
+    private AdventureComplaint complaint;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinTable(name = "add_services_of_adventure_reservation",

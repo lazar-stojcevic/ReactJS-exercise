@@ -184,6 +184,11 @@ public class AdventureReservationService {
                 LocalDateTime.now());
     }
 
+    public Collection<AdventureReservation> getAllPastTermsWithoutComplaintByCustomerId(long id){
+        return adventureReservationRepository.getAllReservationOfCustomerInPastWithoutComplaint(id,
+                LocalDateTime.now());
+    }
+
     public AdventureReservation cancelTerm(CancelTermDto data){
         Customer customer = this.customerService.findCustomerById(data.getUserId());
         AdventureReservation reservation = adventureReservationRepository.getById(data.getReservationId());
