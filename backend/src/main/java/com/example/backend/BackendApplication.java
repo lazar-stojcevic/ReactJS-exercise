@@ -28,6 +28,8 @@ public class BackendApplication implements CommandLineRunner {
     private AdminRepository adminRepository;
     @Autowired
     private GradeRepository gradeRepository;
+    @Autowired
+    private ReportRepository reportRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -375,6 +377,18 @@ public class BackendApplication implements CommandLineRunner {
         currentReservation.setLastDateToReserve(LocalDateTime.of(2021, 10, 15, 15, 0));
         currentReservation.setCustomer(customer1);
         adventureReservationRepository.save(currentReservation);
+
+        //TESTIRANJE REPORTA
+        Report reportGood = new Report();
+        reportGood.setCustomer(customer1);
+        reportGood.setComment("Korisnik je bio korektan");
+        reportRepository.save(reportGood);
+        Report reportBad = new Report();
+        reportBad.setCustomer(customer1);
+        reportBad.setBadReport(true);
+        reportBad.setComment("Korisnik je nije bio korektan");
+        reportRepository.save(reportBad);
+
     }
 
 }

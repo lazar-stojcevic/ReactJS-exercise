@@ -24,7 +24,7 @@ import ReserveAdventure from "@/components/Customer/Reserve/ReserveAvanture"
 import NewAdventureReservation from "@/components/Customer/Reserve/NewAdventureReservation"
 
 import AdminProfile from "@/components/Admin/AdminProfile";
-import ProfileRequests from "@/components/Admin/ProfileRequests";
+import ProfileRequests from "@/components/Admin/Requests";
 import CreateNewAdmin from "@/components/Admin/CreateNewAdmin";
 import CottageOwnerProfile from "../components/CottageOwner/CottageOwnerProfile";
 import CreateCottage from "../components/CottageOwner/CreateCottage";
