@@ -58,7 +58,7 @@ class AdminService{
         return axios.put(URL+ '/changePassword' ,JSON.stringify(data) ,{headers});
     }
 
-    acceptUserRequest(userId){
+    async acceptUserRequest(userId){
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ class AdminService{
         return axios.put(USER_URL+ '/enable/' + userId, null ,{headers});
     }
 
-    notAcceptUserRequest(userId){
+    async notAcceptUserRequest(userId){
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',

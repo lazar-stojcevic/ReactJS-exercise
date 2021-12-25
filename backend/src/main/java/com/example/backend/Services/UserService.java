@@ -13,12 +13,14 @@ import java.util.List;
 public class UserService {
     @Autowired
     public final UserRepository userRepository;
-
     @Autowired
     private EmailService emailService;
-
     @Autowired
     private FishingInstructorService fishingInstructorService;
+    @Autowired
+    private CottageOwnerService cottageOwnerService;
+    @Autowired
+    private BoatOwnerService boatOwnerService;
 
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
@@ -32,31 +34,36 @@ public class UserService {
         return users;
     }
 
-    public User enableUser(long id) {
-        User user = userRepository.findById(id).orElse(null);
-        assert user != null;
+    public User findUserById(long id){
+        return userRepository.findById(id).orElse(null);
+    }
 
-        //TODO: ISPOD DODATI I ZA OSTALE ROLE
-        if(user.getRole().getName().equals("ROLE_INSTRUCTOR"))
-            user = (User) fishingInstructorService.enableFishingInstructor(id);
+    public User enableUser(long id) {
+        User user = findUserById(id);
+
+        switch (user.getRole().getName()) {
+            case "ROLE_INSTRUCTOR" -> user = (User) fishingInstructorService.enableFishingInstructor(id);
+            case "ROLE_COTTAGE_OWNER" -> user = (User) cottageOwnerService.enableCottageOwner(id);
+            case "ROLE_BOAT_OWNER" -> user = (User) boatOwnerService.enableBoatOwner(id);
+        }
+
         try {
-            emailService.sendConfirmMailToInstructor(user);
+            emailService.sendConfirmMailToUser(user);
         }catch (Exception e){ return null; }
 
         return user;
     }
 
     public boolean disableUser(long id){
-        User user = userRepository.findById(id).orElse(null);
-        assert user != null;
-
-        //TODO: ISPOD DODATI I OSTALE ROLE
-        if(user.getRole().getName().equals("ROLE_INSTRUCTOR"))
-            fishingInstructorService.deleteFishingInstructor(id);
-
+        User user = findUserById(id);
         try {
-            emailService.sendNegativeMailToInstructor(user);
+            deleteUser(id);
+            emailService.sendNegativeMailToUser(user);
             return true;
         }catch (Exception e){ System.out.println(e.toString()); return false;}
+    }
+
+    public void deleteUser(long id){
+        userRepository.deleteById(id);
     }
 }

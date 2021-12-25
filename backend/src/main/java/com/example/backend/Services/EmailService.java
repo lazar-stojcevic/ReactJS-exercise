@@ -41,7 +41,7 @@ public class EmailService {
     }
 
     @Async
-    public void sendConfirmMailToInstructor(User user) throws MailException, InterruptedException{
+    public void sendConfirmMailToUser(User user) throws MailException, InterruptedException{
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
@@ -53,7 +53,7 @@ public class EmailService {
     }
 
     @Async
-    public void sendNegativeMailToInstructor(User user) throws MailException, InterruptedException{
+    public void sendNegativeMailToUser(User user) throws MailException, InterruptedException{
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
