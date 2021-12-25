@@ -40,10 +40,10 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/disable/{id}")
+    @DeleteMapping(path = "/disable/{id}/{reason}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> disableFishingInstructor(@PathVariable long id){
-        boolean isDeleted = userService.disableUser(id);
+    public ResponseEntity<?> disableFishingInstructor(@PathVariable long id, @PathVariable String reason){
+        boolean isDeleted = userService.disableUser(id, reason);
         if(!isDeleted)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(HttpStatus.OK);

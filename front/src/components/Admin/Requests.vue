@@ -1,16 +1,22 @@
 <template>
   <div class="container">
-    <!--USER REQUEST-->
-    <div>
-      <h3>USER REQUESTS</h3>
-      <profile-requests></profile-requests>
-      <hr/>
-    </div>
-    <!--REPORT REQUEST-->
-    <div>
-      <h3>REPORT REQUESTS</h3>
-      <reports></reports>
-      <hr/>
+    <div class="card">
+      <div class="card-body">
+          <!--USER REQUEST-->
+        <div>
+          <h3>USER REQUESTS</h3>
+          <profile-requests></profile-requests>
+          <hr/>
+        </div>
+
+        <!--REPORT REQUEST-->
+        <div>
+          <h3>REPORT REQUESTS</h3>
+          <reports></reports>
+          <hr/>
+        </div>
+
+      </div>
     </div>
   </div>
 </template>

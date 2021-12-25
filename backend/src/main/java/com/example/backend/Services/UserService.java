@@ -54,11 +54,11 @@ public class UserService {
         return user;
     }
 
-    public boolean disableUser(long id){
+    public boolean disableUser(long id, String reason){
         User user = findUserById(id);
         try {
             deleteUser(id);
-            emailService.sendNegativeMailToUser(user);
+            emailService.sendNegativeMailToUser(user, reason);
             return true;
         }catch (Exception e){ System.out.println(e.toString()); return false;}
     }

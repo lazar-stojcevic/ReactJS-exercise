@@ -53,13 +53,13 @@ public class EmailService {
     }
 
     @Async
-    public void sendNegativeMailToUser(User user) throws MailException, InterruptedException{
+    public void sendNegativeMailToUser(User user,String reason) throws MailException, InterruptedException{
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Odgovor na podnošenje zahteva za registraciju.");
         mail.setText("Pozdrav " + user.getFirstname() + ", \n\nobaveštavamo vas da vaš nalog nažalost" +
-                " nije prihvaćen." +
+                " nije prihvaćen zbog.\n" + reason +
                 "\n\nS poštovanjem admin tim.");
         javaMailSender.send(mail);
     }
