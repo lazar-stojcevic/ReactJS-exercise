@@ -337,7 +337,7 @@ export default {
       this.reservedTerms = res.data;
     }).catch(() => {alert("THERE IS SOME PROBLEM WITH LOADING RESERVED TERMS")});
 
-    AdventureService.getAdditionalServicesOfAdventure(AdventureService.getAdventureId()).then(res => {this.additionalServices = res.data})
+    AdventureService.getAdditionalServicesOfReservation(AdventureService.getAdventureId()).then(res => {this.additionalServices = res.data})
     .catch(() => {alert("THERE IS SOME ERROR WITH LOADING ADDITIONAL SERVICES")});
 
     AdventureService.getAllImagesOfAdventure(AdventureService.adventureId).then(res => {
@@ -407,7 +407,7 @@ export default {
     },
 
     restartAdditionalService(){
-      AdventureService.getAdditionalServicesOfAdventure(AdventureService.getAdventureId()).then(res => {
+      AdventureService.getAdditionalServicesOfReservation(AdventureService.getAdventureId()).then(res => {
         this.additionalServices = res.data;
       }).catch(() => {alert("THERE IS SOME PROBLEM WITH LOADING ADDITIONAL SERVICES")});
       this.addService = {name: '', addPrice: ''};

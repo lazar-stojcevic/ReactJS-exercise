@@ -1,14 +1,13 @@
 package com.example.backend.Services;
 
-import com.example.backend.Beans.Address;
-import com.example.backend.Beans.Customer;
-import com.example.backend.Beans.FishingInstructor;
-import com.example.backend.Beans.Role;
+import com.example.backend.Beans.*;
 import com.example.backend.Dtos.CustomerChangeDto;
+import com.example.backend.Dtos.DeleteUserRequestDto;
 import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Dtos.UserRegistration;
 import com.example.backend.Repository.AddressRepository;
 import com.example.backend.Repository.CustomerRepository;
+import com.example.backend.Repository.DeleteProfileRequestRepository;
 import com.example.backend.Services.Interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +24,9 @@ import java.util.Optional;
 public class CustomerService implements IUserService {
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private DeleteProfileRequestRepository deleteProfileRequestRepository;
 
     @Autowired
     private AddressRepository addressRepository;
@@ -129,11 +131,30 @@ public class CustomerService implements IUserService {
         return customer.getPenaltyPoints();
     }
 
+    public boolean sendDeleteProfileRequest(DeleteUserRequestDto deleteUserRequestDto){
+        DeleteProfileRequest saveVal = getDeleteProfileRequest(deleteUserRequestDto);
+        try {
+            deleteProfileRequestRepository.save(saveVal);
+        }
+        catch(Exception e){
+            return false;
+        }
+        return true;
+    }
+
     public void deleteCustomer(long id){
         customerRepository.deleteById(id);
     }
 
-    public Customer addPenaltyPointToCustomer(long id) {
+    private DeleteProfileRequest getDeleteProfileRequest(DeleteUserRequestDto deleteUserRequestDto) {
+        DeleteProfileRequest saveVal = new DeleteProfileRequest();
+        saveVal.setRequestText(deleteUserRequestDto.getRequestText());
+        saveVal.setUser(findById(deleteUserRequestDto.getId()));
+        saveVal.setReviewed(false);
+        return saveVal;
+    }
+
+     public Customer addPenaltyPointToCustomer(long id) {
         Customer customer = findCustomerById(id);
         customer.setPenaltyPoints(customer.getPenaltyPoints() + 1);
         return saveCustomer(customer);

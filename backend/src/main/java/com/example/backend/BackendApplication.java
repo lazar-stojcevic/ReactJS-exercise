@@ -60,7 +60,7 @@ public class BackendApplication implements CommandLineRunner {
         roleRepository.save(role5);
 
         Customer customer1 = new Customer();
-        customer1.setEmail("joxy99@gmail.com");
+        customer1.setEmail("yoxy99@gmail.com");
         customer1.setFirstname("Jovana");
         customer1.setLastName("Stankovic");
         customer1.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
@@ -216,12 +216,20 @@ public class BackendApplication implements CommandLineRunner {
         PriceList priceList = new PriceList();
         priceList.setPrice(4000);
         adventure.setPriceList(priceList);
+
         AdditionalService additionalService = new AdditionalService();
         additionalService.setName("Prvi dodatni servis");
         additionalService.setAddPrice(1000);
         additionalService.setPriceList(priceList);
+
+        AdditionalService additionalService2 = new AdditionalService();
+        additionalService2.setName("Drugi dodatni servis");
+        additionalService2.setAddPrice(500);
+        additionalService2.setPriceList(priceList);
+
         Set<AdditionalService> serviceList = new HashSet<>();
         serviceList.add(additionalService);
+        serviceList.add(additionalService2);
         priceList.setAdditionalServices(serviceList);
 
         adventureRepository.save(adventure);
@@ -249,6 +257,24 @@ public class BackendApplication implements CommandLineRunner {
         reservation4.setReservationStart(LocalDateTime.of(2022, 1,15,10,20));
         reservation4.setLastDateToReserve(LocalDateTime.of(2021, 12, 25, 15, 0));
         adventureReservationRepository.save(reservation4);
+
+        AdventureReservation reservation5 = new AdventureReservation();
+        reservation5.setAdventure(adventure);
+        reservation5.setLength(4);
+        reservation5.setPrice(2500);
+        reservation5.setReservationStart(LocalDateTime.of(2022, 1,17,10,20));
+        reservation5.setLastDateToReserve(LocalDateTime.of(2021, 12, 30, 15, 0));
+        adventureReservationRepository.save(reservation5);
+
+        //Za proveru zalbi
+        AdventureReservation reservation6 = new AdventureReservation();
+        reservation6.setAdventure(adventure);
+        reservation6.setLength(4);
+        reservation6.setPrice(2500);
+        reservation6.setReservationStart(LocalDateTime.of(2021, 1,17,10,20));
+        reservation6.setLastDateToReserve(LocalDateTime.of(2020, 12, 30, 15, 0));
+        reservation6.setCustomer(customer2);
+        adventureReservationRepository.save(reservation6);
 
         Cottage cottage1 = new Cottage();
         cottage1.setConductRules("Budite fini");

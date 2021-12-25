@@ -16,4 +16,12 @@ public interface AdventureReservationRepository extends JpaRepository<AdventureR
     @Query("select ar from AdventureReservation ar where ar.customer.id = ?1 and ar.rated = false" +
             " and ar.reservationStart < ?2")
     Collection<AdventureReservation> getAllReservationOfCustomerForEvaluation(long customerId , LocalDateTime now);
+
+    @Query("select ar from AdventureReservation ar where ar.customer.id = ?1" +
+            " and ar.reservationStart > ?2")
+    Collection<AdventureReservation> getAllReservationOfCustomerInFuture(long customerId , LocalDateTime now);
+
+    @Query("select ar from AdventureReservation ar where ar.customer.id = ?1" +
+            " and ar.reservationStart < ?2 and ar.complaint is null")
+    Collection<AdventureReservation> getAllReservationOfCustomerInPastWithoutComplaint(long customerId , LocalDateTime now);
 }

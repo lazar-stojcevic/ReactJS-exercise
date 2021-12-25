@@ -14,7 +14,7 @@
       </b-input-group>
     </div>
     <br>
-    <p>Boat reservations</p>
+    <p>Boat adventures</p>
     <div v-for="reservation in reservations" :key="reservation.id">
       <b-card
           tag="boat"

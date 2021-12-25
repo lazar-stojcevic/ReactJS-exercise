@@ -25,8 +25,18 @@ public class EmailService {
         mail.setTo(user.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Helloooo!");
-        mail.setText("Pozdrav " + user.getFirstname() + ",\n\nhvala što pratiš ISA. \n\n"
+        mail.setText("Pozdrav " + user.getFirstname() + ",\n\novo je link za potvrdu vaseg naloga. \n\n"
         + "http://localhost:8080/auth/" + user.getEmail());
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendAdventureReservationConfirm(Customer user) throws MailException, InterruptedException {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Potvrda o zakazanom terminu avanture");
+        mail.setText("Uspesno ste zakazali termin avanture!");
         javaMailSender.send(mail);
     }
 

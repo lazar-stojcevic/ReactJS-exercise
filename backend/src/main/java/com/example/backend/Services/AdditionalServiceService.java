@@ -5,6 +5,8 @@ import com.example.backend.Repository.AdditionalServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class AdditionalServiceService {
     @Autowired
@@ -17,7 +19,7 @@ public class AdditionalServiceService {
         this.additionalServiceRepository = additionalServiceRepository;
     }
 
-    public AdditionalService fidAdditionalServiceById(long id){
+    public AdditionalService findAdditionalServiceById(long id){
         return additionalServiceRepository.findById(id).orElse(null);
     }
 
@@ -25,5 +27,6 @@ public class AdditionalServiceService {
         additionalServices.setPriceList(adventureService.findAdventureById(adventureId).getPriceList());
         return additionalServiceRepository.save(additionalServices);
     }
+
 
 }

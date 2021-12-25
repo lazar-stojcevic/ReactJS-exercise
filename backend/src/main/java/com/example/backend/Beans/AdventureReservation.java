@@ -46,12 +46,23 @@ public class AdventureReservation {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adventure_complaint_id")
+    private AdventureComplaint complaint;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinTable(name = "add_services_of_adventure_reservation",
             joinColumns = @JoinColumn(name = "adventure_reservation_id", referencedColumnName = "adventure_reservation_id"),
             inverseJoinColumns = @JoinColumn(name = "add_service_id", referencedColumnName = "add_service_id"))
     private List<AdditionalService> services = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinTable(name = "forbiden_to_reserve",
+            joinColumns = @JoinColumn(name = "adventure_reservation_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id"))
+    private List<Customer> forbidenCustomers = new ArrayList<>();
 
     @Column()
     private boolean rated = false;

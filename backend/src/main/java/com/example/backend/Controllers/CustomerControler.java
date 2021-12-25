@@ -2,6 +2,7 @@ package com.example.backend.Controllers;
 
 import com.example.backend.Beans.Customer;
 import com.example.backend.Dtos.CustomerChangeDto;
+import com.example.backend.Dtos.DeleteUserRequestDto;
 import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,13 @@ public class CustomerControler {
     public ResponseEntity<String> isPasswordMatching(@RequestBody PasswordChangeDto passwordChangeDto){
         if(this.customerService.isPasswordMatching(passwordChangeDto.getUserId(),
                 passwordChangeDto.getPassword()))
+            return new ResponseEntity<>("OK", HttpStatus.OK);
+        else return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @PostMapping(path = "/delete")
+    public ResponseEntity<String> sendDeleteRequest(@RequestBody DeleteUserRequestDto deleteRequestDto){
+        if(this.customerService.sendDeleteProfileRequest(deleteRequestDto))
             return new ResponseEntity<>("OK", HttpStatus.OK);
         else return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }

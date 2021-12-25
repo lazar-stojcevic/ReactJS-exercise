@@ -1,10 +1,7 @@
 package com.example.backend.Controllers;
 
 import com.example.backend.Beans.AdventureReservation;
-import com.example.backend.Dtos.CustomerReserveTermDto;
-import com.example.backend.Dtos.MakeFastReservationDto;
-import com.example.backend.Dtos.ReservationSearchDto;
-import com.example.backend.Dtos.ReserveAdventureDto;
+import com.example.backend.Dtos.*;
 import com.example.backend.Services.AdventureReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,8 +60,16 @@ public class AdventureReservationController {
     }
 
     @PutMapping(path = "/reserveTerm/")
-    public ResponseEntity<AdventureReservation> ReserveTerm(@RequestBody CustomerReserveTermDto reservation){
+    public ResponseEntity<AdventureReservation> ReserveTerm(@RequestBody CustomerReserveTermDto reservation) throws InterruptedException {
         AdventureReservation adventureReservation = adventureReservationService.makeNewAppointment(reservation);
+        if (adventureReservation == null)
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(adventureReservation, HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/cancelTerm/")
+    public ResponseEntity<AdventureReservation> CancelTerm(@RequestBody CancelTermDto cancel){
+        AdventureReservation adventureReservation = adventureReservationService.cancelTerm(cancel);
         if (adventureReservation == null)
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(adventureReservation, HttpStatus.OK);
@@ -80,6 +85,20 @@ public class AdventureReservationController {
     public ResponseEntity<Collection<AdventureReservation>> getAllFreeFastReservationsOfAdventure(
             @PathVariable long adventureId){
         return new ResponseEntity<>(adventureReservationService.getAllFreeFastReservations(adventureId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/futureCustomerReservation/{customerId}")
+    public ResponseEntity<Collection<AdventureReservation>> getAllFutureTermsByCustomerId(
+            @PathVariable long customerId){
+        return new ResponseEntity<>(adventureReservationService.getAllFutureTermsByCustomerId(customerId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/pastCustomerReservationWithOutComplaint/{customerId}")
+    public ResponseEntity<Collection<AdventureReservation>> getAllPastTermsWithoutComplaintByCustomerId(
+            @PathVariable long customerId){
+        return new ResponseEntity<>(adventureReservationService.getAllPastTermsWithoutComplaintByCustomerId(customerId),
                 HttpStatus.OK);
     }
 

@@ -4,13 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class CustomerReserveTermDto {
+public class CancelTermDto {
     private long reservationId;
     private long userId;
-    private List<Long> services;
 }

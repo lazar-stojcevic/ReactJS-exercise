@@ -42,6 +42,18 @@ class CustomerService{
         return axios.put(CUSTOMER_URL, data, {headers});
     }
 
+    deleteCustomerRequest(requestText){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.id = LogInService.userId;
+        data.requestText = requestText;
+        return axios.post(CUSTOMER_URL + '/delete', data, {headers});
+    }
+
     getCustomerPenaltyPoints(userId){
         const headers = {
             'Accept': 'application/json',
