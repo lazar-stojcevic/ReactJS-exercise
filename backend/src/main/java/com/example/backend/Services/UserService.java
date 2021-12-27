@@ -1,6 +1,7 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.User;
+import com.example.backend.Dtos.AnswerOnRequestForDeletingDto;
 import com.example.backend.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,5 +66,16 @@ public class UserService {
 
     public void deleteUser(long id){
         userRepository.deleteById(id);
+    }
+
+    public void answerOnRequestForDeleting(AnswerOnRequestForDeletingDto dto) {
+        if(dto.isForDelete())
+            deleteUser(dto.getUserId());
+
+        try {
+            emailService.sendAnswerOnRequestForDeletingProfile(findUserById(dto.getUserId()), dto.getAnswer());
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
 }

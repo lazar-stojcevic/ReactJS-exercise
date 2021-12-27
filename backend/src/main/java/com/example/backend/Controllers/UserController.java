@@ -3,6 +3,7 @@ package com.example.backend.Controllers;
 
 import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Beans.User;
+import com.example.backend.Dtos.AnswerOnRequestForDeletingDto;
 import com.example.backend.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,12 +50,10 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    /*
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(path = "/answerOnRequestFroDeleting")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteUser(@PathVariable long id){
-        userService.userRepository.deleteById(id);
+    public ResponseEntity<?> deleteUser(@RequestBody AnswerOnRequestForDeletingDto dto){
+        userService.answerOnRequestForDeleting(dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    */
 }

@@ -103,4 +103,17 @@ public class EmailService {
                 "\n\nS poštovanjem admin tim.");
         javaMailSender.send(mail);
     }
+
+    @Async
+    public void sendAnswerOnRequestForDeletingProfile(User user, String answer) throws MailException,
+            InterruptedException{
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Obaveštenje o zahtevu za brisanje profila.");
+        mail.setText("Pozdrav " + user.getFirstname() + ", \n\nobaveštavamo vas da " +
+                answer +
+                "\n\nS poštovanjem admin tim.");
+        javaMailSender.send(mail);
+    }
 }
