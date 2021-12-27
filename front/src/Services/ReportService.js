@@ -32,6 +32,13 @@ class ReportService{
         return axios.put(URL + '/mercy/' + reportId, {}, {headers});
     }
 
+    // data je MakeReportDto {
+    //     private String comment;
+    //     private boolean customerAppear;
+    //     private boolean badReport;
+    //     private long reservationId;
+    //     //AR, BR, CR
+    //     private String reservationType;
     makeReport(data){
         const headers = {
             'Accept': 'application/json',

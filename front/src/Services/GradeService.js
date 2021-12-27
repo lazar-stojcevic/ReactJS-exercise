@@ -41,5 +41,21 @@ class GradeService{
         return axios.get(URL + '/instructor/' + instructorId, {headers});
     }
 
+    // data je GradeToSaveDto {
+    //     private int rating;
+    //     private String revision;
+    //     private long entityId;
+    //     //I-instructor, BO-boatOwner, CO-cottageOwner, C-cottage, B-boat
+    //     private String entityType;
+    // }
+    saveGrade(data){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.post(URL, JSON.stringify(data), {headers});
+    }
+
 }
 export default new GradeService()

@@ -6,6 +6,7 @@ import com.example.backend.Services.DeleteProfileRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -22,6 +23,7 @@ public class DeleteProfileRequestController {
     }
 
     @GetMapping(path = "/notReviewed")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Collection<DeleteProfileRequest>> getAllNotReviewedRequests(){
         return new ResponseEntity<>(deleteProfileRequestService.getAllNotReviewedRequestsForProfileDeleting(),
                 HttpStatus.OK);
