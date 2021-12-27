@@ -27,7 +27,5 @@ public class DeleteProfileRequest {
     private String RequestText;
 
     @Column
-    private boolean reviewed;
-
-
+    private boolean reviewed = false;
 }

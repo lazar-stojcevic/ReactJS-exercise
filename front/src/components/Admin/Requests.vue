@@ -2,18 +2,33 @@
   <div class="container">
     <div class="card">
       <div class="card-body">
+
+        <select class="form-select" aria-label="Default select example" v-model="mode">
+          <option selected value="user" >PROFILE VALIDATION REQUESTS</option>
+          <option value="report">BAD REPORTS REQUESTS</option>
+          <option value="delete">REQUESTS FOR DELETING PROFILE</option>
+          <option value="grade">GRADE REVISION</option>
+        </select>
+
           <!--USER REQUEST-->
-        <div>
-          <h3>USER REQUESTS</h3>
+        <div v-if="mode === 'user'">
+          <h3>PROFILE REQUESTS</h3>
           <profile-requests></profile-requests>
-          <hr/>
         </div>
 
         <!--REPORT REQUEST-->
-        <div>
+        <div v-else-if="mode === 'report'">
           <h3>REPORT REQUESTS</h3>
           <reports></reports>
-          <hr/>
+        </div>
+
+        <div v-else-if="mode === 'delete'">
+          <h3>DELETING REQUESTS</h3>
+        </div>
+
+        <div v-else-if="mode === 'grade'">
+          <h3>GRADE REVISION</h3>
+          <grade></grade>
         </div>
 
       </div>
@@ -24,13 +39,16 @@
 <script>
 import ReportRequests from "@/components/Admin/InnerAdminComponents/ReportRequests";
 import ProfileRequests from "@/components/Admin/InnerAdminComponents/ProfileRequests";
+import GradesForRevision from "@/components/Admin/InnerAdminComponents/GradesForRevision";
 export default {
   components:{
     'reports' : ReportRequests,
-    'profileRequests' : ProfileRequests
+    'profileRequests' : ProfileRequests,
+    'grade' : GradesForRevision
   },
   data(){
     return{
+      mode: 'user'
     }
   },
   mounted() {
@@ -41,5 +59,10 @@ export default {
 </script>
 
 <style scoped>
-
+.form-select {
+  background-color: gainsboro;
+  margin-bottom: 20px;
+  font-size: large;
+  font-weight: inherit;
+}
 </style>

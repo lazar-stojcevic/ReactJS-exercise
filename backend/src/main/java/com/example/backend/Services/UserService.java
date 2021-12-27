@@ -1,5 +1,6 @@
 package com.example.backend.Services;
 
+import com.example.backend.Beans.DeleteProfileRequest;
 import com.example.backend.Beans.User;
 import com.example.backend.Dtos.AnswerOnRequestForDeletingDto;
 import com.example.backend.Repository.UserRepository;
@@ -22,6 +23,8 @@ public class UserService {
     private CottageOwnerService cottageOwnerService;
     @Autowired
     private BoatOwnerService boatOwnerService;
+    @Autowired
+    private DeleteProfileRequestService deleteProfileRequestService;
 
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
@@ -69,13 +72,13 @@ public class UserService {
     }
 
     public void answerOnRequestForDeleting(AnswerOnRequestForDeletingDto dto) {
-        if(dto.isForDelete())
-            deleteUser(dto.getUserId());
+        DeleteProfileRequest request = deleteProfileRequestService.findDeleteProfileRequestById(dto.getRequestId());
+        deleteProfileRequestService.markDeleteProfileRequestAsReviewed(request);
 
-        try {
-            emailService.sendAnswerOnRequestForDeletingProfile(findUserById(dto.getUserId()), dto.getAnswer());
-        }catch (Exception e){
-            System.out.println(e);
-        }
+        if(dto.isForDelete())
+            deleteUser(request.getUser().getId());
+
+        try { emailService.sendAnswerOnRequestForDeletingProfile(request.getUser(), dto.getAnswer());
+        }catch (Exception e){ System.out.println(e);}
     }
 }

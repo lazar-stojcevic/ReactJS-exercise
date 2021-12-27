@@ -53,9 +53,6 @@
           <td>
             <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showCottageOwners">COTTAGE OWNERS</button>
           </td>
-          <td>
-            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showGradesForRevision">REVISION GRADE</button>
-          </td>
         </tr>
       </table>
     </div>
@@ -144,11 +141,6 @@
       <customers></customers>
       <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
     </div>
-    <div v-if="mode === 'revision'">
-      <revision></revision>
-      <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
-    </div>
-
   </div>
 </template>
 
@@ -160,14 +152,12 @@ import AllInstructors from "@/components/Admin/InnerAdminComponents/AllInstructo
 import AllCottageOwners from "@/components/Admin/InnerAdminComponents/AllCottageOwners";
 import AllCottages from "@/components/Admin/InnerAdminComponents/AllCottages";
 import AllCustomers from "@/components/Admin/InnerAdminComponents/AllCustomers";
-import GradesForRevision from "@/components/Admin/InnerAdminComponents/GradesForRevision";
 export default {
   components:{
     'instructors' : AllInstructors,
     'cottageOwners': AllCottageOwners,
     'cottages': AllCottages,
-    'customers': AllCustomers,
-    'revision': GradesForRevision
+    'customers': AllCustomers
   },
   data(){
     return{
@@ -233,10 +223,6 @@ export default {
 
     showCustomers(){
       this.mode = 'customers';
-    },
-
-    showGradesForRevision(){
-      this.mode = 'revision';
     },
 
     changePassword(){

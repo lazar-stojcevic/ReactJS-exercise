@@ -1,7 +1,5 @@
 package com.example.backend.Controllers;
 
-
-import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Beans.User;
 import com.example.backend.Dtos.AnswerOnRequestForDeletingDto;
 import com.example.backend.Services.UserService;

@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AnswerOnRequestForDeletingDto {
-    private String answer;
-    private boolean forDelete;
-    private long requestId;
+public class MakeDeleteProfileRequestDto {
+    private String reason;
+    private long userId;
 }

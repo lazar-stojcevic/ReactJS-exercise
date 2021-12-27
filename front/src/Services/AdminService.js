@@ -75,5 +75,14 @@ class AdminService{
         };
         return axios.delete(USER_URL+ '/disable/' + userId + '/' + reason,{headers});
     }
+
+    async getAllDeletingRequests(){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.delete(USER_URL+ '/disable',{headers});
+    }
 }
 export default new AdminService()

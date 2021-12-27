@@ -30,6 +30,7 @@
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/reservationReport">CREATE REPORT</router-link>
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/createReservationForCustomer">CREATE RESERVATION</router-link>
     </div>
+
     <!--FISHING_INSTRUCTOR_ROLE-->
     <div class="btn-group" v-if="LogInService.userRole === 'ROLE_INSTRUCTOR'">
       <router-link class=" btn btn-secondary" to="/createAdventure">CREATE ADVENTURE</router-link>
@@ -37,13 +38,22 @@
       <router-link class=" btn btn-secondary" to="/fishingInstructorProfile">PROFILE</router-link>
     </div>
 
-
     <!--ADMIN-->
     <div class="btn-group" v-if="LogInService.userRole === 'ROLE_ADMIN'">
-      <router-link class=" btn btn-secondary" to="/createNewAdmin">CREATE ADMIN</router-link>
-      <router-link class=" btn btn-outline-secondary" to="/profileRequests">REQUESTS</router-link>
-      <router-link class=" btn btn-secondary" to="/adminProfile">PROFILE</router-link>
+      <div class="btn-group dropstart">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          MENU
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><router-link class="dropdown-item" to="/createNewAdmin">CREATE ADMIN</router-link></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><router-link class="dropdown-item" to="/profileRequests">REQUESTS</router-link></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><router-link class="dropdown-item" to="/adminProfile">PROFILE</router-link></li>
+        </ul>
+      </div>
     </div>
+
     <button :hidden="LogInService.userRole === ''" class="btn btn-outline-secondary" style="margin: 5px" @click="logout()">LogOut</button>
     <router-link :hidden="LogInService.userRole !== ''" class="btn btn-secondary" to="/login" style="margin: 5px">LogIn</router-link>
     <router-link :hidden="LogInService.userRole !== ''" class="btn btn-secondary" to="/registration" style="margin: 5px">Registration</router-link>
@@ -68,5 +78,9 @@ export default {
 </script>
 
 <style scoped>
-
+.dropdown-menu {
+  color: darkred;
+  background-color: silver;
+  font-weight: bolder;
+}
 </style>
