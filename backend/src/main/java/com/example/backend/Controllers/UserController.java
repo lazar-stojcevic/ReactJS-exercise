@@ -48,7 +48,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/answerOnRequestFroDeleting")
+    @PutMapping(path = "/answerOnRequestFroDeleting")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteUser(@RequestBody AnswerOnRequestForDeletingDto dto){
         userService.answerOnRequestForDeleting(dto);

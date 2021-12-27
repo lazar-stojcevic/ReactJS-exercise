@@ -30,6 +30,8 @@ public class BackendApplication implements CommandLineRunner {
     private GradeRepository gradeRepository;
     @Autowired
     private ReportRepository reportRepository;
+    @Autowired
+    private DeleteProfileRequestRepository deleteProfileRequestRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -415,6 +417,12 @@ public class BackendApplication implements CommandLineRunner {
         reportBad.setComment("Korisnik je nije bio korektan");
         reportRepository.save(reportBad);
 
+        //TESTIRANJE ZAHTEVA ZA BRISANJE
+        DeleteProfileRequest deleteProfileRequest = new DeleteProfileRequest();
+        deleteProfileRequest.setRequestText("NEKI TEKST");
+        deleteProfileRequest.setReviewed(false);
+        deleteProfileRequest.setUser(fishingInstructor);
+        deleteProfileRequestRepository.save(deleteProfileRequest);
     }
 
 }

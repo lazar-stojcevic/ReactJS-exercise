@@ -19,7 +19,7 @@ public class DeleteProfileRequest {
     @Column(name = "delete_profile_request_id", unique = true, nullable = false)
     private long id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 

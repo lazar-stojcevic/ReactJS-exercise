@@ -1,10 +1,13 @@
 package com.example.backend.Beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -49,6 +52,10 @@ public abstract class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address", referencedColumnName = "address_id")
     private Address address;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<DeleteProfileRequest> deleteProfileRequests = new ArrayList<>();
 
     public boolean getEnabled(){
         return this.enabled;

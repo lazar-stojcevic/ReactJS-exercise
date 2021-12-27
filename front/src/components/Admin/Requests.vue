@@ -22,10 +22,13 @@
           <reports></reports>
         </div>
 
+        <!--DELETE REQUESTS-->
         <div v-else-if="mode === 'delete'">
           <h3>DELETING REQUESTS</h3>
+          <delete></delete>
         </div>
 
+        <!--GRADE REVISION-->
         <div v-else-if="mode === 'grade'">
           <h3>GRADE REVISION</h3>
           <grade></grade>
@@ -40,11 +43,13 @@
 import ReportRequests from "@/components/Admin/InnerAdminComponents/ReportRequests";
 import ProfileRequests from "@/components/Admin/InnerAdminComponents/ProfileRequests";
 import GradesForRevision from "@/components/Admin/InnerAdminComponents/GradesForRevision";
+import DeleteRequest from "@/components/Admin/InnerAdminComponents/DeleteRequest";
 export default {
   components:{
     'reports' : ReportRequests,
     'profileRequests' : ProfileRequests,
-    'grade' : GradesForRevision
+    'grade' : GradesForRevision,
+    'delete' : DeleteRequest
   },
   data(){
     return{
