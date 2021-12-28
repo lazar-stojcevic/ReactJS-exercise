@@ -32,6 +32,8 @@ public class BackendApplication implements CommandLineRunner {
     private ReportRepository reportRepository;
     @Autowired
     private DeleteProfileRequestRepository deleteProfileRequestRepository;
+    @Autowired
+    private AdventureComplaintRepository adventureComplaintRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -432,6 +434,21 @@ public class BackendApplication implements CommandLineRunner {
         deleteProfileRequest.setReviewed(false);
         deleteProfileRequest.setUser(fishingInstructor);
         deleteProfileRequestRepository.save(deleteProfileRequest);
+
+        //TESTIRANJE ZALBE NA AVANTURU
+        AdventureReservation reservation23 = new AdventureReservation();
+        reservation23.setCustomer(customer1);
+        reservation23.setAdventure(adventure);
+        reservation23.setLength(4);
+        reservation23.setReservationStart(LocalDateTime.of(2021, 9,10,10,20));
+        reservation23.setLastDateToReserve(LocalDateTime.of(2021, 10, 10, 15, 0));
+        adventureReservationRepository.save(reservation23);
+
+        AdventureComplaint adventureComplaint = new AdventureComplaint();
+        adventureComplaint.setText("NEKI TEKST");
+        adventureComplaint.setReviewed(false);
+        adventureComplaint.setReservation(reservation23);
+        adventureComplaintRepository.save(adventureComplaint);
     }
 
 }
