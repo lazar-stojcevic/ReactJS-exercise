@@ -53,6 +53,8 @@ public abstract class User implements UserDetails {
     @JoinColumn(name = "address", referencedColumnName = "address_id")
     private Address address;
 
+    private double mark;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<DeleteProfileRequest> deleteProfileRequests = new ArrayList<>();

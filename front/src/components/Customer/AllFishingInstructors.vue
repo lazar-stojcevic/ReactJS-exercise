@@ -23,11 +23,11 @@
       </b-input-group>
     </div>
     <br>
-    <p>Cottages</p>
+    <p>Instructors</p>
     <br>
     <div v-for="instructor in filtered" :key="instructor.id">
       <b-card
-          tag="cottage"
+          name="instructor"
           style="max-width: 20rem;"
           class="mb-2"
       >
@@ -42,9 +42,9 @@
           ADDRESS:  {{ instructor.address.country }} , {{ instructor.address.city }}, {{instructor.address.street}}
         </b-card-text>
         <br>
-        <p>
-          Average mark: {{ instructor.mark }}
-        </p>
+        <b-card-text>
+          Mark: {{instructor.mark}}
+        </b-card-text>
 
         <router-link class="btn btn-secondary" :to="'instructor/'+instructor.id.toString()" style="margin: 5px">See adventures</router-link>
 
@@ -59,12 +59,11 @@ import FishingInstructorService from "@/Services/FishingInstructorService";
 import GradeService from "@/Services/GradeService";
 
 export default {
-  name: "AllInstructors",
+  name: "AllFishingInstructors",
   data() {
     return {
-      instructors : [],
-      filtered : [],
-      instructor : {},
+      instructors : '',
+      filtered : '',
       filter: {
         name:'',
         location:'',
@@ -77,21 +76,24 @@ export default {
     FishingInstructorService.getAllFishingInstructors().then(res => {
       this.instructors = res.data;
       this.filtered = res.data;
-    }).then(() => {
-      for(let ad of this.instructors){
-        GradeService.getAllGradeOfInstructor(ad.id).then(res =>{
-          ad.mark = res.data.avgRating;
-          console.log(ad.mark)
-        })
+      return this.instructors
+    }).then((res) => {
+      console.log(res)
+      this.instructors = res;
+      this.filtered = res;
+      for(let ad in this.instructors){
+        GradeService.getAllGradeOfInstructor(this.instructors[ad].id).then(res =>{
+          this.instructors[ad].mark = 0
+          this.instructors[ad].mark = res.data.avgRating;
+        });
       }
-      for(let ad of this.filtered){
-        GradeService.getAllGradeOfInstructor(ad.id).then(res =>{
-          ad.mark = res.data.avgRating;
-          console.log(ad.mark)
-        })
+      for(let ad2 in this.filtered){
+        GradeService.getAllGradeOfInstructor(this.filtered[ad2].id).then(res =>{
+          this.filtered[ad2].mark = 0
+          this.filtered[ad2].mark = res.data.avgRating;
+        });
       }
-    })
-
+    });
     },
   methods:{
     search(){

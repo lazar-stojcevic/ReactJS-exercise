@@ -6,7 +6,7 @@ import AdventureProfile from "@/components/FishingInstructor/AdventureProfile";
 import CustomerProfile from "@/components/Customer/CustomerProfile";
 import AllCottages from "@/components/Customer/AllCottages";
 import AllBoats from "@/components/Customer/AllBoats";
-import AllInstructors from "@/components/Customer/AllInstructors";
+import AllFishingInstructors from "@/components/Customer/AllFishingInstructors";
 import CottageReservations from "@/components/Customer/CottageReservations";
 import BoatReservations from "@/components/Customer/BoatReservations";
 import AdventureReservations from "@/components/Customer/AdventureReservations";
@@ -48,7 +48,7 @@ const routes = [
     {path: '/customerProfile', component: CustomerProfile},
     {path: '/allcottages', component: AllCottages},
     {path: '/allboats', component: AllBoats},
-    {path: '/allinstructors', component: AllInstructors},
+    {path: '/allinstructors', component: AllFishingInstructors},
     {path: '/cottageReservations', component: CottageReservations},
     {path: '/boatReservations', component: BoatReservations},
     {path: '/adventureReservations', component: AdventureReservations},
