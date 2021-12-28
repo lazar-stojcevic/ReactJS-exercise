@@ -116,4 +116,18 @@ public class EmailService {
                 "\n\nS poštovanjem admin tim.");
         javaMailSender.send(mail);
     }
+
+    @Async
+    public void sendAnswerOnComplaint(User user, String answer) throws MailException,
+            InterruptedException{
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Obaveštenje o žalbi.");
+        mail.setText("Pozdrav " + user.getFirstname() + ", \n\n" +
+                "ovom prilikom želimo da vas obavestimo sledeće\n" +
+                answer +
+                "\n\nS poštovanjem admin tim.");
+        javaMailSender.send(mail);
+    }
 }
