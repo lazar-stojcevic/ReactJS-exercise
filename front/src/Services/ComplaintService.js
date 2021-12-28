@@ -16,5 +16,24 @@ class ComplaintService{
 
         return axios.post(URL + "/adventure" , JSON.stringify(data), {headers});
     }
+
+     async reviewComplaint(data){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.put(URL + "/reviewComplaint", JSON.stringify(data), {headers});
+    }
+
+    loadAllAdventureComplaints(){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + "/adventureComplaint", {headers});
+    }
+
 }
 export default new ComplaintService()

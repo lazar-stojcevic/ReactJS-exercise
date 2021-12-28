@@ -8,6 +8,7 @@
           <option value="report">BAD REPORTS REQUESTS</option>
           <option value="delete">REQUESTS FOR DELETING PROFILE</option>
           <option value="grade">GRADE REVISION</option>
+          <option value="adventure">ADVENTURE COMPLAINTS REVISION</option>
         </select>
 
           <!--USER REQUEST-->
@@ -34,6 +35,12 @@
           <grade></grade>
         </div>
 
+        <!--ADVENTURE COMPLAINTS REVISION-->
+        <div v-else-if="mode === 'adventure'">
+          <h3>ADVENTURE COMPLAINTS</h3>
+          <adventure-complaints></adventure-complaints>
+        </div>
+
       </div>
     </div>
   </div>
@@ -44,12 +51,14 @@ import ReportRequests from "@/components/Admin/InnerAdminComponents/ReportReques
 import ProfileRequests from "@/components/Admin/InnerAdminComponents/ProfileRequests";
 import GradesForRevision from "@/components/Admin/InnerAdminComponents/GradesForRevision";
 import DeleteRequest from "@/components/Admin/InnerAdminComponents/DeleteRequest";
+import AdventureComplaints from "@/components/Admin/InnerAdminComponents/AdventureComplaints";
 export default {
   components:{
     'reports' : ReportRequests,
     'profileRequests' : ProfileRequests,
     'grade' : GradesForRevision,
-    'delete' : DeleteRequest
+    'delete' : DeleteRequest,
+    'adventureComplaints' : AdventureComplaints
   },
   data(){
     return{

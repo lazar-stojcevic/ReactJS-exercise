@@ -48,6 +48,7 @@ public class AdventureReservation {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventure_complaint_id")
+    @JsonIgnore
     private AdventureComplaint complaint;
 
     @ManyToMany(fetch = FetchType.LAZY)
