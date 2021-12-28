@@ -28,6 +28,4 @@ public class AdventureComplaint {
 
     @Column
     private boolean reviewed;
-
-
 }
