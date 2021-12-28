@@ -30,30 +30,16 @@
             </tbody>
           </table>
           <!--BUTTONS-->
-          <div class="btn-group-sm" style="margin: 10px">
-            <button @click="changeModeToInfo" v-if="mode === 'neutral'" class="btn-info">CHANGE YOUR INFO</button>
-            <button @click="changeModeToPassword" v-if="mode === 'neutral'" class="btn-info">CHANGE PASSWORD</button>
-            <button @click="changeModeToHoliday" v-if="mode === 'neutral'" class="btn-info">ADD AVAILABLE TIMESPAN</button>
-            <button @click="myAdventures" v-if="mode === 'neutral'" class="btn-info">MY ADVENTURES</button>
-            <button @click="requestForDeleting" v-if="mode === 'neutral'" class="btn-danger">SEND REQUEST FOR DELETING</button>
-          </div>
-          <!--CALENDAR-->
-          <div v-if="user.available !== null" style="text-align: center">
-            <strong style="margin: 10px">YOUR AVAILABLE TIMESPAN</strong>
-          <table class="table table-striped">
-            <thead>
-            <tr>
-              <td>FROM DATE</td>
-              <td>TO DATE</td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>{{user.available.fromDate}}</td>
-              <td>{{user.available.toDate}}</td>
-            </tr>
-            </tbody>
-          </table>
+          <div style="margin-top: 20px">
+            <table>
+              <tr>
+                <td><button @click="changeModeToInfo" v-if="mode === 'neutral'" class="btn-info">CHANGE YOUR INFO</button></td>
+                <td><button @click="changeModeToPassword" v-if="mode === 'neutral'" class="btn-info">CHANGE PASSWORD</button></td>
+                <td><button @click="changeModeToHoliday" v-if="mode === 'neutral'" class="btn-info">ADD AVAILABLE TIMESPAN</button></td>
+                <td><button @click="myAdventures" v-if="mode === 'neutral'" class="btn-info">MY ADVENTURES</button></td>
+                <td><button @click="changeModeForDeleting" v-if="mode === 'neutral'" class="btn-danger">SEND REQUEST FOR DELETING</button></td>
+              </tr>
+            </table>
           </div>
           <!--PASSWORD CHANGING-->
           <div v-if="mode === 'changePassword'" class="container">
@@ -128,13 +114,43 @@
               </div>
             </form>
           </div>
+          <!--REQUEST FOR DELETING PROFILE-->
+          <div v-if="mode === 'delete'" class="container">
+            <form @submit.prevent="sendRequestForDeleting">
+              <div class="input-group mb-3">
+                <span class="input-group-text">DELETING REASON</span>
+                <input type="text" class="form-control" v-model="deletingRequest.reason" required/>
+              </div>
+              <div class="btn-group-sm">
+                <button type="submit" class="btn-warning">CONFIRM</button>
+                <button @click="changeModeToNeutral()" type="reset" class="btn-danger">CLOSE</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
       <!--OVDE IDE KALENDAR ZAUZETOSTI-->
-      <!--ODOBRENI KOMENTARI ZA PRIKAZ, SA PROSECNOM OCENOM-->
+      <div v-if="user.available !== null" style="text-align: center">
+        <strong style="margin: 10px">YOUR AVAILABLE TIMESPAN</strong>
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <td>FROM DATE</td>
+            <td>TO DATE</td>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>{{user.available.fromDate}}</td>
+            <td>{{user.available.toDate}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <!--ODOBRENI KOMENTARI ZA PRIKAZ-->
       <div>
         <hr style="margin-top: 15px">
-        <h2>CUSTOMER COMMENTS OF YOU:</h2>
+        <h2>COMMENTS:</h2>
         <table class="table table-striped">
           <tbody>
           <tr v-for="(comment, index) in gradesToShow.comments" :key="index">
@@ -152,6 +168,7 @@
 import FishingInstructorService from "@/Services/FishingInstructorService";
 import LogInService from "@/Services/LogInService";
 import GradeService from "@/Services/GradeService";
+import DeleteProfileRequestService from "@/Services/DeleteProfileRequestService";
 export default {
   data(){
     return{
@@ -169,7 +186,8 @@ export default {
       newUserInfo: '',
       fromDate: ' ',
       toDate: '',
-      gradesToShow: []
+      gradesToShow: [],
+      deletingRequest: {reason: ''}
       }
     },
   mounted() {
@@ -187,6 +205,7 @@ export default {
     changeModeToHoliday(){
       this.mode = 'addHoliday';
     },
+
     changeModeToNeutral(){
       if(this.mode === 'changePassword'){
         this.newPassword = '';
@@ -198,13 +217,16 @@ export default {
       }
       this.mode = 'neutral';
     },
+
     changeModeToInfo(){
       this.mode = 'changeInfo';
       this.newUserInfo = JSON.parse(JSON.stringify(this.user));
     },
+
     changeModeToPassword(){
       this.mode = 'changePassword'
     },
+
     changePassword(){
       if(this.newPassword !== this.confirmPassword && this.newPassword.trim() !== ''){
         alert("NEW PASSWORD IS NOT MATCHING WITH CONFIRM PASSWORD");
@@ -217,13 +239,14 @@ export default {
           })
           .catch(err => { alert("SERVER ERROR: " + err)});
     },
-    //TODO: VALIDACIJA
+
     changeUserInfo(){
       FishingInstructorService.changeFishingInstructor(this.newUserInfo).then(res => {this.user = res.data}).catch(() => {
         alert("SERVER ERROR");
       });
       this.mode = 'neutral';
     },
+
     addAvailableTimespan(){
       if(this.toDate === '' && this.fromDate === ''){
         alert("BOTH OF FIELDS MUST BE FILLED")
@@ -239,13 +262,22 @@ export default {
       });
       this.mode = 'neutral';
     },
+
     myAdventures(){
       this.$router.push('/myAdventures');
     },
-    requestForDeleting(){
-      FishingInstructorService.requestForDeleting(this.user.id).then(() => {LogInService.logout()}).catch(
-          () => {alert("PROBABLY REQUEST IS ALREADY SENT")}
-      )
+
+    changeModeForDeleting(){
+      this.mode = 'delete';
+      this.deletingRequest = {reason: ''};
+    },
+
+    sendRequestForDeleting(){
+      this.deletingRequest.userId = LogInService.userId;
+      DeleteProfileRequestService.saveDeleteProfileRequest(this.deletingRequest).then(() => {
+        alert("REQUEST IS SAVED");
+      }).catch(() => {alert("THERE IS SOME PROBLEM WITH SAVING REQUEST")});
+      this.mode = 'neutral';
     }
   }
 

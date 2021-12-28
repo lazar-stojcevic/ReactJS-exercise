@@ -24,5 +24,11 @@ export default {
 </script>
 
 <style>
-
+.loginImage{
+  background-image: url("assets/bridge1.jpg");
+  height: 2160px;
+  background-position: top;
+  background-repeat: repeat-x;
+  background-size: cover;
+}
 </style>
