@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <div class="search">
-      <b-input-group prepend="Cottage name" class="mb-2 mt-2">
-        <b-form-input aria-label="Cottage name" v-model="filter.name"></b-form-input>
+      <b-input-group prepend="Instructor name" class="mb-2 mt-2">
+        <b-form-input aria-label="Instructor name" v-model="filter.name"></b-form-input>
       </b-input-group>
       <b-input-group prepend="Location" class="mb-2 mt-2 m-lg-2">
-        <b-form-input aria-label="Cottage location" v-model="filter.location"></b-form-input>
+        <b-form-input aria-label="Instructor location" v-model="filter.location"></b-form-input>
       </b-input-group>
       <b-input-group prepend="Minimum mark" class="mt-2">
         <b-form-input type="range" min="0" max="5" v-model="filter.mark"></b-form-input>
@@ -32,19 +32,20 @@
           class="mb-2"
       >
         <b-card-title>
-          {{instructor.name}}
+          {{instructor.firstname}} {{instructor.lastName}}
         </b-card-title>
         <b-card-text>
-          {{ instructor.description }}
+          Phone number: {{ instructor.phone }}
         </b-card-text>
         <br>
         <b-card-text>
-          ADDRESS:  {{ instructor.street }} , {{ instructor.city }}, {{instructor.country}}
+          ADDRESS:  {{ instructor.address.country }} , {{ instructor.address.city }}, {{instructor.address.street}}
         </b-card-text>
         <br>
-        <b-card-text>
-          Average mark: {{instructor.mark}}
-        </b-card-text>
+        <p>
+          Average mark: {{ instructor.mark }}
+        </p>
+
         <router-link class="btn btn-secondary" :to="'instructor/'+instructor.id.toString()" style="margin: 5px">See adventures</router-link>
 
       </b-card>
@@ -54,6 +55,9 @@
 </template>
 
 <script>
+import FishingInstructorService from "@/Services/FishingInstructorService";
+import GradeService from "@/Services/GradeService";
+
 export default {
   name: "AllInstructors",
   data() {
@@ -70,19 +74,25 @@ export default {
     }
   },
   mounted() {
-    //DUMMY
-    this.instructors = [
-      {id: 3, name : "Bojan Lupulov", city : "Beograd" , street : "Ustanicka", country : "Serbia" , description: "Very exciting advanture in amazon jungle", mark: 3.5},
-      {id: 4, name : "Zoran Zoranovic", city : "Novi Sad" , street : "Dositejeva", country : "Serbia", description: "Meet the river Nile", mark: 1.5},
-      {id: 5, name : "Branko Brankovic", city : "Karavukovo" , street : "Karadjodja", country : "Serbia", description: "Fishing in Danube", mark: 4.9},
-    ];
-    this.filtered = [
-      {id: 3, name : "Bojan Lupulov", city : "Beograd" , street : "Ustanicka", country : "Serbia" , description: "Very exciting advanture in amazon jungle", mark: 3.5},
-      {id: 4, name : "Zoran Zoranovic", city : "Novi Sad" , street : "Dositejeva", country : "Serbia", description: "Meet the river Nile", mark: 1.5},
-      {id: 5, name : "Branko Brankovic", city : "Karavukovo" , street : "Karadjodja", country : "Serbia", description: "Fishing in Danube", mark: 4.9},
-    ];
-    this.filtered.sort((a,b) => (a.city > b.city) ? 1 : ((b.city > a.city) ? -1 : 0))
-  },
+    FishingInstructorService.getAllFishingInstructors().then(res => {
+      this.instructors = res.data;
+      this.filtered = res.data;
+    }).then(() => {
+      for(let ad of this.instructors){
+        GradeService.getAllGradeOfInstructor(ad.id).then(res =>{
+          ad.mark = res.data.avgRating;
+          console.log(ad.mark)
+        })
+      }
+      for(let ad of this.filtered){
+        GradeService.getAllGradeOfInstructor(ad.id).then(res =>{
+          ad.mark = res.data.avgRating;
+          console.log(ad.mark)
+        })
+      }
+    })
+
+    },
   methods:{
     search(){
       this.filtered = [];

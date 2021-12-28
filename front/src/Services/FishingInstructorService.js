@@ -10,7 +10,7 @@ class FishingInstructorService{
             'Accept': 'application/json',
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
-        return axios.get(FISHING_INSTRUCTOR_URL, {headers});
+        return axios.get(FISHING_INSTRUCTOR_URL + '/getAll', {headers});
     }
 
     getFishingInstructorById(userId){

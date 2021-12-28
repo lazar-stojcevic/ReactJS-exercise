@@ -278,6 +278,15 @@ public class BackendApplication implements CommandLineRunner {
         reservation6.setCustomer(customer2);
         adventureReservationRepository.save(reservation6);
 
+        AdventureReservation reservation7 = new AdventureReservation();
+        reservation7.setAdventure(adventure);
+        reservation7.setLength(4);
+        reservation7.setPrice(2500);
+        reservation7.setReservationStart(LocalDateTime.of(2021, 2,17,10,20));
+        reservation7.setLastDateToReserve(LocalDateTime.of(2020, 12, 30, 15, 0));
+        reservation7.setCustomer(customer2);
+        adventureReservationRepository.save(reservation7);
+
         Cottage cottage1 = new Cottage();
         cottage1.setConductRules("Budite fini");
         cottage1.setName("Mala kuca");

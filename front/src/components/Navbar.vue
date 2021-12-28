@@ -3,7 +3,7 @@
     <div class="container-fluid" style="align-items: self-start; justify-content: flex-start">
       <router-link class="btn btn-secondary m-2" to="/">Home</router-link>
       <!--CUSTOMER_ROLE-->
-      <b-nav-item-dropdown text="Registrations" class="align-content-lg-end list-unstyled m-2" right :hidden="LogInService.userRole.trim() !== 'ROLE_CUSTOMER'">
+      <b-nav-item-dropdown text="Past reservation" class="align-content-lg-end list-unstyled m-2" right :hidden="LogInService.userRole.trim() !== 'ROLE_CUSTOMER'">
         <b-dropdown-item href="#/cottageReservations">Cottages</b-dropdown-item>
         <b-dropdown-item href="#/adventureReservations">Adventures</b-dropdown-item>
         <b-dropdown-item href="#/boatReservations">Boats</b-dropdown-item>

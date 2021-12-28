@@ -25,7 +25,7 @@ public class FishingInstructorController {
         this.fishingInstructorService = fishingInstructorService;
     }
 
-    @GetMapping
+    @GetMapping(path = "/getAll")
     public ResponseEntity<Collection<FishingInstructor>> getAll(){
         return new ResponseEntity<>(fishingInstructorService.getAllFishingInstructors(), HttpStatus.OK);
     }
