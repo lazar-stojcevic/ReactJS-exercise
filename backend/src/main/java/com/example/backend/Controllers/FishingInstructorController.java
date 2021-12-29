@@ -3,6 +3,7 @@ package com.example.backend.Controllers;
 import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Dtos.FishingInstructorChangeDto;
 import com.example.backend.Dtos.AvailableTimespanDto;
+import com.example.backend.Dtos.NewSubcriptionDto;
 import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Services.FishingInstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,12 @@ public class FishingInstructorController {
         return new ResponseEntity<>(fishingInstructorService.findFishingInstructorById(id), HttpStatus.OK);
     }
 
+    @GetMapping (path = "isSubcribed/{instructorId}/{userId}")
+    public ResponseEntity<Boolean> isCustomerSubscribedToInstuctor(@PathVariable long instructorId, @PathVariable long userId){
+
+        return new ResponseEntity<>(fishingInstructorService.isUserSubcribed(instructorId, userId), HttpStatus.OK);
+    }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteFishingInstructor(@PathVariable long id){
         fishingInstructorService.deleteFishingInstructor(id);
@@ -54,6 +61,28 @@ public class FishingInstructorController {
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDto passwordChangeDto){
         fishingInstructorService.changePasswordToFishingInstructor(passwordChangeDto);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/subscribe", consumes = "application/json")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<?> subscribe(@RequestBody NewSubcriptionDto newSubcriptionDto){
+        try {
+            fishingInstructorService.newSubscription(newSubcriptionDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(path = "/unsubscribe", consumes = "application/json")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<?> unsubscribe(@RequestBody NewSubcriptionDto forUnsubscribe){
+        try {
+            fishingInstructorService.unsubscribe(forUnsubscribe);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping(consumes = "application/json")

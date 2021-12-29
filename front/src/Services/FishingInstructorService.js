@@ -71,5 +71,38 @@ class FishingInstructorService{
         };
         return axios.put(FISHING_INSTRUCTOR_URL + '/deletingRequest/' + userId, {}, {headers});
     }
+
+    isCustomerSubscribedToInstructor(userId, instructorId){
+        const headers = {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(FISHING_INSTRUCTOR_URL + '/isSubcribed/' + instructorId + '/' + userId, {headers});
+    }
+    subscribeInstructor(userId, instructorId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.userId = userId;
+        data.advertiserId = instructorId;
+        return axios.put(FISHING_INSTRUCTOR_URL + '/subscribe/', JSON.stringify(data),
+            {headers} );
+    }
+
+    unsubscribeInstructor(userId, instructorId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.userId = userId;
+        data.advertiserId = instructorId;
+        return axios.put(FISHING_INSTRUCTOR_URL + '/unsubscribe/', JSON.stringify(data),
+            {headers} );
+    }
 }
 export default new FishingInstructorService()

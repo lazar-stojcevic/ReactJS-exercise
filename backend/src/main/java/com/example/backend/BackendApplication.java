@@ -97,6 +97,25 @@ public class BackendApplication implements CommandLineRunner {
         customer2.setPoints(10);
         customer2.setPenaltyPoints(2);
 
+        //TESTIRANJE PRETPLATE NA ODREDJENU AVANTURU OD STRANE KORISNIKA
+        Customer prepaidCustomer = new Customer();
+        prepaidCustomer.setEmail("mihatufa@gmail.com");
+        prepaidCustomer.setFirstname("Mihajlo");
+        prepaidCustomer.setLastName("Tufic");
+        prepaidCustomer.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
+        prepaidCustomer.setEnabled(true);
+        prepaidCustomer.setPhone("555-333");
+        prepaidCustomer.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
+        Address prepaidAddress = new Address();
+        prepaidAddress.setStreet("Nikole Tesle");
+        prepaidAddress.setCity("Dobanovci");
+        prepaidAddress.setCountry("Srbija");
+        prepaidCustomer.setAddress(prepaidAddress);
+        prepaidCustomer.setRole(role1);
+        prepaidCustomer.setPoints(100);
+        prepaidCustomer.setPenaltyPoints(0);
+        repository.save(prepaidCustomer);
+
         FishingInstructor fishingInstructor = new FishingInstructor();
         fishingInstructor.setEmail("asd@gmail.com");
         fishingInstructor.setFirstname("Bojan");
@@ -106,6 +125,7 @@ public class BackendApplication implements CommandLineRunner {
         fishingInstructor.setPhone("566-566");
         fishingInstructor.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         fishingInstructor.setRole(roleRepository.findByName("ROLE_INSTRUCTOR").get(0));
+        fishingInstructor.getPrepaidCustomers().add(prepaidCustomer);
         Address address1 = new Address();
         address1.setStreet("Jaksica");
         address1.setCity("Jarkovac");
@@ -337,24 +357,6 @@ public class BackendApplication implements CommandLineRunner {
 
         adminRepository.save(admin);
 
-        //TESTIRANJE PRETPLATE NA ODREDJENU AVANTURU OD STRANE KORISNIKA
-        Customer prepaidCustomer = new Customer();
-        prepaidCustomer.setEmail("mihatufa@gmail.com");
-        prepaidCustomer.setFirstname("Mihajlo");
-        prepaidCustomer.setLastName("Tufic");
-        prepaidCustomer.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
-        prepaidCustomer.setEnabled(true);
-        prepaidCustomer.setPhone("555-333");
-        prepaidCustomer.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
-        Address prepaidAddress = new Address();
-        prepaidAddress.setStreet("Nikole Tesle");
-        prepaidAddress.setCity("Dobanovci");
-        prepaidAddress.setCountry("Srbija");
-        prepaidCustomer.setAddress(prepaidAddress);
-        prepaidCustomer.setRole(role1);
-        prepaidCustomer.setPoints(100);
-        prepaidCustomer.setPenaltyPoints(0);
-        repository.save(prepaidCustomer);
 
         Adventure adventure1 = new Adventure();
         Address adventureAddress1 = new Address();
@@ -373,7 +375,7 @@ public class BackendApplication implements CommandLineRunner {
         PriceList priceList1 = new PriceList();
         priceList1.setPrice(5000);
         adventure1.setPriceList(priceList1);
-        adventure1.getPrepaidCustomers().add(prepaidCustomer);
+        //adventure1.getPrepaidCustomers().add(prepaidCustomer);
         adventureRepository.save(adventure1);
         //adventureService.prepaidCustomerToAdventure(10, 1);
 

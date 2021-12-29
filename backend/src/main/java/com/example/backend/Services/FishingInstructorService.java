@@ -1,11 +1,9 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.Address;
+import com.example.backend.Beans.Customer;
 import com.example.backend.Beans.FishingInstructor;
-import com.example.backend.Dtos.FishingInstructorChangeDto;
-import com.example.backend.Dtos.AvailableTimespanDto;
-import com.example.backend.Dtos.PasswordChangeDto;
-import com.example.backend.Dtos.UserRegistration;
+import com.example.backend.Dtos.*;
 import com.example.backend.Repository.FishingInstructorRepository;
 import com.example.backend.Services.Interfaces.IFishingInstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,9 @@ public class FishingInstructorService implements IFishingInstructorService {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private CustomerService customerService;
 
     public FishingInstructorService(FishingInstructorRepository fishingInstructorRepository) {
         this.fishingInstructorRepository = fishingInstructorRepository;
@@ -79,6 +80,37 @@ public class FishingInstructorService implements IFishingInstructorService {
         FishingInstructor instructor = findFishingInstructorById(passwordChangeDto.getUserId());
         instructor.setPassword(passwordEncoder.encode(passwordChangeDto.getPassword()));
         instructor.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
+        fishingInstructorRepository.save(instructor);
+    }
+
+    public boolean isUserSubcribed(long instructorId, long userId){
+        FishingInstructor instructor = findFishingInstructorById(instructorId);
+        Customer customer = customerService.findCustomerById(userId);
+
+        return instructor.getPrepaidCustomers().contains(customer);
+    }
+
+    public void newSubscription(NewSubcriptionDto newSubcription){
+        if(isUserSubcribed(newSubcription.getAdvertiserId(), newSubcription.getUserId())){
+            return;
+        }
+
+        FishingInstructor instructor = findFishingInstructorById(newSubcription.getAdvertiserId());
+        Customer customer = customerService.findCustomerById(newSubcription.getUserId());
+
+        instructor.getPrepaidCustomers().add(customer);
+        fishingInstructorRepository.save(instructor);
+    }
+
+    public void unsubscribe(NewSubcriptionDto toUnsubscribe){
+        if(!isUserSubcribed(toUnsubscribe.getAdvertiserId(), toUnsubscribe.getUserId())){
+            return;
+        }
+
+        FishingInstructor instructor = findFishingInstructorById(toUnsubscribe.getAdvertiserId());
+        Customer customer = customerService.findCustomerById(toUnsubscribe.getUserId());
+
+        instructor.getPrepaidCustomers().remove(customer);
         fishingInstructorRepository.save(instructor);
     }
 

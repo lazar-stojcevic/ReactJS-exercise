@@ -76,7 +76,7 @@ public class AdventureService {
     public Adventure prepaidCustomerToAdventure(long customerId, long adventureId){
         Customer customer = customerService.findCustomerById(customerId);
         Adventure adventure = findAdventureById(adventureId);
-        adventure.getPrepaidCustomers().add(customer);
+        adventure.getInstructor().getPrepaidCustomers().add(customer);
         return adventureRepository.save(adventure);
     }
 }

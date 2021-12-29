@@ -69,5 +69,7 @@ class CustomerService{
         };
         return axios.get(CUSTOMER_URL, {headers});
     }
+
+    isCustomerS
 }
 export default new CustomerService()

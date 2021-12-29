@@ -286,7 +286,7 @@ public class AdventureReservationService {
     }
 
     private void sendNotificationMailToAllPrepaidCustomers(long adventureId){
-        for(Customer customer : adventureService.findAdventureById(adventureId).getPrepaidCustomers()){
+        for(Customer customer : adventureService.findAdventureById(adventureId).getInstructor().getPrepaidCustomers()){
             try {
                 emailService.sendNotificationForCreatingNewAdventureReservation(customer);
             }catch (Exception e){System.out.println(e.toString());}

@@ -1,5 +1,10 @@
 <template>
   <div>
+    <b-button v-if="this.subcribed && LogInService.getRole() === 'ROLE_CUSTOMER'" style="margin-left: 20px; margin-top: 10px" variant="danger" v-on:click="unsubscribe">Unsubscribe</b-button>
+    <b-button v-else-if="LogInService.getRole() === 'ROLE_CUSTOMER'" style="margin-left: 20px; margin-top: 10px" variant="success" v-on:click="subscribe">
+      Subscribe
+    </b-button>
+    <br>
   <div class="myClass" v-for="adventure in adventures" :key="adventure.id">
     <strong>{{adventure.name}}</strong>
     <table style="margin: 10px">
@@ -28,11 +33,14 @@
 <script>
 import FishingInstructorService from "@/Services/FishingInstructorService";
 import AdventureService from "@/Services/AdventureService";
+import LogInService from "@/Services/LogInService";
 export default {
   name: "OneInstructor",
   data(){
     return{
+      LogInService,
       id: '',
+      subcribed : false,
       user: '',
       adventures: []
     }
@@ -44,8 +52,25 @@ export default {
     }).then(() => {
     AdventureService.getAllAdventuresOfFishingInstructor(this.id).then(res =>{
       this.adventures = res.data;
+    }).then(() =>{
+      if (LogInService.userId !== ''){
+        FishingInstructorService.isCustomerSubscribedToInstructor(LogInService.userId, this.id).
+        then(res => {
+          this.subcribed = res.data;
+        }).catch(() => alert("Some error ocured!"))
+      }
     })
     });
+  },
+  methods:{
+    subscribe(){
+      FishingInstructorService.subscribeInstructor(LogInService.userId, this.id);
+      this.subcribed = true;
+    },
+    unsubscribe(){
+      FishingInstructorService.unsubscribeInstructor(LogInService.userId, this.id);
+      this.subcribed = false;
+    }
   }
 }
 

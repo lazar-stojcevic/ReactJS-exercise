@@ -78,19 +78,22 @@ export default {
       this.filtered = res.data;
       return this.instructors
     }).then((res) => {
-      console.log(res)
       this.instructors = res;
       this.filtered = res;
       for(let ad in this.instructors){
         GradeService.getAllGradeOfInstructor(this.instructors[ad].id).then(res =>{
           this.instructors[ad].mark = 0
           this.instructors[ad].mark = res.data.avgRating;
+          if (isNaN(this.instructors[ad].mark))
+            this.instructors[ad].mark = 0
         });
       }
       for(let ad2 in this.filtered){
         GradeService.getAllGradeOfInstructor(this.filtered[ad2].id).then(res =>{
           this.filtered[ad2].mark = 0
           this.filtered[ad2].mark = res.data.avgRating;
+          if (isNaN(this.filtered[ad2].mark))
+            this.filtered[ad2].mark = 0
         });
       }
     });
@@ -99,24 +102,24 @@ export default {
     search(){
       this.filtered = [];
       for (let instructor of this.instructors){
-        if (instructor.name.includes(this.filter.name) && (instructor.city.includes(this.filter.location) ||
-                instructor.country.includes(this.filter.location) || instructor.street.includes(this.filter.location)) &&
+        if ((instructor.firstname.includes(this.filter.name) || (instructor.lastName.includes(this.filter.name))) && (instructor.address.city.includes(this.filter.location) ||
+                instructor.address.country.includes(this.filter.location) || instructor.address.street.includes(this.filter.location)) &&
             instructor.mark >= this.filter.mark){
           this.filtered.push(instructor)
         }
       }
       if (this.sort === 'nameDESC')
-        this.filtered.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
+        this.filtered.sort((a,b) => (a.firstname > b.firstname) ? 1 : ((b.firstname > a.firstname) ? -1 : 0))
       else if (this.sort === 'nameASC')
-        this.filtered.sort((a,b) => (a.name < b.name) ? 1 : ((b.name < a.name) ? -1 : 0))
+        this.filtered.sort((a,b) => (a.firstname < b.firstname) ? 1 : ((b.firstname < a.firstname) ? -1 : 0))
       else if (this.sort === 'markDESC')
         this.filtered.sort((a,b) => (a.mark > b.mark) ? 1 : ((b.mark > a.mark) ? -1 : 0))
       else if (this.sort === 'markASC')
         this.filtered.sort((a,b) => (a.mark < b.mark) ? 1 : ((b.mark < a.mark) ? -1 : 0))
       else if (this.sort === 'cityDESC')
-        this.filtered.sort((a,b) => (a.city > b.city) ? 1 : ((b.city > a.city) ? -1 : 0))
+        this.filtered.sort((a,b) => (a.address.city > b.city) ? 1 : ((b.address.city > a.address.city) ? -1 : 0))
       else if (this.sort === 'cityASC')
-        this.filtered.sort((a,b) => (a.city < b.city) ? 1 : ((b.city < a.city) ? -1 : 0))
+        this.filtered.sort((a,b) => (a.address.city < b.address.city) ? 1 : ((b.address.city < a.address.city) ? -1 : 0))
       //this.filtered.concat(pom);
     }
   }

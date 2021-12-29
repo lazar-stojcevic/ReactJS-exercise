@@ -28,6 +28,13 @@ public class FishingInstructor extends User {
     @JsonIgnore
     private List<Grade> grades = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinTable(name = "have_prepaid_on_instuctor",
+            joinColumns = @JoinColumn(name = "instructor_id", referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "user_id"))
+    private List<Customer> prepaidCustomers = new ArrayList<>();
+
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

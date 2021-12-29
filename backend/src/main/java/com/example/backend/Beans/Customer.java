@@ -33,7 +33,7 @@ public class Customer extends User {
 
     @ManyToMany(mappedBy = "prepaidCustomers", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Adventure> prepaidAdventures = new ArrayList<>();
+    private List<FishingInstructor> prepaidInstructors = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     @JsonIgnore

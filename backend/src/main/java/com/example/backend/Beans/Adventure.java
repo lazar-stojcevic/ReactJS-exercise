@@ -65,11 +65,4 @@ public class Adventure {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "adventure", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Image> images = new ArrayList<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinTable(name = "have_prepaid_on_adventures",
-            joinColumns = @JoinColumn(name = "adventure_id", referencedColumnName = "adventure_id"),
-            inverseJoinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "user_id"))
-    private List<Customer> prepaidCustomers = new ArrayList<>();
 }
