@@ -1,6 +1,7 @@
 package com.example.backend.Controllers;
 
 import com.example.backend.Beans.Customer;
+import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Dtos.CustomerChangeDto;
 import com.example.backend.Dtos.DeleteUserRequestDto;
 import com.example.backend.Dtos.PasswordChangeDto;
@@ -79,5 +80,11 @@ public class CustomerControler {
         if(this.customerService.sendDeleteProfileRequest(deleteRequestDto))
             return new ResponseEntity<>("OK", HttpStatus.OK);
         else return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @GetMapping (path = "/instructorSubscriptions/{userId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<Collection<FishingInstructor>> getAllCustomersInstructorSubscriptions(@PathVariable long userId){
+        return new ResponseEntity<>(customerService.getCustomerInstructorsSubscription(userId), HttpStatus.OK);
     }
 }
