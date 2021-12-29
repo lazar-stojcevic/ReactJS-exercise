@@ -120,7 +120,7 @@ export default {
         entityType: 'I'
       };
       GradeService.saveGrade(data).then(()=>{
-        alert("Complaint successfully added");
+        alert("Grade successfully added");
         this.$router.push('/');
       }).catch(() => alert("Some error occurred"));
     }

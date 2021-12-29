@@ -4,9 +4,9 @@ import Registration from "@/components/Registration";
 import FishingInstructorProfile from "@/components/FishingInstructor/FishingInstructorProfile";
 import AdventureProfile from "@/components/FishingInstructor/AdventureProfile";
 import CustomerProfile from "@/components/Customer/CustomerProfile";
-import AllCottages from "@/components/Customer/AllCottages";
-import AllBoats from "@/components/Customer/AllBoats";
-import AllFishingInstructors from "@/components/Customer/AllFishingInstructors";
+import AllCottages from "@/components/Customer/ShowAll/AllCottages";
+import AllBoats from "@/components/Customer/ShowAll/AllBoats";
+import AllFishingInstructors from "@/components/Customer/ShowAll/AllFishingInstructors";
 import CottageReservations from "@/components/Customer/CottageReservations";
 import BoatReservations from "@/components/Customer/BoatReservations";
 import AdventureReservations from "@/components/Customer/AdventureReservations";
@@ -17,11 +17,12 @@ import Complaint from "@/components/Customer/Complaint";
 import AdventuresOfFishingInstructor from "@/components/FishingInstructor/AdventuresOfFishingInstructor";
 import CreateNewAdventure from "@/components/FishingInstructor/CreateNewAdventure";
 import HistoryOfReservations from "@/components/FishingInstructor/HistoryOfReservations";
-import OneBoat from "@/components/Customer/OneBoat";
-import OneInstructor from "@/components/Customer/OneInstructor";
-import OneCottage from "@/components/Customer/OneCottage";
+import OneBoat from "@/components/Customer/ShowOne/OneBoat";
+import OneInstructor from "@/components/Customer/ShowOne/OneInstructor";
+import OneCottage from "@/components/Customer/ShowOne/OneCottage";
 import ReserveAdventure from "@/components/Customer/Reserve/ReserveAvanture"
 import NewAdventureReservation from "@/components/Customer/Reserve/NewAdventureReservation"
+import InstructorActions from "@/components/Customer/InstructorActions"
 
 import AdminProfile from "@/components/Admin/AdminProfile";
 import ProfileRequests from "@/components/Admin/Requests";
@@ -78,6 +79,7 @@ const routes = [
     {path: '/createReservationForCustomer', component: CreateReservation},
     {path: '/reserveAdventure', component: ReserveAdventure},
     {path: '/newAdventureReservation/:id', component: NewAdventureReservation},
+    {path: '/instructorActions/:id', component: InstructorActions},
 ]
 
 export default routes;

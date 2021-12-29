@@ -27,6 +27,8 @@
       </tr>
     </table>
   </div>
+    <br>
+    <router-link class="btn btn-success" :to='"/instructorActions/" + this.id'>ACTIONS</router-link>
   </div>
 </template>
 
