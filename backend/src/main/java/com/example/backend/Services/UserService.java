@@ -58,7 +58,7 @@ public class UserService {
         return user;
     }
 
-    public boolean disableUser(long id, String reason){
+    public boolean disableUserRegistration(long id, String reason){
         User user = findUserById(id);
         try {
             deleteUser(id);
@@ -80,5 +80,22 @@ public class UserService {
 
         try { emailService.sendAnswerOnRequestForDeletingProfile(request.getUser(), dto.getAnswer());
         }catch (Exception e){ System.out.println(e);}
+    }
+
+    public Collection<User> getAllUsersExceptAdmins(){
+        return userRepository.getAllUsersExceptAdmins();
+    }
+
+    public User disableUser(long id){
+        User user = findUserById(id);
+        user.setEnabled(false);
+        try {
+            emailService.sendMailForDisabling(user);
+        }catch (Exception ignore) {}
+        return save(user);
+    }
+
+    private User save(User user){
+        return userRepository.save(user);
     }
 }
