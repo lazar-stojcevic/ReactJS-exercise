@@ -18,4 +18,5 @@ public class ReserveAdventureDto {
     private LocalDateTime reservationStart;
     private int length;
     private long adventureId;
+    private double discount;
 }

@@ -22,6 +22,7 @@ public class MakeFastReservationDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime adventureStart;
     private int length;
+    private double discount;
 
     List<AdditionalService> addServices = new ArrayList<>();
 }
