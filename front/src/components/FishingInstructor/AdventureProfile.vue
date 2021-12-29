@@ -26,6 +26,7 @@
        </td>
      </tr>
    </table>
+
     <div v-if="mode === 'makeCustomReservation'" style="margin-top: 15px">
       <form @submit.prevent="saveCustomReservation">
         <div class="input-group mb-lg-2">
@@ -42,6 +43,10 @@
           <input type="number" class="form-control" v-model="newCustomReservation.length" required/>
         </div>
         <div class="input-group mb-lg-2">
+          <span class="input-group-text">DISCOUNT (0 IS DEFAULT)</span>
+          <input type="number" class="form-control" v-model="newCustomReservation.discount" required/>
+        </div>
+        <div class="input-group mb-lg-2">
           <p><strong>SELECT ADDITIONAL SERVICES</strong></p>
           <div class="form-group form-check" v-for="item in additionalServices" v-bind:key="item.id">
             <input type="checkbox"  v-model="selectedAddServices" :id="item.id" :value="item.id">
@@ -56,6 +61,7 @@
         </div>
       </form>
     </div>
+
    <!--MAKE FAST RESERVATIONS-->
     <div v-if="mode === 'makeFastReservation'">
       <form @submit.prevent="saveFastReservation">
@@ -70,6 +76,10 @@
         <div class="input-group mb-lg-2">
           <span class="input-group-text">LENGTH (IN HOURS)</span>
           <input type="number" class="form-control" v-model="newReservation.length" required/>
+        </div>
+        <div class="input-group mb-lg-2">
+          <span class="input-group-text">DISCOUNT (0 IS DEFAULT)</span>
+          <input type="number" class="form-control" v-model="newReservation.discount"/>
         </div>
         <div class="input-group mb-lg-2">
           <div class="btn-group-sm">
@@ -262,6 +272,7 @@
          <td>{{fr.reservationStart}}</td>
          <td>{{fr.length}}</td>
          <td>{{fr.price}}</td>
+         <td><button class="btn-sm btn-danger" @click="deleteFastReservation(fr.id)">DELETE</button></td>
        </tr>
        </tbody>
      </table>
@@ -315,7 +326,7 @@ export default {
       newAdventure: {name: '', address:{street: ''}, priceList: {price: ''}},
       newImage: '',
       imagesToShow: [],
-      newReservation: {reservationStart: '', lastDateToReserve: ''},
+      newReservation: {reservationStart: '', lastDateToReserve: '', discount: ''},
       currentReservationOwner: '',
       newCustomReservation: {},
       selectedAddServices: []
@@ -358,7 +369,7 @@ export default {
 
     makeFastReservation(){
       this.mode = 'makeFastReservation';
-      this.newReservation = {reservationStart: '', lastDateToReserve: ''}
+      this.newReservation = {reservationStart: '', lastDateToReserve: '', discount: ''}
     },
 
     changeAdventure(){
@@ -488,6 +499,12 @@ export default {
       AdventureReservationService.getAllReservedTerms(AdventureService.getAdventureId()).then(res => {
         this.reservedTerms = res.data;
       }).catch(() => {alert("THERE IS SOME PROBLEM WITH LOADING RESERVED TERMS")});
+    },
+
+    deleteFastReservation(id){
+      AdventureReservationService.deleteReservation(id).then(() => {this.loadFreeFastReservations()}).catch(() => {
+        alert("THERE IS SOME ERROR WITH DELETING RESERVATION");
+      })
     }
   }
 }

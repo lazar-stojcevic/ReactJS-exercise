@@ -78,6 +78,7 @@ class AdventureReservationService {
         data.lastDateToReserve = reservation.lastDateToReserve.replaceAll('T', ' ');
         data.adventureStart = reservation.reservationStart.replaceAll('T', ' ');
         data.length = reservation.length;
+        data.discount = reservation.discount;
 
         return axios.post(URL + '/makeFastReservation', JSON.stringify(data), {headers});
     }
@@ -137,5 +138,14 @@ class AdventureReservationService {
         return axios.post(URL + '/customReserve', data, {headers});
     }
 
+    deleteReservation(id){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+
+        return axios.delete(URL + '/' + id, {headers});
+    }
 }
 export default new AdventureReservationService()

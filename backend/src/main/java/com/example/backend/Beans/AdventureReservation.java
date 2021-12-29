@@ -71,6 +71,9 @@ public class AdventureReservation {
     @Column()
     private boolean reported = false;
 
+    @Column()
+    private double discount = 0;
+
     public boolean isReserved(){
         return this.customer != null;
     }

@@ -214,6 +214,7 @@ public class AdventureReservationService {
         reservation.setAdventure(this.adventureService.findAdventureById(dto.getAdventureId()));
         reservation.setLength(dto.getLength());
         reservation.setLastDateToReserve(LocalDateTime.now());
+        reservation.setDiscount(dto.getDiscount());
         if(!addCustomerToReservation(reservation, dto))
             return null;
         else return reservation;
@@ -282,6 +283,7 @@ public class AdventureReservationService {
         adventureReservation.setReservationStart(dto.getAdventureStart());
         adventureReservation.setLastDateToReserve(dto.getLastDateToReserve());
         adventureReservation.setLength(dto.getLength());
+        adventureReservation.setDiscount(dto.getDiscount());
         return adventureReservation;
     }
 
@@ -320,7 +322,10 @@ public class AdventureReservationService {
             price += as.getAddPrice();
             reservation.addAdditionalService(as);
         }
-        reservation.setPrice(price);
+        reservation.setPrice((int) (price * (1 - reservation.getDiscount()/100)));
     }
 
+    private void deleteReservation(long id){
+        adventureReservationRepository.deleteById(id);
+    }
 }
