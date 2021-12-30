@@ -132,13 +132,28 @@ public class EmailService {
     }
 
     @Async
-    public void sendMailForDisabling(User user) {
+    public void sendMailForDisabling(User user) throws MailException,
+            InterruptedException{
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Obaveštenje o blokiranju profila.");
         mail.setText("Pozdrav " + user.getFirstname() + ", \n\n" +
                 "ovom prilikom želimo da vas obavestimo da je vas nalog blokiran." +
+                "\n\nS poštovanjem admin tim.");
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendMailToInstructorAboutIncome(User user, int income, int reservationNumber) throws MailException,
+            InterruptedException{
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Obaveštenje o prihodu za selektovani period.");
+        mail.setText("Pozdrav " + user.getFirstname() + ", \n\n" +
+                "ovom prilikom želimo da vas obavestimo da je Vaš prihod za selektovani period bez" +
+                "plaćanja sistemu" + income + ", a ukupan broj rezervacija je: " + reservationNumber +
                 "\n\nS poštovanjem admin tim.");
         javaMailSender.send(mail);
     }
