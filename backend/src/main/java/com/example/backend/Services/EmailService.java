@@ -152,8 +152,8 @@ public class EmailService {
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Obaveštenje o prihodu za selektovani period.");
         mail.setText("Pozdrav " + user.getFirstname() + ", \n\n" +
-                "ovom prilikom želimo da vas obavestimo da je Vaš prihod za selektovani period bez" +
-                "plaćanja sistemu" + income + ", a ukupan broj rezervacija je: " + reservationNumber +
+                "ovom prilikom želimo da vas obavestimo da je Vaš prihod za selektovani period bez " +
+                "plaćanja sistemu " + income + "din, a ukupan broj rezervacija je: " + reservationNumber +
                 "\n\nS poštovanjem admin tim.");
         javaMailSender.send(mail);
     }

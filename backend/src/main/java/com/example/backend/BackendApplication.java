@@ -451,6 +451,35 @@ public class BackendApplication implements CommandLineRunner {
         adventureComplaint.setReviewed(false);
         adventureComplaint.setReservation(reservation23);
         adventureComplaintRepository.save(adventureComplaint);
+
+        //TESTIRANJE OBAVESTENJA O PRIHODIMA
+        AdventureReservation reservation91 = new AdventureReservation();
+        reservation91.setCustomer(customer1);
+        reservation91.setAdventure(adventure);
+        reservation91.setPrice(1000);
+        reservation91.setLength(4);
+        reservation91.setLastDateToReserve(LocalDateTime.of(2021, 9,10,10,20));
+        reservation91.setReservationStart(LocalDateTime.of(2021, 9,10,10,20));
+
+        AdventureReservation reservation92 = new AdventureReservation();
+        reservation92.setCustomer(customer1);
+        reservation92.setAdventure(adventure);
+        reservation92.setPrice(1000);
+        reservation92.setLength(4);
+        reservation92.setLastDateToReserve(LocalDateTime.of(2021, 9,10,10,20));
+        reservation92.setReservationStart(LocalDateTime.of(2021, 10,10,10,20));
+
+        AdventureReservation reservation93 = new AdventureReservation();
+        reservation93.setCustomer(customer1);
+        reservation93.setAdventure(adventure);
+        reservation93.setPrice(1000);
+        reservation93.setLength(4);
+        reservation93.setLastDateToReserve(LocalDateTime.of(2021, 9,10,10,20));
+        reservation93.setReservationStart(LocalDateTime.of(2021, 11,10,10,20));
+
+        adventureReservationRepository.save(reservation91);
+        adventureReservationRepository.save(reservation92);
+        adventureReservationRepository.save(reservation93);
     }
 
 }
