@@ -44,15 +44,6 @@
           <td>
             <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showCustomers">CUSTOMERS</button>
           </td>
-          <td>
-            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showInstructors">INSTRUCTORS</button>
-          </td>
-          <td>
-            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showBoatOwners">BOAT OWNERS</button>
-          </td>
-          <td>
-            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showCottageOwners">COTTAGE OWNERS</button>
-          </td>
         </tr>
       </table>
     </div>
@@ -125,16 +116,8 @@
     </div>
     <!--PERCENT OF ALL TRANSACTIONS-->
     <!--ALL ENTITIES-->
-    <div v-if="mode === 'instructors'">
-      <instructors></instructors>
-      <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
-    </div>
     <div v-if="mode === 'cottage'">
       <cottages></cottages>
-      <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
-    </div>
-    <div v-if="mode === 'cottageOwners'">
-      <cottageOwners></cottageOwners>
       <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
     </div>
     <div v-if="mode === 'customers'">
@@ -148,14 +131,10 @@
 import AdminService from "@/Services/AdminService";
 import LogInService from "@/Services/LogInService";
 
-import AllInstructors from "@/components/Admin/InnerAdminComponents/AllInstructors";
-import AllCottageOwners from "@/components/Admin/InnerAdminComponents/AllCottageOwners";
 import AllCottages from "@/components/Admin/InnerAdminComponents/AllCottages";
 import AllCustomers from "@/components/Admin/InnerAdminComponents/AllCustomers";
 export default {
   components:{
-    'instructors' : AllInstructors,
-    'cottageOwners': AllCottageOwners,
     'cottages': AllCottages,
     'customers': AllCustomers
   },
@@ -209,16 +188,8 @@ export default {
       this.mode = 'cottage';
     },
 
-    showInstructors(){
-      this.mode = 'instructors';
-    },
-
     showBoatOwners(){
       this.mode = 'boatOwners';
-    },
-
-    showCottageOwners(){
-      this.mode = 'cottageOwners';
     },
 
     showCustomers(){

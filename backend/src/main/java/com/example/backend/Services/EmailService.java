@@ -136,7 +136,7 @@ public class EmailService {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
-        mail.setSubject("Obaveštenje o žalbi.");
+        mail.setSubject("Obaveštenje o blokiranju profila.");
         mail.setText("Pozdrav " + user.getFirstname() + ", \n\n" +
                 "ovom prilikom želimo da vas obavestimo da je vas nalog blokiran." +
                 "\n\nS poštovanjem admin tim.");

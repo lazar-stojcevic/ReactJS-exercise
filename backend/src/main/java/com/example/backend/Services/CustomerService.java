@@ -38,6 +38,9 @@ public class CustomerService implements IUserService {
     private RoleService roleService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     public CustomerService(CustomerRepository customerRepository){
         this.customerRepository = customerRepository;
     }
@@ -162,5 +165,11 @@ public class CustomerService implements IUserService {
 
     private Customer saveCustomer(Customer customer){
         return customerRepository.save(customer);
+    }
+
+    public User enableCustomer(long id) {
+        Customer customer = findCustomerById(id);
+        customer.setEnabled(true);
+        return saveCustomer(customer);
     }
 }

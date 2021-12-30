@@ -25,6 +25,8 @@ public class UserService {
     private BoatOwnerService boatOwnerService;
     @Autowired
     private DeleteProfileRequestService deleteProfileRequestService;
+    @Autowired
+    private CustomerService customerService;
 
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
@@ -49,6 +51,7 @@ public class UserService {
             case "ROLE_INSTRUCTOR" -> user = (User) fishingInstructorService.enableFishingInstructor(id);
             case "ROLE_COTTAGE_OWNER" -> user = (User) cottageOwnerService.enableCottageOwner(id);
             case "ROLE_BOAT_OWNER" -> user = (User) boatOwnerService.enableBoatOwner(id);
+            case "ROLE_CUSTOMER" -> user = (User) customerService.enableCustomer(id);
         }
 
         try {
