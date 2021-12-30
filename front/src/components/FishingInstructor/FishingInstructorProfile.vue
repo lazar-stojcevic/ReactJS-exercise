@@ -37,9 +37,29 @@
                 <td><button @click="changeModeToPassword" v-if="mode === 'neutral'" class="btn-info">CHANGE PASSWORD</button></td>
                 <td><button @click="changeModeToHoliday" v-if="mode === 'neutral'" class="btn-info">ADD AVAILABLE TIMESPAN</button></td>
                 <td><button @click="myAdventures" v-if="mode === 'neutral'" class="btn-info">MY ADVENTURES</button></td>
+                <td><button @click="showIncomeForm" v-if="mode === 'neutral'" class="btn-info">MY INCOME</button></td>
                 <td><button @click="changeModeForDeleting" v-if="mode === 'neutral'" class="btn-danger">SEND REQUEST FOR DELETING</button></td>
               </tr>
             </table>
+          </div>
+          <!--INCOME-->
+          <div v-if="mode === 'income'" class="container">
+            <form @submit.prevent="incomeRequest">
+              <div class="input-group mb-3">
+                <span class="input-group-text">FROM DATE</span>
+                <input type="date" class="form-control" v-model="fromDate">
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text">TO DATA</span>
+                <input type="date" class="form-control" v-model="toDate">
+              </div>
+              <div class="input-group mb-3">
+                <div class="btn-group-sm">
+                  <button type="submit" class="btn-info">CONFIRM</button>
+                  <button @click="changeModeToNeutral()" type="reset" class="btn-danger">CLOSE</button>
+                </div>
+              </div>
+            </form>
           </div>
           <!--PASSWORD CHANGING-->
           <div v-if="mode === 'changePassword'" class="container">
@@ -129,6 +149,7 @@
           </div>
         </div>
       </div>
+
       <!--OVDE IDE KALENDAR ZAUZETOSTI-->
       <div v-if="user.available !== null" style="text-align: center">
         <strong style="margin: 10px">YOUR AVAILABLE TIMESPAN</strong>
@@ -147,6 +168,7 @@
           </tbody>
         </table>
       </div>
+
       <!--ODOBRENI KOMENTARI ZA PRIKAZ-->
       <div>
         <hr style="margin-top: 15px">
@@ -169,6 +191,8 @@ import FishingInstructorService from "@/Services/FishingInstructorService";
 import LogInService from "@/Services/LogInService";
 import GradeService from "@/Services/GradeService";
 import DeleteProfileRequestService from "@/Services/DeleteProfileRequestService";
+import IncomeService from "@/Services/IncomeService";
+
 export default {
   data(){
     return{
@@ -278,6 +302,22 @@ export default {
         alert("REQUEST IS SAVED");
       }).catch(() => {alert("THERE IS SOME PROBLEM WITH SAVING REQUEST")});
       this.mode = 'neutral';
+    },
+
+    showIncomeForm(){
+      this.mode = 'income';
+      this.fromDate = '';
+      this.toDate = '';
+    },
+
+    incomeRequest(){
+      if(this.toDate < this.fromDate){
+        alert("DATE IS NOT CORRECT SELECTED")
+        return;
+      }
+      let data = {userId: LogInService.userId, fromDate: this.fromDate, toDate: this.toDate};
+      IncomeService.getInstructorIncome(data).then(() => {alert("INCOME SENT ON THE MALE")}).
+      catch(() => {alert("THERE IS SOME ERROR WITH INCOME REQUEST")});
     }
   }
 

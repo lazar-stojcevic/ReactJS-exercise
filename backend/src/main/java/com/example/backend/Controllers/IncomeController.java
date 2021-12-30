@@ -19,7 +19,7 @@ public class IncomeController {
         this.incomeService = incomeService;
     }
 
-    @GetMapping(path = "/instructorIncome")
+    @PostMapping(path = "/instructorIncome")
     @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<?> getIncomeOfInstructor(@RequestBody IncomeDto dto){
         incomeService.prepareForCalculatingInstructorIncome(dto);
