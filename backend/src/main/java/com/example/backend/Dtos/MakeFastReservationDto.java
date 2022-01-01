@@ -24,5 +24,5 @@ public class MakeFastReservationDto {
     private int length;
     private double discount;
 
-    List<AdditionalService> addServices = new ArrayList<>();
+    private List<AdditionalService> addServices = new ArrayList<>();
 }

@@ -136,9 +136,9 @@ public class AdventureReservationService {
 
     public AdventureReservation createFreeFastReservation(MakeFastReservationDto dto){
         AdventureReservation adventureReservation = makeAdventureReservation(dto);
+        if(!isReservationInAvailableTimespanOfInstructor(adventureReservation, dto.getInstructorId()))
+            return null;
         for(AdventureReservation ar : getAllNextReservationsOfInstructor(dto.getInstructorId())){
-            if(!isReservationInAvailableTimespanOfInstructor(adventureReservation, dto.getInstructorId()))
-                return null;
             if(isReservationsOverlap(ar, adventureReservation))
                 return null;
         }
