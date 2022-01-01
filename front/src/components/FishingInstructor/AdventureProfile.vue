@@ -26,7 +26,7 @@
        </td>
      </tr>
    </table>
-
+    <!--CUSTOM RESERVATION-->
     <div v-if="mode === 'makeCustomReservation'" style="margin-top: 15px">
       <form @submit.prevent="saveCustomReservation">
         <div class="input-group mb-lg-2">
@@ -80,6 +80,13 @@
         <div class="input-group mb-lg-2">
           <span class="input-group-text">DISCOUNT (0 IS DEFAULT)</span>
           <input type="number" class="form-control" v-model="newReservation.discount"/>
+        </div>
+        <div class="input-group mb-lg-2" v-if="newReservation.discount > 0">
+          <p><strong>SELECT ADDITIONAL SERVICES</strong></p>
+          <div class="form-group form-check" v-for="item in additionalServices" v-bind:key="item.id">
+            <input type="checkbox"  v-model="newReservation.addServices" :id="item.id" :value="item">
+            <label class="form-check-label" :for="item.id">{{item.name}}, {{item.addPrice}}</label>
+          </div>
         </div>
         <div class="input-group mb-lg-2">
           <div class="btn-group-sm">
@@ -326,7 +333,7 @@ export default {
       newAdventure: {name: '', address:{street: ''}, priceList: {price: ''}},
       newImage: '',
       imagesToShow: [],
-      newReservation: {reservationStart: '', lastDateToReserve: '', discount: ''},
+      newReservation: {reservationStart: '', lastDateToReserve: '', discount: '', addServices:[]},
       currentReservationOwner: '',
       newCustomReservation: {},
       selectedAddServices: []
@@ -369,7 +376,7 @@ export default {
 
     makeFastReservation(){
       this.mode = 'makeFastReservation';
-      this.newReservation = {reservationStart: '', lastDateToReserve: '', discount: ''}
+      this.newReservation = {reservationStart: '', lastDateToReserve: '', discount: '', addServices: []}
     },
 
     changeAdventure(){
@@ -467,6 +474,7 @@ export default {
           AdventureService.adventureId).then(() => {
             alert('RESERVATION IS CREATED');
             this.loadFreeFastReservations();
+            this.mode = 'neutral';
           }).catch(() => {
             alert('RESERVATION IS NOT CREATED, PROBABLY YOU HAVE RESERVATION IN THIS TERM')
       })
