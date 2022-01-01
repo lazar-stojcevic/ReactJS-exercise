@@ -42,7 +42,7 @@ public class UserController {
     @DeleteMapping(path = "/disable/{id}/{reason}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> disableFishingInstructor(@PathVariable long id, @PathVariable String reason){
-        boolean isDeleted = userService.disableUser(id, reason);
+        boolean isDeleted = userService.disableUserRegistration(id, reason);
         if(!isDeleted)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -54,4 +54,18 @@ public class UserController {
         userService.answerOnRequestForDeleting(dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping(path = "/allUsersExceptAdmins")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Collection<User>> getAllUsersExceptAdmins(){
+        return new ResponseEntity<>(userService.getAllUsersExceptAdmins(), HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/disableUser/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> disableUser(@PathVariable long id){
+        userService.disableUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

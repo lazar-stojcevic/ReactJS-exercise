@@ -25,6 +25,8 @@ public class UserService {
     private BoatOwnerService boatOwnerService;
     @Autowired
     private DeleteProfileRequestService deleteProfileRequestService;
+    @Autowired
+    private CustomerService customerService;
 
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
@@ -49,6 +51,7 @@ public class UserService {
             case "ROLE_INSTRUCTOR" -> user = (User) fishingInstructorService.enableFishingInstructor(id);
             case "ROLE_COTTAGE_OWNER" -> user = (User) cottageOwnerService.enableCottageOwner(id);
             case "ROLE_BOAT_OWNER" -> user = (User) boatOwnerService.enableBoatOwner(id);
+            case "ROLE_CUSTOMER" -> user = (User) customerService.enableCustomer(id);
         }
 
         try {
@@ -58,7 +61,7 @@ public class UserService {
         return user;
     }
 
-    public boolean disableUser(long id, String reason){
+    public boolean disableUserRegistration(long id, String reason){
         User user = findUserById(id);
         try {
             deleteUser(id);
@@ -80,5 +83,22 @@ public class UserService {
 
         try { emailService.sendAnswerOnRequestForDeletingProfile(request.getUser(), dto.getAnswer());
         }catch (Exception e){ System.out.println(e);}
+    }
+
+    public Collection<User> getAllUsersExceptAdmins(){
+        return userRepository.getAllUsersExceptAdmins();
+    }
+
+    public User disableUser(long id){
+        User user = findUserById(id);
+        user.setEnabled(false);
+        try {
+            emailService.sendMailForDisabling(user);
+        }catch (Exception ignore) {}
+        return save(user);
+    }
+
+    private User save(User user){
+        return userRepository.save(user);
     }
 }
