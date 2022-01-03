@@ -19,7 +19,7 @@ class CottageService{
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
-        return axios.get(URL, {headers});
+        return axios.get(URL + "/getAll", {headers});
     }
     create(newCottage){
         let headers = {

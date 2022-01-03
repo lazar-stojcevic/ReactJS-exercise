@@ -27,7 +27,7 @@
   <br>
   <div v-for="cottage in filtered" :key="cottage.id">
     <b-card
-        tag="cottage"
+        name="cottage"
         style="max-width: 20rem;"
         class="mb-2"
     >
@@ -35,11 +35,11 @@
         {{cottage.name}}
       </b-card-title>
       <b-card-text>
-        {{ cottage.description }}
+        {{ cottage.promo }}
       </b-card-text>
       <br>
       <b-card-text>
-        ADDRESS:  {{ cottage.street }} , {{ cottage.city }}, {{cottage.country}}
+        ADDRESS:  {{ cottage.address.street }} , {{ cottage.address.city }}, {{cottage.address.country}}
       </b-card-text>
       <br>
       <b-card-text>
@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import CottageService from "@/Services/CottageService";
 export default {
   name: "AllCottages",
   data() {
@@ -70,24 +71,18 @@ export default {
   },
   mounted() {
     //DUMMY
-    this.cottages = [
-      {id: 1, name : "Mala kuca", city : "Zlatibor" , street : "Ustanicka", country : "Serbia" , description: "Very nice", rating: 4.1},
-      {id: 2, name : "Mala kuca", city : "Tara" , street : "Ustanicka", country : "Serbia", description: "Very nice", rating: 3.1},
-      {id: 3, name : "Random kucica", city : "Warsaw" , street : "Ustanicka", country : "Serbia", description: "Very nice", rating: 1.9},
-    ];
-    this.filtered = [
-      {id: 1, name : "Mala kuca", city : "Zlatibor" , street : "Ustanicka", country : "Serbia" , description: "Very nice", rating: 4.1},
-      {id: 2, name : "Mala kuca", city : "Tara" , street : "Ustanicka", country : "Serbia", description: "Very nice", rating: 3.1},
-      {id: 3, name : "Random kucica", city : "Warsaw" , street : "Ustanicka", country : "Serbia", description: "Very nice", rating: 1.9},
-    ];
-    this.filtered.sort((a,b) => (a.city > b.city) ? 1 : ((b.city > a.city) ? -1 : 0))
+    CottageService.getAllCottages().then((res) => {
+      this.cottages = res.data;
+      this.filtered = res.data;
+    })
+    this.filtered.sort((a,b) => (a.address.city > b.address.city) ? 1 : ((b.address.city > a.address.city) ? -1 : 0))
   },
   methods:{
     search(){
       this.filtered = [];
       for (let cottage of this.cottages){
-        if (cottage.name.includes(this.filter.name) && (cottage.city.includes(this.filter.location) ||
-            cottage.country.includes(this.filter.location) || cottage.street.includes(this.filter.location)) &&
+        if (cottage.name.includes(this.filter.name) && (cottage.address.city.includes(this.filter.location) ||
+            cottage.address.country.includes(this.filter.location) || cottage.address.street.includes(this.filter.location)) &&
         cottage.rating >= this.filter.rating){
           this.filtered.push(cottage)
         }
@@ -101,9 +96,9 @@ export default {
       else if (this.sort === 'markASC')
         this.filtered.sort((a,b) => (a.rating < b.rating) ? 1 : ((b.rating < a.rating) ? -1 : 0))
       else if (this.sort === 'cityDESC')
-        this.filtered.sort((a,b) => (a.city > b.city) ? 1 : ((b.city > a.city) ? -1 : 0))
+        this.filtered.sort((a,b) => (a.address.city < b.address.city) ? 1 : ((b.address.city < a.address.city) ? -1 : 0))
       else if (this.sort === 'cityASC')
-        this.filtered.sort((a,b) => (a.city < b.city) ? 1 : ((b.city < a.city) ? -1 : 0))
+        this.filtered.sort((a,b) => (a.address.city > b.address.city) ? 1 : ((b.address.city > a.address.city) ? -1 : 0))
       //this.filtered.concat(pom);
     }
   }

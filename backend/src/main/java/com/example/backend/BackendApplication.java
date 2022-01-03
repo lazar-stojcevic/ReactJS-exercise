@@ -258,6 +258,43 @@ public class BackendApplication implements CommandLineRunner {
 
         adventureRepository.save(adventure);
 
+        //ADVENTURE 2
+        Adventure adventure2 = new Adventure();
+        Address adventureAddress2 = new Address();
+        adventureAddress2.setStreet("Gagarinova");
+        adventureAddress2.setCity("Paracin");
+        adventureAddress2.setCountry("Srbija");
+        adventure2.setAddress(adventureAddress2);
+        adventure2.setName("Izlet na jezeru");
+        adventure2.setInstructor((FishingInstructor) repository.findByEmail("asd@gmail.com"));
+        adventure2.setMaxPersons(10);
+        adventure2.setDescription("Poseta etno parku, imitacija divljeg zapada, ludilo");
+        adventure2.setCancelingTerms("10% uplate zadrzava instruktor");
+        adventure2.setInstructorBiography("Diplomirani biolog i elektro inzenjer");
+        adventure2.setConductRules("Strogo je zabranjeno bacanje djubreta van kanti za smece");
+        adventure2.setEquipment("Sovijetska vojna oprema.");
+
+        PriceList priceList2 = new PriceList();
+        priceList2.setPrice(4000);
+        adventure2.setPriceList(priceList2);
+
+        AdditionalService additionalService22 = new AdditionalService();
+        additionalService22.setName("Prvi dodatni servis");
+        additionalService22.setAddPrice(1000);
+        additionalService22.setPriceList(priceList2);
+
+        AdditionalService additionalService23 = new AdditionalService();
+        additionalService23.setName("Drugi dodatni servis");
+        additionalService23.setAddPrice(500);
+        additionalService23.setPriceList(priceList2);
+
+        Set<AdditionalService> serviceList2 = new HashSet<>();
+        serviceList2.add(additionalService22);
+        serviceList2.add(additionalService23);
+        priceList2.setAdditionalServices(serviceList2);
+
+        adventureRepository.save(adventure2);
+
         AdventureReservation reservation2 = new AdventureReservation();
         reservation2.setAdventure(adventure);
         reservation2.setLength(4);
@@ -289,6 +326,39 @@ public class BackendApplication implements CommandLineRunner {
         reservation5.setReservationStart(LocalDateTime.of(2022, 1,17,10,20));
         reservation5.setLastDateToReserve(LocalDateTime.of(2021, 12, 30, 15, 0));
         adventureReservationRepository.save(reservation5);
+
+        AdventureReservation reservation9 = new AdventureReservation();
+        reservation9.setAdventure(adventure);
+        reservation9.setLength(4);
+        reservation9.setPrice(2500);
+        reservation9.setReservationStart(LocalDateTime.of(2022, 5,17,10,20));
+        reservation9.setLastDateToReserve(LocalDateTime.of(2022, 1, 30, 15, 0));
+        adventureReservationRepository.save(reservation9);
+
+        AdventureReservation reservation10 = new AdventureReservation();
+        reservation10.setAdventure(adventure);
+        reservation10.setLength(4);
+        reservation10.setPrice(2500);
+        reservation10.setReservationStart(LocalDateTime.of(2022, 4,17,10,20));
+        reservation10.setLastDateToReserve(LocalDateTime.of(2022, 1, 30, 15, 0));
+        adventureReservationRepository.save(reservation10);
+
+        AdventureReservation reservation11 = new AdventureReservation();
+        reservation11.setAdventure(adventure);
+        reservation11.setLength(4);
+        reservation11.setPrice(2500);
+        reservation11.setReservationStart(LocalDateTime.of(2022, 9,17,10,20));
+        reservation11.setLastDateToReserve(LocalDateTime.of(2022, 1, 30, 15, 0));
+        adventureReservationRepository.save(reservation11);
+
+        //OVO JE SAMO ZA PROVERU
+        AdventureReservation reservation12 = new AdventureReservation();
+        reservation12.setAdventure(adventure2);
+        reservation12.setLength(48);
+        reservation12.setPrice(2500);
+        reservation12.setReservationStart(LocalDateTime.of(2022, 9,25,10,20));
+        reservation12.setLastDateToReserve(LocalDateTime.of(2022, 1, 30, 15, 0));
+        adventureReservationRepository.save(reservation12);
 
         //Za proveru zalbi
         AdventureReservation reservation6 = new AdventureReservation();
