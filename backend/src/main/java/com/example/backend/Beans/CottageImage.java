@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-@Table(name = "Images")
+@Table(name = "CottageImages")
 public class CottageImage {
     @Id
     @SequenceGenerator(name = "myGen_image", sequenceName = "mySeq_image",

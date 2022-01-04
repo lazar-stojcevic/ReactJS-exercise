@@ -53,9 +53,9 @@ public class CottageService implements ICottageService {
         cottage.setPromo(newCottage.getPromo());
         CottageOwner owner = cottageOwnerService.findCottageOwner(newCottage.getCottageOwnerId());
         cottage.setCottageOwner(owner);
-        PriceList priceList = new PriceList();
+        CottagePriceList priceList = new CottagePriceList();
         priceList.setPrice(newCottage.getPrice());
-        cottage.setPriceList(priceList);
+        cottage.setCottagePriceList(priceList);
         return cottageRepository.save(cottage);
     }
 
@@ -68,8 +68,7 @@ public class CottageService implements ICottageService {
         cottage.getAddress().setCountry(changeDto.getCountry());
         cottage.setPromo(changeDto.getPromo());
         cottage.setConductRules(changeDto.getConductRules());
-        cottage.setCottageOwner(cottageOwnerService.findCottageOwner(changeDto.getId()));
-        cottage.getPriceList().setPrice(changeDto.getPrice());
+        cottage.getCottagePriceList().setPrice(changeDto.getPrice());
         return cottageRepository.save(cottage);
     }
 

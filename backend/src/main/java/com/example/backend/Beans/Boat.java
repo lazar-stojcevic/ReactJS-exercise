@@ -30,19 +30,37 @@ public class Boat {
     @Column(length = 50)
     private String name;
 
+    @Column(length = 50)
+    private String type;
+
+    @Column()
+    private int numberOfEngines;
+
+    @Column()
+    private double enginePower;
+
+    @Column()
+    private double topSpeed;
+
+    @Column()
+    private String promo;
+
     @Column
     private String conductRules;
 
-    @OneToMany(mappedBy = "cottage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude
-    @JsonIgnore
-    private Set<CottageImage> images = new HashSet<CottageImage>();
+    @Column()
+    private int capacity;
 
-    @OneToMany(mappedBy = "cottage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "boat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
     @JsonIgnore
-    private Set<Room> rooms = new HashSet<Room>();
+    private Set<BoatImage> images = new HashSet<>();
+
 
     @OneToOne(cascade = CascadeType.ALL)
-    private PriceList priceList;
+    private BoatPriceList priceList;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address", referencedColumnName = "address_id")
+    private Address address;
 }

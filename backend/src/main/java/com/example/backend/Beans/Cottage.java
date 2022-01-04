@@ -50,9 +50,17 @@ public class Cottage {
 
     @OneToMany(mappedBy = "cottage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
+    private Set<AvailablePeriodCottage> periods = new HashSet<AvailablePeriodCottage>();
+
+    @OneToMany(mappedBy = "cottage", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<CottageReservation> reservations = new HashSet<CottageReservation>();
+
+    @OneToMany(mappedBy = "cottage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Room> rooms = new HashSet<Room>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    private PriceList priceList;
+    private CottagePriceList CottagePriceList;
 
 }
