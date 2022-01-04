@@ -52,6 +52,13 @@ public class AdventureReservationController {
                 HttpStatus.OK);
     }
 
+    @GetMapping(path = "/nextActions/{instructorId}")
+    public ResponseEntity<Collection<AdventureReservation>> getAllNextFreeActionsOfInstructor(
+            @PathVariable long instructorId){
+        return new ResponseEntity<>(adventureReservationService.getAllNextFreeActionsOfInstructor(instructorId),
+                HttpStatus.OK);
+    }
+
     @GetMapping(path = "/term/{termId}")
     public ResponseEntity<AdventureReservation> getAdventureReservation(
             @PathVariable long termId){
@@ -62,6 +69,14 @@ public class AdventureReservationController {
     @PutMapping(path = "/reserveTerm/")
     public ResponseEntity<AdventureReservation> ReserveTerm(@RequestBody CustomerReserveTermDto reservation) throws InterruptedException {
         AdventureReservation adventureReservation = adventureReservationService.makeNewAppointment(reservation);
+        if (adventureReservation == null)
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(adventureReservation, HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/reserveTermOnAction/")
+    public ResponseEntity<AdventureReservation> ReserveTermOnAction(@RequestBody CustomerReserveTermDto reservation) throws InterruptedException {
+        AdventureReservation adventureReservation = adventureReservationService.makeNewAppointmentOnAction(reservation);
         if (adventureReservation == null)
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(adventureReservation, HttpStatus.OK);

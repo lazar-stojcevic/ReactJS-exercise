@@ -74,6 +74,8 @@ public class AdventureReservation {
     @Column()
     private double discount = 0;
 
+    private double mark = 0;
+
     public boolean isReserved(){
         return this.customer != null;
     }

@@ -97,6 +97,20 @@ class AdventureReservationService {
         return axios.put(URL + '/reserveTerm/', JSON.stringify(data), {headers});
     }
 
+    reserveAdventureOnAction(reservationId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.reservationId = reservationId;
+        data.userId = LogInService.userId;
+        data.services = [];
+
+        return axios.put(URL + '/reserveTermOnAction/', JSON.stringify(data), {headers});
+    }
+
     getAllFutureTermsByCustomerId(customerId){
         const headers = {
             'Accept': 'application/json',
@@ -146,6 +160,15 @@ class AdventureReservationService {
         };
 
         return axios.delete(URL + '/' + id, {headers});
+    }
+
+    getAllNextActionsOfInstructor(id){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/nextActions/' + id, {headers});
     }
 }
 export default new AdventureReservationService()

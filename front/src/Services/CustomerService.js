@@ -70,6 +70,12 @@ class CustomerService{
         return axios.get(CUSTOMER_URL, {headers});
     }
 
-    isCustomerS
+    getAllCustomerInstructorsSubscriptions(userId){
+        const headers = {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(CUSTOMER_URL + '/instructorSubscriptions/' + userId, {headers});
+    }
 }
 export default new CustomerService()

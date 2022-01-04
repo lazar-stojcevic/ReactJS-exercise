@@ -23,10 +23,11 @@ public class CottageController {
         this.cottageService = cottageService;
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<Collection<Cottage>> getAll(){
         return new ResponseEntity<>(this.cottageService.findAllCottages(), HttpStatus.OK);
     }
+
 
     @GetMapping(path = "{id}")
     public ResponseEntity<Cottage> getCottageById(@PathVariable long id){

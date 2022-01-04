@@ -71,7 +71,12 @@ export default {
   },
   methods:{
     reserve(){
-      AdventureReservationService.reserveAdventure(this.id, this.selected);
+      alert("Please wait for a while...")
+      AdventureReservationService.reserveAdventure(this.id, this.selected).then(() => {
+        alert("Reservation creted. Details will be sent to your email.")
+            this.$router.push('/');
+      }
+      ).catch(() => {alert("Some of your term overlaps!")})
     }
   }
 }

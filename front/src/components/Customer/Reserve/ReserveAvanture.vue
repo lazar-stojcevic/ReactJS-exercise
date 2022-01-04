@@ -16,6 +16,17 @@
     <button type="submit" class="btn-info">Search</button>
   </b-form>
   <br>
+  <div style="display: flex">
+    <b-form-select v-model="sort" class="m-3">
+      <b-form-select-option value="markASC">mark ascending</b-form-select-option>
+      <b-form-select-option value="markDESC">mark descending</b-form-select-option>
+      <b-form-select-option value="priceASC">price ascending</b-form-select-option>
+      <b-form-select-option value="priceDESC">price descending</b-form-select-option>
+    </b-form-select>
+    <b-input-group>
+      <b-button variant="info" @click="sortReservations">Sort</b-button>
+    </b-input-group>
+  </div>
 
   <div style="margin-right: 20px; margin-left: 20px" v-for="adventure in adventures" :key="adventure.id">
     <b-card bg-variant="dark" text-variant="white">
@@ -37,6 +48,12 @@
       <b-card-text style="margin: 5px">
         RULES: {{adventure.adventure.conductRules}}
       </b-card-text>
+      <b-card-text style="margin: 5px">
+        Base price: {{adventure.price}}
+      </b-card-text>
+      <b-card-text style="margin: 5px">
+        Instructor mark: {{adventure.mark}}
+      </b-card-text>
       <b-button :to="'newAdventureReservation/'+adventure.id.toString()" variant="primary">Reserve</b-button>
     </b-card>
     <br>
@@ -47,6 +64,7 @@
 
 <script>
 import AdventureReservationService from "@/Services/AdventureReservationService";
+import GradeService from "@/Services/GradeService";
 export default {
   name: "ReserveAvanture",
   data() {
@@ -58,13 +76,36 @@ export default {
         persons: 1
       },
       adventures: [],
+      sort : 'markDESC'
 
     }
   },
   methods:{
     searchAvailableAdventures(){
       AdventureReservationService.getAllAvailableAdventureTerms(this.inputData.firstDay, this.inputData.lastDay, this.inputData.persons)
-          .then((res) => {this.adventures = res.data})
+          .then((res) => {
+            this.adventures = res.data;
+            console.log(res.data)
+          }).then(() => {
+        for(let ad in this.adventures){
+          GradeService.getAllGradeOfInstructor(this.adventures[ad].adventure.instructor.id).then(res =>{
+            this.adventures[ad].mark = 0
+            this.adventures[ad].mark = res.data.avgRating;
+            if (isNaN(this.adventures[ad].mark))
+              this.adventures[ad].mark = 0
+          });
+        }
+      });
+    },
+    sortReservations(){
+    if (this.sort === 'markDESC')
+        this.adventures.sort((a,b) => (a.rating > b.rating) ? 1 : ((b.rating > a.rating) ? -1 : 0))
+    else if (this.sort === 'markASC')
+        this.adventures.sort((a,b) => (a.rating < b.rating) ? 1 : ((b.rating < a.rating) ? -1 : 0))
+      if (this.sort === 'priceDESC')
+        this.adventures.sort((a,b) => (a.price < b.price) ? 1 : ((b.price < a.price) ? -1 : 0))
+      else if (this.sort === 'priceASC')
+        this.adventures.sort((a,b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0))
     }
   }
 }

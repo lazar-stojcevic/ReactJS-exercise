@@ -77,6 +77,19 @@ public class AdventureReservationService {
         return save(adventureReservation);
     }
 
+    //Isto kao obicna samo bez racunanje cene, jer je ona u napred zadata
+    public AdventureReservation makeNewAppointmentOnAction(CustomerReserveTermDto reservation) throws InterruptedException {
+        Customer customer = customerService.findCustomerById(reservation.getUserId());
+        AdventureReservation adventureReservation = getAdventureReservationById(reservation.getReservationId());
+        for (AdventureReservation ar : customer.getAdventureReservations()){
+            if (isReservationsOverlap(ar, adventureReservation))
+                return null;
+        }
+        adventureReservation.setCustomer(customer);
+        emailService.sendAdventureReservationConfirm(customer);
+        return save(adventureReservation);
+    }
+
     public Collection<AdventureReservation> getAllNextReservedTermsOfAdventure(long adventureId){
         List<AdventureReservation> adventureReservations = new ArrayList<>();
         for (AdventureReservation ar : adventureReservationRepository.findAll())
@@ -105,6 +118,17 @@ public class AdventureReservationService {
             }
         }
         return pastAdventure;
+    }
+
+    public Collection<AdventureReservation> getAllNextFreeActionsOfInstructor(long instructorId){
+        List<AdventureReservation> nextActions = new ArrayList<>();
+        for (AdventureReservation ar: adventureReservationRepository.findAll()) {
+            if(ar.getReservationStart().isAfter(LocalDateTime.now()) && !ar.isReserved() &&
+                    ar.getAdventure().getInstructor().getId() == instructorId && ar.getDiscount() != 0){
+                nextActions.add(ar);
+            }
+        }
+        return nextActions;
     }
 
     public Collection<AdventureReservation> getAllReservationOfCustomerForEvaluation(long customerId){

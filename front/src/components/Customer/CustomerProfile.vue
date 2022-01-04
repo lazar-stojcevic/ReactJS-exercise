@@ -44,7 +44,7 @@
           <div class="btn-group-sm" style="margin: 5px">
             <button @click="changeModeToInfo" v-if="mode === 'neutral'" class="btn-info">CHANGE YOUR INFO</button>
             <button @click="changeModeToPassword" v-if="mode === 'neutral'" class="btn-info">CHANGE PASSWORD</button>
-            <button @click="deleteProfileRequest" v-if="mode === 'neutral'" class="btn-danger">DELETE PASSWORD</button>
+            <button @click="deleteProfileRequest" v-if="mode === 'neutral'" class="btn-danger">DELETE ACCOUNT</button>
           </div>
           <div v-if="mode === 'changePassword'" class="container">
             <form @submit.prevent="changePassword">
