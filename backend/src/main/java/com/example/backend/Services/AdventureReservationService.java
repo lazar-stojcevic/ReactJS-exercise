@@ -44,6 +44,15 @@ public class AdventureReservationService {
         this.adventureReservationRepository = repository;
     }
 
+    public Collection<CalendarReservationsDto> getAllReservationsOfInstructorForCalendar(long instructorId){
+        List<CalendarReservationsDto> reservations = new ArrayList<>();
+        for(AdventureReservation ar :
+                adventureReservationRepository.getAllReservationsOfInstructorForCalendar(instructorId)){
+            reservations.add(new CalendarReservationsDto(ar));
+        }
+        return reservations;
+    }
+
     public AdventureReservation getCurrentReservationOfInstructor(long instructorId){
         FishingInstructor instructor = this.fishingInstructorService.findFishingInstructorById(instructorId);
         for(Adventure adventure : instructor.getAdventures())

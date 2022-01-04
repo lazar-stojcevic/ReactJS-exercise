@@ -24,4 +24,8 @@ public interface AdventureReservationRepository extends JpaRepository<AdventureR
     @Query("select ar from AdventureReservation ar where ar.customer.id = ?1" +
             " and ar.reservationStart < ?2 and ar.complaint is null")
     Collection<AdventureReservation> getAllReservationOfCustomerInPastWithoutComplaint(long customerId , LocalDateTime now);
+
+    @Query("select ar from AdventureReservation ar where" +
+            " ar.adventure.instructor.id = ?1 order by ar.reservationStart asc ")
+    Collection<AdventureReservation> getAllReservationsOfInstructorForCalendar(long instructorId);
 }
