@@ -1,8 +1,6 @@
 package com.example.backend.Services;
 
-import com.example.backend.Beans.AdditionalBoatService;
 import com.example.backend.Beans.AdditionalCottageService;
-import com.example.backend.Beans.AdditionalService;
 import com.example.backend.Dtos.AdditionalServiceDto;
 import com.example.backend.Repository.AdditionalCottageServiceRepository;
 import com.example.backend.Services.Interfaces.IAdditionalCottageService;

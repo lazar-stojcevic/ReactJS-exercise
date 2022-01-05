@@ -48,7 +48,8 @@ export default {
   },
   methods:{
     searchAvailableCottages(){
-      CottageReservationService.getAllAvailableAdventureTerms(this.inputData.firstDay, this.inputData.lastDay, this.inputData.persons);
+      CottageReservationService.getAllAvailableAdventureTerms(this.inputData.firstDay, this.inputData.lastDay, this.inputData.persons)
+      .then((res) => {console.log(res.data)});
     },
     sortReservations(){
 

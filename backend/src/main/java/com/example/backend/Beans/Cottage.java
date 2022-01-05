@@ -61,6 +61,6 @@ public class Cottage {
     private Set<Room> rooms = new HashSet<Room>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    private CottagePriceList CottagePriceList;
+    private CottagePriceList cottagePriceList;
 
 }

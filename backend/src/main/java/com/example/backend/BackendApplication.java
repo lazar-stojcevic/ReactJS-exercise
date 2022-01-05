@@ -8,9 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,6 +36,8 @@ public class BackendApplication implements CommandLineRunner {
     private AdventureComplaintRepository adventureComplaintRepository;
     @Autowired
     private AvailablePeriodCottageRepository availablePeriodCottageRepository;
+    @Autowired
+    private RoomRepository roomRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -406,11 +406,35 @@ public class BackendApplication implements CommandLineRunner {
         cottage1.setCottageOwner(cottageOwner1);
         CottagePriceList priceList14 = new CottagePriceList();
         priceList14.setPrice(5000);
+        AdditionalCottageService additionalService33 = new AdditionalCottageService();
+        additionalService33.setName("Trening golfa");
+        additionalService33.setAddPrice(1000);
+        additionalService33.setPriceList(priceList14);
+
+        AdditionalCottageService additionalService34 = new AdditionalCottageService();
+        additionalService34.setName("Macevanje");
+        additionalService34.setAddPrice(500);
+        additionalService34.setPriceList(priceList14);
+        HashSet<AdditionalCottageService> serviceList3 = new HashSet<AdditionalCottageService>();
+        serviceList3.add(additionalService33);
+        serviceList3.add(additionalService34);
+        priceList14.setAdditionalServices(serviceList3);
+
         cottage1.setCottagePriceList(priceList14);
         AvailablePeriodCottage availablePeriodCottage1 = new AvailablePeriodCottage();
         availablePeriodCottage1.setCottage(cottage1);
         availablePeriodCottage1.setFromDate(LocalDateTime.of(2020, 2, 5, 5, 5));
         availablePeriodCottage1.setToDate(LocalDateTime.of(2023, 2, 5, 5, 5));
+        Room room1 = new Room();
+        room1.setCottage(cottage1);
+        room1.setRoomDescription("Soba sa pogledom na nista");
+        room1.setNumberOfBeds(2);
+        Room room2 = new Room();
+        room2.setCottage(cottage1);
+        room2.setRoomDescription("Soba sa pogledom na nista");
+        room2.setNumberOfBeds(2);
+        cottage1.getRooms().add(room1);
+        cottage1.getRooms().add(room2);
 
         Cottage cottage2 = new Cottage();
         cottage2.setConductRules("Budite fini");
@@ -423,15 +447,32 @@ public class BackendApplication implements CommandLineRunner {
         address7.setStreet("Ustanicka");
         cottage2.setAddress(address7);
         cottage2.setCottageOwner(cottageOwner2);
+        CottagePriceList priceList15 = new CottagePriceList();
+        priceList14.setPrice(6500);
+        cottage1.setCottagePriceList(priceList15);
         AvailablePeriodCottage availablePeriodCottage2 = new AvailablePeriodCottage();
         availablePeriodCottage2.setCottage(cottage2);
         availablePeriodCottage2.setFromDate(LocalDateTime.of(2020, 2, 5, 5, 5));
-        availablePeriodCottage2.setToDate(LocalDateTime.of(2023, 2, 5, 5, 5));
+        availablePeriodCottage2.setToDate(LocalDateTime.of(2023, 1, 5, 5, 5));
+        Room room3 = new Room();
+        room3.setCottage(cottage2);
+        room3.setRoomDescription("Soba sa djakuzi kadom");
+        room3.setNumberOfBeds(1);
+        Room room4 = new Room();
+        room4.setCottage(cottage2);
+        room4.setRoomDescription("Soba sa montiranim mitraljezom zastava m84 na terasi");
+        room4.setNumberOfBeds(5);
+        cottage2.getRooms().add(room3);
+        cottage2.getRooms().add(room4);
 
         cottageRepository.save(cottage1);
         availablePeriodCottageRepository.save(availablePeriodCottage1);
+        //roomRepository.save(room1);
+        //roomRepository.save(room2);
         cottageRepository.save(cottage2);
         availablePeriodCottageRepository.save(availablePeriodCottage2);
+        //roomRepository.save(room3);
+        //roomRepository.save(room4);
 
         Admin admin = new Admin();
         Address adminAddress = new Address();
