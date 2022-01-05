@@ -17,6 +17,10 @@
     <br>
     <br>
     <router-link class="btn btn-secondary" to="/allcottages" style="margin: 5px">See cottages</router-link>
+    <router-link class="btn btn-secondary" :hidden="LogInService.userRole.trim() !== 'ROLE_CUSTOMER'" to="/reserveCottage" style="margin: 5px">
+      Reserve cottage
+    </router-link>
+
   </b-card>
     <br>
     <b-card

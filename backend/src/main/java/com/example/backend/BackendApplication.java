@@ -8,7 +8,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,6 +36,8 @@ public class BackendApplication implements CommandLineRunner {
     private DeleteProfileRequestRepository deleteProfileRequestRepository;
     @Autowired
     private AdventureComplaintRepository adventureComplaintRepository;
+    @Autowired
+    private AvailablePeriodCottageRepository availablePeriodCottageRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -403,6 +407,10 @@ public class BackendApplication implements CommandLineRunner {
         CottagePriceList priceList14 = new CottagePriceList();
         priceList14.setPrice(5000);
         cottage1.setCottagePriceList(priceList14);
+        AvailablePeriodCottage availablePeriodCottage1 = new AvailablePeriodCottage();
+        availablePeriodCottage1.setCottage(cottage1);
+        availablePeriodCottage1.setFromDate(LocalDateTime.of(2020, 2, 5, 5, 5));
+        availablePeriodCottage1.setToDate(LocalDateTime.of(2023, 2, 5, 5, 5));
 
         Cottage cottage2 = new Cottage();
         cottage2.setConductRules("Budite fini");
@@ -415,9 +423,15 @@ public class BackendApplication implements CommandLineRunner {
         address7.setStreet("Ustanicka");
         cottage2.setAddress(address7);
         cottage2.setCottageOwner(cottageOwner2);
+        AvailablePeriodCottage availablePeriodCottage2 = new AvailablePeriodCottage();
+        availablePeriodCottage2.setCottage(cottage2);
+        availablePeriodCottage2.setFromDate(LocalDateTime.of(2020, 2, 5, 5, 5));
+        availablePeriodCottage2.setToDate(LocalDateTime.of(2023, 2, 5, 5, 5));
 
         cottageRepository.save(cottage1);
+        availablePeriodCottageRepository.save(availablePeriodCottage1);
         cottageRepository.save(cottage2);
+        availablePeriodCottageRepository.save(availablePeriodCottage2);
 
         Admin admin = new Admin();
         Address adminAddress = new Address();

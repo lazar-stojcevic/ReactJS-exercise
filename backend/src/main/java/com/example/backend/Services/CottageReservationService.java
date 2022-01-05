@@ -1,18 +1,26 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.*;
-import com.example.backend.Repository.AdventureReservationRepository;
+import com.example.backend.Dtos.ReservationSearchDto;
+import com.example.backend.Repository.CottageRepository;
 import com.example.backend.Repository.CottageReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+@Service
 public class CottageReservationService {
 
     @Autowired
     private final CottageReservationRepository cottageReservationRepository;
+
+    @Autowired
+    private final CottageRepository cottageRepository;
 
     @Autowired
     private CottageService cottageService;
@@ -26,8 +34,9 @@ public class CottageReservationService {
     @Autowired
     private AdditionalServiceService additionalServiceService;
 
-    public CottageReservationService(CottageReservationRepository repository){
+    public CottageReservationService(CottageReservationRepository repository, CottageRepository cottageRepository){
         this.cottageReservationRepository = repository;
+        this.cottageRepository = cottageRepository;
     }
 
     public CottageReservation getCurrentReservationOfInstructor(long cottageId){
@@ -51,6 +60,25 @@ public class CottageReservationService {
         return cottageReservationRepository.findById(id).orElse(null);
     }
 
+    public Collection<Cottage> getAllAvailableCottagesForSearch(ReservationSearchDto search){
+        List<Cottage> cottages = new ArrayList<>();
+        for (Cottage cottage : cottageRepository.findAll()){
+            if (isSearchInCottageAvailablePeriod(search.getDateFrom(), search.getDateTo(), cottage) &&
+                    isCottageHaveEnoughBeds(search.getPersons(), cottage)){
+                boolean valid = true;
+                for (CottageReservation cr: cottage.getReservations()){
+                     if(isReservationsOverlapForSearch(cr, search.getDateFrom(), search.getDateTo())) {
+                         valid = false;
+                         break;
+                     }
+                }
+                if (valid)
+                    cottages.add(cottage);
+            }
+        }
+        return cottages;
+    }
+
     private CottageReservation save(CottageReservation cottageReservation){
         return this.cottageReservationRepository.save(cottageReservation);
     }
@@ -68,6 +96,19 @@ public class CottageReservationService {
                     newReservation.getReservationEnd().isAfter(existingReservation.getReservationEnd());
     }
 
+    private boolean isReservationsOverlapForSearch(CottageReservation existingReservation, LocalDateTime start, LocalDateTime end){
+        if(start.isAfter(existingReservation.getReservationStart()) &&
+                start.isBefore(existingReservation.getReservationEnd()))
+            return true;
+        else if(end.isAfter(existingReservation.getReservationStart()) &&
+                end.isBefore(existingReservation.getReservationEnd()))
+            return true;
+        else if(start.isEqual(existingReservation.getReservationStart()))
+            return true;
+        else return start.isBefore(existingReservation.getReservationStart()) &&
+                    end.isAfter(existingReservation.getReservationEnd());
+    }
+
     private boolean isReservationInAvailablePeriod(CottageReservation newReservation){
         for (AvailablePeriodCottage periodCottage: cottageService.findById(newReservation.getCottage().getId()).getPeriods()) {
             if(newReservation.getReservationStart().isAfter(periodCottage.getFromDate()) &&
@@ -75,6 +116,23 @@ public class CottageReservationService {
                 return true;
         }
         return false;
+    }
+
+    private boolean isSearchInCottageAvailablePeriod(LocalDateTime start, LocalDateTime end, Cottage cottage){
+         for(AvailablePeriodCottage periodCottage: cottage.getPeriods()){
+             if (start.isAfter(periodCottage.getFromDate()) && end.isBefore(periodCottage.getToDate())) {
+
+                 return true;
+             }
+         }
+         return false;
+    }
+
+    private boolean isCottageHaveEnoughBeds(int numberOfBeds, Cottage cottage){
+        int beds = 0;
+        for (Room room : cottage.getRooms())
+            beds += room.getNumberOfBeds();
+        return beds >= numberOfBeds;
     }
 
     private boolean ReservationTimeCheck(CottageReservation cottageReservation){
