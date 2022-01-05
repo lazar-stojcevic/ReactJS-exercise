@@ -14,21 +14,18 @@ import java.time.LocalDateTime;
 public class CalendarReservationsDto {
     private long id;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm")
-    private LocalDateTime start_date;
+    private LocalDateTime start;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm")
-    private LocalDateTime end_date;
-    private int price;
-    private String text;
-    private boolean reported;
+    private LocalDateTime end;
+    private String title;
 
     public CalendarReservationsDto(AdventureReservation ar){
         this.id = ar.getId();
-        this.start_date = ar.getReservationStart();
-        this.end_date = ar.getReservationStart().plusHours(ar.getLength());
-        this.price = ar.getPrice();
-        this.reported = ar.isReported();
+        this.start = ar.getReservationStart();
+        this.end = ar.getReservationStart().plusHours(ar.getLength());
         if(ar.getCustomer() != null)
-            this.text = ar.getCustomer().getEmail();
-        else this.text = "NOT RESERVED";
+            this.title ="CUSTOMER: " + ar.getCustomer().getEmail() + "\n" + "PRICE: " + ar.getPrice() + " RSD\n"
+                    + "REPORTED: " + ar.isReported();
+        else this.title = "NOT RESERVED";
     }
 }
