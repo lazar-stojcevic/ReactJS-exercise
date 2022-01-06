@@ -19,7 +19,7 @@ public class CottagePriceList {
     @SequenceGenerator(name = "myGen_cottage_price_list", sequenceName = "mySeq_cottage_price_list",
             initialValue = 1, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myGen_cottage_price_list")
-    @Column(name = "cottage_price_lis_id", unique = true, nullable = false)
+    @Column(name = "cottage_price_list_id", unique = true, nullable = false)
     private long id;
 
     @Column

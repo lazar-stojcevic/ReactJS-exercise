@@ -24,7 +24,7 @@ public class AdditionalService {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "price_list_price_lis_id")
+    @JoinColumn(name = "price_list_price_list_id")
     private PriceList priceList;
 
     @Column(length = 50)

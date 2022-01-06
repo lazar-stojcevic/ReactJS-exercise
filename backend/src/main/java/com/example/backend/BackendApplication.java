@@ -406,8 +406,11 @@ public class BackendApplication implements CommandLineRunner {
         address6.setStreet("Ustanicka");
         cottage1.setAddress(address6);
         cottage1.setCottageOwner(cottageOwner1);
+
         CottagePriceList priceList14 = new CottagePriceList();
         priceList14.setPrice(5000);
+        cottage1.setCottagePriceList(priceList14);
+
         AdditionalCottageService additionalService33 = new AdditionalCottageService();
         additionalService33.setName("Trening golfa");
         additionalService33.setAddPrice(1000);
@@ -417,12 +420,12 @@ public class BackendApplication implements CommandLineRunner {
         additionalService34.setName("Macevanje");
         additionalService34.setAddPrice(500);
         additionalService34.setPriceList(priceList14);
+
         HashSet<AdditionalCottageService> serviceList3 = new HashSet<AdditionalCottageService>();
         serviceList3.add(additionalService33);
         serviceList3.add(additionalService34);
         priceList14.setAdditionalServices(serviceList3);
 
-        cottage1.setCottagePriceList(cottagePriceListRepository.save(priceList14));
         AvailablePeriodCottage availablePeriodCottage1 = new AvailablePeriodCottage();
         availablePeriodCottage1.setCottage(cottage1);
         availablePeriodCottage1.setFromDate(LocalDateTime.of(2020, 2, 5, 5, 5));
@@ -450,8 +453,8 @@ public class BackendApplication implements CommandLineRunner {
         cottage2.setAddress(address7);
         cottage2.setCottageOwner(cottageOwner2);
         CottagePriceList priceList15 = new CottagePriceList();
-        priceList14.setPrice(6500);
-        cottage1.setCottagePriceList(priceList15);
+        priceList15.setPrice(6500);
+        cottage2.setCottagePriceList(priceList15);
         AvailablePeriodCottage availablePeriodCottage2 = new AvailablePeriodCottage();
         availablePeriodCottage2.setCottage(cottage2);
         availablePeriodCottage2.setFromDate(LocalDateTime.of(2020, 2, 5, 5, 5));
@@ -469,12 +472,8 @@ public class BackendApplication implements CommandLineRunner {
 
         cottageRepository.save(cottage1);
         availablePeriodCottageRepository.save(availablePeriodCottage1);
-        //roomRepository.save(room1);
-        //roomRepository.save(room2);
         cottageRepository.save(cottage2);
         availablePeriodCottageRepository.save(availablePeriodCottage2);
-        //roomRepository.save(room3);
-        //roomRepository.save(room4);
 
         Admin admin = new Admin();
         Address adminAddress = new Address();

@@ -61,6 +61,7 @@ public class Cottage {
     private Set<Room> rooms = new HashSet<Room>();
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cottage_price_list", referencedColumnName = "cottage_price_list_id")
     private CottagePriceList cottagePriceList;
 
 }
