@@ -1,6 +1,7 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.*;
+import com.example.backend.Dtos.CustomerReserveCottageDto;
 import com.example.backend.Dtos.ReservationSearchDto;
 import com.example.backend.Repository.CottageRepository;
 import com.example.backend.Repository.CottageReservationRepository;
@@ -33,6 +34,9 @@ public class CottageReservationService {
 
     @Autowired
     private AdditionalServiceService additionalServiceService;
+
+    @Autowired
+    private AdditionalCottageServiceService additionalCottageServiceService;
 
     public CottageReservationService(CottageReservationRepository repository, CottageRepository cottageRepository){
         this.cottageReservationRepository = repository;
@@ -79,21 +83,32 @@ public class CottageReservationService {
         return cottages;
     }
 
-    private CottageReservation save(CottageReservation cottageReservation){
-        return this.cottageReservationRepository.save(cottageReservation);
+    public CottageReservation makeNewAppointment(CustomerReserveCottageDto reservation) throws InterruptedException {
+        Customer customer = customerService.findCustomerById(reservation.getUserId());
+
+        CottageReservation cottageReservation = new CottageReservation();
+        cottageReservation.setReservationStart(reservation.getFrom());
+        cottageReservation.setReservationEnd(reservation.getTo());
+        cottageReservation.setCustomer(customer);
+        cottageReservation.setCottage(cottageService.findById(reservation.getCottageId()));
+        if (IsCustomersReservationsOverlapsWithNew(customer, cottageReservation)){
+            return null;
+        }
+
+        cottageReservation.setDiscount(0);
+        cottageReservation.setCottagePriceList(cottageReservation.getCottage().getCottagePriceList()); //DA LI MENI OVO TREBA??
+        List<AdditionalCottageService> services = findAllSelectedAdditionalServices(reservation.getServices());
+
+        calculateFullPriceOfReservation(cottageReservation, services);
+        cottageReservation.setLength((int) ChronoUnit.DAYS.between(reservation.getFrom(), reservation.getTo()));
+
+        emailService.sendCottageReservationConfirm(customer, cottageReservation);
+        return save(cottageReservation);
     }
 
-    private boolean isReservationsOverlap(CottageReservation existingReservation, CottageReservation newReservation){
-        if(newReservation.getReservationStart().isAfter(existingReservation.getReservationStart()) &&
-                newReservation.getReservationStart().isBefore(existingReservation.getReservationEnd()))
-            return true;
-        else if(newReservation.getReservationEnd().isAfter(existingReservation.getReservationStart()) &&
-                newReservation.getReservationEnd().isBefore(existingReservation.getReservationEnd()))
-            return true;
-        else if(newReservation.getReservationStart().isEqual(existingReservation.getReservationStart()))
-            return true;
-        else return newReservation.getReservationStart().isBefore(existingReservation.getReservationStart()) &&
-                    newReservation.getReservationEnd().isAfter(existingReservation.getReservationEnd());
+
+    private CottageReservation save(CottageReservation cottageReservation){
+        return this.cottageReservationRepository.save(cottageReservation);
     }
 
     private boolean isReservationsOverlapForSearch(CottageReservation existingReservation, LocalDateTime start, LocalDateTime end){
@@ -135,17 +150,74 @@ public class CottageReservationService {
         return beds >= numberOfBeds;
     }
 
-    private boolean ReservationTimeCheck(CottageReservation cottageReservation){
-        if (!isReservationInAvailablePeriod(cottageReservation)){
-            return false;
-        }else{
-            for (CottageReservation reservation: cottageService.findById(cottageReservation.getCottage().getId()).getReservations()) {
-                if(!isReservationsOverlap(cottageReservation, reservation)){
-                    return false;
-                }
+    private boolean IsCustomersReservationsOverlapsWithNew(Customer customer, CottageReservation newReservation){
+        for (AdventureReservation ar : customer.getAdventureReservations()){
+            if (isReservationsOverlapWithAdventureReservations(ar, newReservation))
+                return true;
+        }
+
+        for (CottageReservation cr : customer.getCottageReservations()){
+            if (isReservationsOverlapWithCottageReservations(cr, newReservation)){
+                return true;
             }
         }
-        return true;
+
+        for (CottageReservation cr: newReservation.getCottage().getReservations()){
+            if (isReservationsOverlapWithCottageReservations(cr, newReservation)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isReservationsOverlapWithAdventureReservations(
+            AdventureReservation existingReservation, CottageReservation newReservation){
+        LocalDateTime existingReservationEndTime = existingReservation.getReservationStart()
+                .plusHours(existingReservation.getLength());
+        LocalDateTime newReservationEndTime = newReservation.getReservationEnd();
+        if(newReservation.getReservationStart().isAfter(existingReservation.getReservationStart()) &&
+                newReservation.getReservationStart().isBefore(existingReservationEndTime))
+            return true;
+        else if(newReservationEndTime.isAfter(existingReservation.getReservationStart()) &&
+                newReservationEndTime.isBefore(existingReservationEndTime))
+            return true;
+        else if(newReservation.getReservationStart().isEqual(existingReservation.getReservationStart()))
+            return true;
+        else return newReservation.getReservationStart().isBefore(existingReservation.getReservationStart()) &&
+                    newReservationEndTime.isAfter(existingReservationEndTime);
+    }
+
+    private boolean isReservationsOverlapWithCottageReservations(
+            CottageReservation existingReservation, CottageReservation newReservation){
+        LocalDateTime existingReservationEndTime = existingReservation.getReservationEnd();
+        LocalDateTime newReservationEndTime = newReservation.getReservationEnd();
+        if(newReservation.getReservationStart().isAfter(existingReservation.getReservationStart()) &&
+                newReservation.getReservationStart().isBefore(existingReservationEndTime))
+            return true;
+        else if(newReservationEndTime.isAfter(existingReservation.getReservationStart()) &&
+                newReservationEndTime.isBefore(existingReservationEndTime))
+            return true;
+        else if(newReservation.getReservationStart().isEqual(existingReservation.getReservationStart()))
+            return true;
+        else return newReservation.getReservationStart().isBefore(existingReservation.getReservationStart()) &&
+                    newReservationEndTime.isAfter(existingReservationEndTime);
+    }
+
+    private List<AdditionalCottageService> findAllSelectedAdditionalServices(List<Long> ids){
+        List<AdditionalCottageService> services = new ArrayList<>();
+        for(long id : ids)
+            services.add(this.additionalCottageServiceService.findAdditionalServiceById(id));
+        return services;
+    }
+
+    private void calculateFullPriceOfReservation(
+            CottageReservation reservation, List<AdditionalCottageService> addServices){
+        int price = reservation.getCottagePriceList().getPrice();
+        for(AdditionalCottageService as : addServices){
+            price += as.getAddPrice();
+            reservation.addAdditionalService(as);
+        }
+        reservation.setPrice((int) (price * (1 - reservation.getDiscount()/100)));
     }
 
     public double CountPrice(CottageReservation cottageReservation){

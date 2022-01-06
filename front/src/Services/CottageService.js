@@ -48,6 +48,15 @@ class CottageService{
         return axios.delete(URL + '/' + id, {headers}).then();
 
     }
+
+    getAdditionalServicesOfCottage(cottageId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/additionalServices/' + cottageId, {headers});
+    }
 }
 
 export default new CottageService()

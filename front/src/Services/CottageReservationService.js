@@ -5,7 +5,7 @@ const URL = 'http://localhost:8080/cottageReservation';
 
 class CottageReservationService {
 
-    getAllAvailableAdventureTerms(dateFromPar, dateToPar, persons){
+    getAllAvailableCottagesTerms(dateFromPar, dateToPar, persons){
         let headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -18,6 +18,22 @@ class CottageReservationService {
             id: LogInService.userId
         }
         return axios.post(URL + '/availableCottages/', JSON.stringify(body), {headers});
+    }
+
+    reserveCottage(cottageId, selectedServices, from, to){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.cottageId = cottageId;
+        data.userId = LogInService.userId;
+        data.from = from;
+        data.to = to;
+        data.services = selectedServices;
+
+        return axios.put(URL + '/reserveTerm/', JSON.stringify(data), {headers});
     }
 }
 export default new CottageReservationService()

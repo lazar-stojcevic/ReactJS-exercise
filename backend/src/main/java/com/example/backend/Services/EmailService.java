@@ -1,5 +1,6 @@
 package com.example.backend.Services;
 
+import com.example.backend.Beans.CottageReservation;
 import com.example.backend.Beans.Customer;
 import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Beans.User;
@@ -37,6 +38,19 @@ public class EmailService {
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Potvrda o zakazanom terminu avanture");
         mail.setText("Uspesno ste zakazali termin avanture!");
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendCottageReservationConfirm(Customer user, CottageReservation cottageReservation) throws MailException, InterruptedException {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Potvrda o izdavanju vikendice");
+        mail.setText("Uspesno ste zakupili vikendicu!" + System.lineSeparator() +
+                "Vas termin traje od" + System.lineSeparator() + cottageReservation.getReservationStart() +
+                "do " + cottageReservation.getReservationEnd() + System.lineSeparator() +
+                "Adresa vikendice: " + cottageReservation.getCottage().getAddress().toString());
         javaMailSender.send(mail);
     }
 

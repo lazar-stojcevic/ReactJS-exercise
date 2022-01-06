@@ -64,4 +64,7 @@ public class Cottage {
     @JoinColumn(name = "cottage_price_list", referencedColumnName = "cottage_price_list_id")
     private CottagePriceList cottagePriceList;
 
+    //Polja dodata zvog vue nedostatka
+    private int services;
+
 }

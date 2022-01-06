@@ -41,6 +41,10 @@ public class Customer extends User {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     @JsonIgnore
+    private List<CottageReservation> cottageReservations = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+    @JsonIgnore
     private List<Report> reports = new ArrayList<>();
 
     @Override

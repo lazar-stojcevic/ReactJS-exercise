@@ -5,7 +5,9 @@ import com.example.backend.Dtos.AdditionalServiceDto;
 import com.example.backend.Repository.AdditionalCottageServiceRepository;
 import com.example.backend.Services.Interfaces.IAdditionalCottageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AdditionalCottageServiceService implements IAdditionalCottageService {
 
     @Autowired

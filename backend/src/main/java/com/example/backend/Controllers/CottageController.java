@@ -1,5 +1,7 @@
 package com.example.backend.Controllers;
 
+import com.example.backend.Beans.AdditionalCottageService;
+import com.example.backend.Beans.AdditionalService;
 import com.example.backend.Beans.Adventure;
 import com.example.backend.Beans.Cottage;
 import com.example.backend.Dtos.CottageDto;
@@ -36,6 +38,13 @@ public class CottageController {
             return new ResponseEntity<>(cottage, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(path = "/additionalServices/{cottageId}")
+    public ResponseEntity<Collection<AdditionalCottageService>> getAdditionalServicesOfAdventure(
+            @PathVariable long cottageId){
+        return new ResponseEntity<>(cottageService.findById(cottageId).getCottagePriceList().getAdditionalServices(),
+                HttpStatus.OK);
     }
 
     @PostMapping(consumes = "application/json")
