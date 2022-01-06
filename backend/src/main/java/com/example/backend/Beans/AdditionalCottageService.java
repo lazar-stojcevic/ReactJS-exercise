@@ -21,7 +21,7 @@ public class AdditionalCottageService {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "cottage_price_list_cottage_price_lis_id")
+    @JoinColumn(name = "cottage_price_lis_id")
     private CottagePriceList priceList;
 
     @Column(length = 50)

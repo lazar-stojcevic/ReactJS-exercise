@@ -38,6 +38,8 @@ public class BackendApplication implements CommandLineRunner {
     private AvailablePeriodCottageRepository availablePeriodCottageRepository;
     @Autowired
     private RoomRepository roomRepository;
+    @Autowired
+    private CottagePriceListRepository cottagePriceListRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -420,7 +422,7 @@ public class BackendApplication implements CommandLineRunner {
         serviceList3.add(additionalService34);
         priceList14.setAdditionalServices(serviceList3);
 
-        cottage1.setCottagePriceList(priceList14);
+        cottage1.setCottagePriceList(cottagePriceListRepository.save(priceList14));
         AvailablePeriodCottage availablePeriodCottage1 = new AvailablePeriodCottage();
         availablePeriodCottage1.setCottage(cottage1);
         availablePeriodCottage1.setFromDate(LocalDateTime.of(2020, 2, 5, 5, 5));
