@@ -38,6 +38,20 @@ public class CottageReservationController {
                 HttpStatus.OK);
     }
 
+    @GetMapping(path = "/pastCustomerReservation/{customerId}")
+    public ResponseEntity<Collection<CottageReservation>> getAllPastTermsByCustomerId(
+            @PathVariable long customerId){
+        return new ResponseEntity<>(cottageReservationService.getAllPastTermsByCustomerId(customerId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/pastCustomerReservationWithoutComplaint/{customerId}")
+    public ResponseEntity<Collection<CottageReservation>> getAllPastTermsByCustomerIdWithoutComplaint(
+            @PathVariable long customerId){
+        return new ResponseEntity<>(cottageReservationService.getAllPastTermsByCustomerId(customerId),
+                HttpStatus.OK);
+    }
+
     @PostMapping(path = "/availableCottages/")
     public ResponseEntity<Collection<Cottage>> getAllAvailableCottages(@RequestBody ReservationSearchDto search){
         return new ResponseEntity<>(cottageReservationService.getAllAvailableCottagesForSearch(search),

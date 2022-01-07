@@ -6,7 +6,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -63,6 +65,13 @@ public class Cottage {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cottage_price_list", referencedColumnName = "cottage_price_list_id")
     private CottagePriceList cottagePriceList;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinTable(name = "have_prepaid_on_cottage",
+            joinColumns = @JoinColumn(name = "cottage_id", referencedColumnName = "cottage_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "user_id"))
+    private List<Customer> prepaidCustomers = new ArrayList<>();
 
     //Polja dodata zvog vue nedostatka
     private int services;

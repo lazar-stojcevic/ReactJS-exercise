@@ -16,4 +16,8 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
     @Query("select cr from CottageReservation cr where cr.customer.id = ?1" +
             " and cr.reservationStart > ?2")
     Collection<CottageReservation> getAllReservationOfCustomerInFuture(long customerId , LocalDateTime now);
+
+    @Query("select cr from CottageReservation cr where cr.customer.id = ?1" +
+            " and cr.reservationStart <= ?2")
+    Collection<CottageReservation> getAllReservationOfCustomerInPast(long customerId , LocalDateTime now);
 }

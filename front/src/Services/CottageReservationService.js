@@ -57,5 +57,14 @@ class CottageReservationService {
 
         return axios.put(URL + '/cancelTerm/', JSON.stringify(data), {headers});
     }
+
+    getAllPastTermsByCustomerId(customerId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/pastCustomerReservation/' + customerId, {headers});
+    }
 }
 export default new CottageReservationService()

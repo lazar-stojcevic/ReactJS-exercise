@@ -624,10 +624,20 @@ public class BackendApplication implements CommandLineRunner {
         cottageReservation1.setCottage(cottage1);
         cottageReservation1.setReservationStart(LocalDateTime.of(2022, 1,15,10,20));
         cottageReservation1.setReservationEnd(LocalDateTime.of(2022, 1,20,10,20));
-        cottageReservation1.setLength(5);
+        cottageReservation1.setLength(6);
         cottageReservation1.setDiscount(0);
         cottageReservation1.setPrice(7000);
         cottageReservationRepository.save(cottageReservation1);
+
+        CottageReservation cottageReservation2 = new CottageReservation();
+        cottageReservation2.setCustomer(customer1);
+        cottageReservation2.setCottage(cottage1);
+        cottageReservation2.setReservationStart(LocalDateTime.of(2022, 1,2,10,20));
+        cottageReservation2.setReservationEnd(LocalDateTime.of(2022, 1,5,10,20));
+        cottageReservation2.setLength(4);
+        cottageReservation2.setDiscount(0);
+        cottageReservation2.setPrice(7000);
+        cottageReservationRepository.save(cottageReservation2);
     }
 
 }

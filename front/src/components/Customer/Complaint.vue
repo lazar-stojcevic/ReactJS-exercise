@@ -54,7 +54,7 @@ export default {
     }
   },
   mounted() {
-    AdventureReservationService.getAllPastTermsByCustomerId(LogInService.userId).then(res =>  {
+    AdventureReservationService.getAllPastTermsByCustomerIdWithPutComplaint(LogInService.userId).then(res =>  {
       console.log(res.data)
       this.adventures = res.data;
       for(let ad of this.adventures){

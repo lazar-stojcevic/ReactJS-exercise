@@ -117,6 +117,10 @@ public class CottageReservationService {
                 LocalDateTime.now());
     }
 
+    public Collection<CottageReservation> getAllPastTermsByCustomerId(long id){
+        return cottageReservationRepository.getAllReservationOfCustomerInPast(id, LocalDateTime.now());
+    }
+
     public CottageReservation cancelTerm(CancelTermDto data){
         Customer customer = this.customerService.findCustomerById(data.getUserId());
         CottageReservation reservation = findCottageReservationById(data.getReservationId());
@@ -282,4 +286,9 @@ public class CottageReservationService {
         return true;
     }
 
+    public CottageReservation markReservationAsEvaluated(long reservationId){
+        CottageReservation cottageReservation = findCottageReservationById(reservationId);
+        cottageReservation.setRated(true);
+        return save(cottageReservation);
+    }
 }

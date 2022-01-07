@@ -1,6 +1,7 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.AdventureReservation;
+import com.example.backend.Beans.CottageReservation;
 import com.example.backend.Beans.Grade;
 import com.example.backend.Dtos.GradeToSaveDto;
 import com.example.backend.Dtos.GradeToShowDto;
@@ -28,6 +29,9 @@ public class GradeService {
 
     @Autowired
     private AdventureReservationService reservationService;
+
+    @Autowired
+    private CottageReservationService cottageReservationService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -120,7 +124,11 @@ public class GradeService {
     }
 
     private Grade makeGradeForCottage(GradeToSaveDto dto) {
-        return new Grade();
+        Grade grade = new Grade();
+        makeBaseGrade(grade, dto);
+        CottageReservation reservation = cottageReservationService.markReservationAsEvaluated(dto.getEntityId());
+        grade.setCottage(reservation.getCottage());
+        return saveGrade(grade);
     }
 
     private Grade makeGradeForBoatOwner(GradeToSaveDto dto) {
