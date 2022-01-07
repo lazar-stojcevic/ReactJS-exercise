@@ -27,6 +27,32 @@
         <b-button v-if="isInNext3Days(reservation.reservationStart)" @click="cancelReservation(reservation)" variant="danger">Cancel</b-button>
       </b-card>
     </div>
+
+    <div v-for="cottage in cottages" :key="cottage.id">
+      <b-card
+          tag="adventure"
+          style="max-width: 20rem;"
+          class="mb-2"
+      >
+        <b-card-title>
+          {{cottage.cottage.name}}
+        </b-card-title>
+        <br>
+        <b-card-sub-title>
+          Description: {{cottage.cottage.promo}}
+        </b-card-sub-title>
+
+        <b-card-text>
+          {{ cottage.reservationStart | formatDate}} - {{ cottage.reservationEnd | formatDate}}
+        </b-card-text>
+        <br>
+        <b-card-text>
+          PRICE:  {{ cottage.price }}
+        </b-card-text>
+        <br>
+        <b-button v-if="isInNext3Days(cottage.reservationStart)" @click="cancelCottageReservation(cottage)" variant="danger">Cancel</b-button>
+      </b-card>
+    </div>
   </div>
 </template>
 
@@ -34,6 +60,7 @@
 
 import moment from "moment";
 import AdventureReservationService from "@/Services/AdventureReservationService";
+import CottageReservationService from "@/Services/CottageReservationService";
 import LogInService from "@/Services/LogInService";
 
 export default {
@@ -41,6 +68,7 @@ export default {
   data() {
     return {
       adventures : [],
+      cottages : [],
       filter: {
         dateFrom: new Date(),
         dateTo: new Date(),
@@ -52,8 +80,11 @@ export default {
   },
   mounted() {
     AdventureReservationService.getAllFutureTermsByCustomerId(LogInService.userId).then(res =>  {
-      console.log(res.data)
       this.adventures = res.data;
+    });
+    CottageReservationService.getAllFutureTermsByCustomerId(LogInService.userId).then(res =>  {
+      console.log(res.data)
+      this.cottages = res.data;
     });
   },
   methods:{
@@ -63,6 +94,11 @@ export default {
     },
     cancelReservation(adventure){
       AdventureReservationService.cancelReservation(adventure);
+      alert("Reservation canceled");
+    },
+    cancelCottageReservation(cottageReservation){
+      CottageReservationService.cancelReservation(cottageReservation);
+      alert("Reservation canceled");
     }
   }
 }

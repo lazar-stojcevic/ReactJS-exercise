@@ -2,6 +2,7 @@ package com.example.backend.Beans;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Setter
 @ToString
 @Table(name = "CottageReservations")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CottageReservation {
     @Id
     @SequenceGenerator(name = "myGen_cottageReservation", sequenceName = "mySeq_cottageReservation",

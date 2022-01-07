@@ -40,6 +40,8 @@ public class BackendApplication implements CommandLineRunner {
     private RoomRepository roomRepository;
     @Autowired
     private CottagePriceListRepository cottagePriceListRepository;
+    @Autowired
+    private CottageReservationRepository cottageReservationRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -616,6 +618,16 @@ public class BackendApplication implements CommandLineRunner {
         adventureReservationRepository.save(reservation91);
         adventureReservationRepository.save(reservation92);
         adventureReservationRepository.save(reservation93);
+
+        CottageReservation cottageReservation1 = new CottageReservation();
+        cottageReservation1.setCustomer(customer1);
+        cottageReservation1.setCottage(cottage1);
+        cottageReservation1.setReservationStart(LocalDateTime.of(2022, 1,15,10,20));
+        cottageReservation1.setReservationEnd(LocalDateTime.of(2022, 1,20,10,20));
+        cottageReservation1.setLength(5);
+        cottageReservation1.setDiscount(0);
+        cottageReservation1.setPrice(7000);
+        cottageReservationRepository.save(cottageReservation1);
     }
 
 }

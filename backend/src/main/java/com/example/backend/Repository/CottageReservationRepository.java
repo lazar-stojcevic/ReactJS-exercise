@@ -12,4 +12,8 @@ import java.util.Collection;
 public interface CottageReservationRepository extends JpaRepository<CottageReservation, Long> {
     @Query("select cr from CottageReservation cr where cr.customer.id is null and cr.reservationStart > ?2 ")
     Collection<CottageReservation> getAllCottageReservationInFuture(long customerId , LocalDateTime now);
+
+    @Query("select cr from CottageReservation cr where cr.customer.id = ?1" +
+            " and cr.reservationStart > ?2")
+    Collection<CottageReservation> getAllReservationOfCustomerInFuture(long customerId , LocalDateTime now);
 }
