@@ -5,6 +5,15 @@ const URL = 'http://localhost:8080/adventureReservation';
 
 class AdventureReservationService {
 
+    getAllReservationsOfInstructorForCalendar(instructorId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/calendar/' + instructorId, {headers});
+    }
+
     getAllFreeFastReservations(adventureId){
         const headers = {
             'Accept': 'application/json',

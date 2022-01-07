@@ -28,6 +28,14 @@ public class AdventureReservationController {
         return new ResponseEntity<>(adventureReservationService.getAllAdventureReservations(), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/calendar/{instructorId}")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    public ResponseEntity<Collection<CalendarReservationsDto>>
+            getAllReservationForCalendarOfInstructor(@PathVariable long instructorId){
+        return new ResponseEntity<>(adventureReservationService.getAllReservationsOfInstructorForCalendar(instructorId),
+                HttpStatus.OK);
+    }
+
     @GetMapping(path = "/current/{instructorId}")
     @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<String> getOwnerOfCurrentReservationOfInstructor(@PathVariable long instructorId){

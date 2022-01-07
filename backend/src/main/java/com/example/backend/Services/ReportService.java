@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Objects;
 
 @Service
 public class ReportService {
@@ -45,9 +46,9 @@ public class ReportService {
     }
 
     public Report makeReportForSaving(MakeReportDto dto){
-        if(dto.getReservationType() == "AR")
+        if(Objects.equals(dto.getReservationType(), "AR"))
             return makeAdventureReservationReport(dto);
-        else if(dto.getReservationType() == "BR")
+        else if(Objects.equals(dto.getReservationType(), "BR"))
             return makeBoatReservationReport(dto);
         else return makeCottageReservationReport(dto);
     }

@@ -150,8 +150,9 @@
         </div>
       </div>
 
-      <!--OVDE IDE KALENDAR ZAUZETOSTI-->
-      <div v-if="user.available !== null" style="text-align: center">
+      <hr/>
+      <!--AVAILABLE TIME SPAM-->
+      <div v-if="user.available !== null" style="text-align: center; margin-top: 15px">
         <strong style="margin: 10px">YOUR AVAILABLE TIMESPAN</strong>
         <table class="table table-striped">
           <thead>
@@ -168,6 +169,11 @@
           </tbody>
         </table>
       </div>
+      <hr/>
+
+      <div style="margin-top: 30px">
+        <calendar></calendar>
+      </div>
 
       <!--ODOBRENI KOMENTARI ZA PRIKAZ-->
       <div>
@@ -182,6 +188,7 @@
           </tbody>
         </table>
       </div>
+
     </div>
   </div>
 </template>
@@ -192,8 +199,10 @@ import LogInService from "@/Services/LogInService";
 import GradeService from "@/Services/GradeService";
 import DeleteProfileRequestService from "@/Services/DeleteProfileRequestService";
 import IncomeService from "@/Services/IncomeService";
+import Calendar from "@/components/FishingInstructor/Calendar";
 
 export default {
+  components: {'calendar' : Calendar},
   data(){
     return{
       user: {
