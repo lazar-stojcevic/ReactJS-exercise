@@ -47,10 +47,10 @@ public class CottageReservationController {
                 HttpStatus.OK);
     }
 
-    @GetMapping(path = "/pastCustomerReservationWithoutComplaint/{customerId}")
+    @GetMapping(path = "/pastCustomerReservationWithOutComplaint/{customerId}")
     public ResponseEntity<Collection<CottageReservation>> getAllPastTermsByCustomerIdWithoutComplaint(
-            @PathVariable long customerId) {
-        return new ResponseEntity<>(cottageReservationService.getAllPastTermsByCustomerId(customerId),
+            @PathVariable long customerId){
+        return new ResponseEntity<>(cottageReservationService.getAllPastTermsWithoutComplaintByCustomerId(customerId),
                 HttpStatus.OK);
     }
 

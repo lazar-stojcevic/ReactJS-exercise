@@ -51,11 +51,18 @@ public class CottageReservation {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "complaint", referencedColumnName = "complaint_id")
+    private Complaint complaint;
+
     @Column()
     private boolean rated = false;
 
     @Column()
     private double discount = 0;
+
+    @Column()
+    private boolean reported = false;
 
     private double mark = 0;
 

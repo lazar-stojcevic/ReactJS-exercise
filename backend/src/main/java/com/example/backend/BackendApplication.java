@@ -33,7 +33,7 @@ public class BackendApplication implements CommandLineRunner {
     @Autowired
     private DeleteProfileRequestRepository deleteProfileRequestRepository;
     @Autowired
-    private AdventureComplaintRepository adventureComplaintRepository;
+    private ComplaintRepository complaintRepository;
     @Autowired
     private AvailablePeriodCottageRepository availablePeriodCottageRepository;
     @Autowired
@@ -582,13 +582,15 @@ public class BackendApplication implements CommandLineRunner {
         reservation23.setLength(4);
         reservation23.setReservationStart(LocalDateTime.of(2021, 9,10,10,20));
         reservation23.setLastDateToReserve(LocalDateTime.of(2021, 10, 10, 15, 0));
+        Complaint complaint = new Complaint();
+        complaint.setText("NEKI TEKST");
+        complaint.setReviewed(false);
+        reservation23.setComplaint(complaint);
+        complaintRepository.save(complaint);
         adventureReservationRepository.save(reservation23);
 
-        AdventureComplaint adventureComplaint = new AdventureComplaint();
-        adventureComplaint.setText("NEKI TEKST");
-        adventureComplaint.setReviewed(false);
-        adventureComplaint.setReservation(reservation23);
-        adventureComplaintRepository.save(adventureComplaint);
+
+
 
         //TESTIRANJE OBAVESTENJA O PRIHODIMA
         AdventureReservation reservation91 = new AdventureReservation();

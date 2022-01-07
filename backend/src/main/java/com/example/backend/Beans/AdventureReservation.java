@@ -2,6 +2,7 @@ package com.example.backend.Beans;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,6 +17,7 @@ import java.util.List;
 @Setter
 @ToString
 @Table(name = "AdventureReservations")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class AdventureReservation {
     @Id
     @SequenceGenerator(name = "myGen_adventureReservation", sequenceName = "mySeq_adventureReservation",
@@ -47,9 +49,8 @@ public class AdventureReservation {
     private Customer customer;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "adventure_complaint_id")
-    @JsonIgnore
-    private AdventureComplaint complaint;
+    @JoinColumn(name = "complaint", referencedColumnName = "complaint_id")
+    private Complaint complaint;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore

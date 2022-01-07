@@ -26,7 +26,7 @@
         </b-card-title>
         <br>
         <b-card-sub-title>
-          Instructor: {{reservation.cottage.cottageOwner.firstname}} {{reservation.cottage.cottageOwner.lastName}}
+          Cottage owner: {{reservation.cottage.cottageOwner.firstname}} {{reservation.cottage.cottageOwner.lastName}}
         </b-card-sub-title>
         <br>
         <b-card-sub-title>

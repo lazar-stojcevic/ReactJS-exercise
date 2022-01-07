@@ -121,6 +121,11 @@ public class CottageReservationService {
         return cottageReservationRepository.getAllReservationOfCustomerInPast(id, LocalDateTime.now());
     }
 
+    public Collection<CottageReservation> getAllPastTermsWithoutComplaintByCustomerId(long id){
+        return cottageReservationRepository.getAllReservationOfCustomerInPastWithoutComplaint(id,
+                LocalDateTime.now());
+    }
+
     public CottageReservation cancelTerm(CancelTermDto data){
         Customer customer = this.customerService.findCustomerById(data.getUserId());
         CottageReservation reservation = findCottageReservationById(data.getReservationId());
