@@ -108,6 +108,15 @@ class AdventureService{
     getAdventureId(){
         return this.adventureId;
     }
+
+    getAdditionalServices(adventureId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL_AS + '/' + adventureId, {headers});
+    }
 }
 
 export default new AdventureService()

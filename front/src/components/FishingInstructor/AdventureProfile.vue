@@ -355,7 +355,7 @@ export default {
       this.reservedTerms = res.data;
     }).catch(() => {alert("THERE IS SOME PROBLEM WITH LOADING RESERVED TERMS")});
 
-    AdventureService.getAdditionalServicesOfReservation(AdventureService.getAdventureId()).then(res => {this.additionalServices = res.data})
+    AdventureService.getAdditionalServices(AdventureService.adventureId).then(res => {this.additionalServices = res.data})
     .catch(() => {alert("THERE IS SOME ERROR WITH LOADING ADDITIONAL SERVICES")});
 
     AdventureService.getAllImagesOfAdventure(AdventureService.adventureId).then(res => {

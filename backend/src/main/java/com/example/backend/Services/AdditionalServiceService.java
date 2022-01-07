@@ -29,4 +29,7 @@ public class AdditionalServiceService {
     }
 
 
+    public Collection<AdditionalService> getAllAdditionalServicesOfAdventure(long adventureId) {
+        return adventureService.findAdventureById(adventureId).getPriceList().getAdditionalServices();
+    }
 }
