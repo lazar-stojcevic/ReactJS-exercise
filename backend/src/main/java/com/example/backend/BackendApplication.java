@@ -606,7 +606,6 @@ public class BackendApplication implements CommandLineRunner {
         reservation92.setReservationStart(LocalDateTime.of(2021, 10,10,10,20));
 
         AdventureReservation reservation93 = new AdventureReservation();
-        reservation93.setCustomer(customer1);
         //reservation93.setCustomer(customer1);
         reservation93.setAdventure(adventure);
         reservation93.setPrice(1000);
