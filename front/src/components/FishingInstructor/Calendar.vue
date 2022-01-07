@@ -40,6 +40,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import AdventureReservationService from "@/Services/AdventureReservationService";
 import LogInService from "@/Services/LogInService";
+import ReportService from "@/Services/ReportService";
 
 export default {
   components: {
@@ -58,7 +59,7 @@ export default {
         events: [],
         eventClick: this.handleEventClick
       },
-      report: {comment: '', reservationType: 'AR', badReport: false, customerAppear: true, adventureId: ''},
+      report: {comment: '', reservationType: 'AR', badReport: false, customerAppear: true, reservationId: ''},
       mode: 'neutral'
     }
   },
@@ -91,16 +92,27 @@ export default {
 
     makeReport(adventureId){
       this.report = {comment: '', reservationType: 'AR', badReport: false, customerAppear: true,
-        adventureId: adventureId};
+        reservationId: adventureId};
       this.mode = 'report';
     },
 
     saveReport(){
-      alert(JSON.stringify(this.report));
+      ReportService.makeReport(this.report).then(() => {
+        this.loadAllReservations();
+      }).catch(() => {alert("THERE IS SOME ERRORS WITH MAKING REPORT")});
     },
 
     changeModeToNeutral(){
       this.mode = 'neutral';
+    },
+
+    loadAllReservations(){
+      AdventureReservationService.getAllReservationsOfInstructorForCalendar(LogInService.userId).then(res => {
+        this.calendarOptions.events = res.data;
+        this.changeModeToNeutral();
+      }).catch(() => {
+        alert("THERE IS SOME ERROR WITH LOADING RESERVATIONS FOR CALENDAR");
+      })
     }
 
   }
