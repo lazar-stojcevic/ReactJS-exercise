@@ -453,7 +453,7 @@ public class BackendApplication implements CommandLineRunner {
         address7.setCountry("Srbija");
         address7.setStreet("Ustanicka");
         cottage2.setAddress(address7);
-        cottage2.setCottageOwner(cottageOwner2);
+        cottage2.setCottageOwner(cottageOwner1);
         CottagePriceList priceList15 = new CottagePriceList();
         priceList15.setPrice(6500);
         cottage2.setCottagePriceList(priceList15);

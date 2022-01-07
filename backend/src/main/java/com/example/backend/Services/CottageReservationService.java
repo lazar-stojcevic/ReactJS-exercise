@@ -3,6 +3,7 @@ package com.example.backend.Services;
 import com.example.backend.Beans.*;
 import com.example.backend.Dtos.CancelTermDto;
 import com.example.backend.Dtos.CustomerReserveCottageDto;
+import com.example.backend.Dtos.FastReservationDto;
 import com.example.backend.Dtos.ReservationSearchDto;
 import com.example.backend.Repository.CottageRepository;
 import com.example.backend.Repository.CottageReservationRepository;
@@ -12,9 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CottageReservationService {
@@ -97,6 +96,7 @@ public class CottageReservationService {
         cottageReservation.setReservationEnd(reservation.getTo());
         cottageReservation.setCustomer(customer);
         cottageReservation.setCottage(cottageService.findById(reservation.getCottageId()));
+        cottageReservation.setFast(false);
         if (IsCustomersReservationsOverlapsWithNew(customer, cottageReservation)){
             return null;
         }
@@ -138,6 +138,47 @@ public class CottageReservationService {
         //TODO
         //cottageReservationRepository.delete(cottageReservationRepository.getById(reservation.getId()));
         return reservation;
+    }
+
+    public CottageReservation makeFastReservationSlot(FastReservationDto reservation) throws InterruptedException {
+
+        CottageReservation cottageReservation = new CottageReservation();
+        cottageReservation.setReservationStart(reservation.getDate1());
+        cottageReservation.setReservationEnd(reservation.getDate2());
+        cottageReservation.setCottage(cottageService.findById(reservation.getCottageId()));
+        cottageReservation.setDiscount(reservation.getSale());
+        cottageReservation.setCottagePriceList(cottageReservation.getCottage().getCottagePriceList());
+        cottageReservation.setFast(true);
+
+        calculateFullPriceOfReservation(cottageReservation, cottageReservation.getCottagePriceList().getAdditionalServices());
+        cottageReservation.setLength((int) ChronoUnit.DAYS.between(reservation.getDate1(), reservation.getDate2()));
+
+        if(isFastReservationPeriodValid(cottageReservation)){
+            for (Customer cr: customerService.getAllCustomers()) {
+                if(cr.getEmail().equals("yoxy99@gmail.com")) {
+                    emailService.sendNotificationForCreatingFastReservation(cr, reservation, cottageReservation.getCottage().getName());
+                }
+            }
+            return save(cottageReservation);
+        }
+
+        return null;
+    }
+
+    public Collection<CottageReservation> getAllFastReservations(){
+        List<CottageReservation> fastReservations = new ArrayList<CottageReservation>();
+        for (CottageReservation reservation: getAllCottageReservations()) {
+            if(reservation.isFast() && reservation.getCustomer() == null){
+                fastReservations.add(reservation);
+            }
+        }
+        return fastReservations;
+    }
+
+    public CottageReservation reserveFastReservation(long usedId, long reservationId){
+        CottageReservation cottageReservation = findCottageReservationById(reservationId);
+        cottageReservation.setCustomer(customerService.findCustomerById(usedId));
+        return save(cottageReservation);
     }
 
     private CottageReservation save(CottageReservation cottageReservation){
@@ -203,6 +244,18 @@ public class CottageReservationService {
         return false;
     }
 
+    private boolean isFastReservationPeriodValid(CottageReservation reservation){
+        if(isSearchInCottageAvailablePeriod(reservation.getReservationStart(), reservation.getReservationEnd(), reservation.getCottage())){
+            for (CottageReservation cr : reservation.getCottage().getReservations()){
+                if (isReservationsOverlapWithCottageReservations(cr, reservation)){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
     private boolean isReservationsOverlapWithAdventureReservations(
             AdventureReservation existingReservation, CottageReservation newReservation){
         LocalDateTime existingReservationEndTime = existingReservation.getReservationStart()
@@ -264,17 +317,23 @@ public class CottageReservationService {
             price += as.getAddPrice();
             reservation.addAdditionalService(as);
         }
+        long days = ChronoUnit.DAYS.between(reservation.getReservationStart(), reservation.getReservationEnd());
+        price = price*(int)days;
         reservation.setPrice((int) (price * (1 - reservation.getDiscount()/100)));
     }
 
-    public double CountPrice(CottageReservation cottageReservation){
-        long days = ChronoUnit.DAYS.between(cottageReservation.getReservationStart(), cottageReservation.getReservationEnd());
-        double price = cottageReservation.getCottagePriceList().getPrice();
-        for (AdditionalCottageService service: cottageReservation.getCottagePriceList().getAdditionalServices()){
-            price = price + service.getAddPrice();
+    private void calculateFullPriceOfReservation(
+            CottageReservation reservation, Set<AdditionalCottageService> addServices){
+        int price = reservation.getCottagePriceList().getPrice();
+        for(AdditionalCottageService as : addServices){
+            price += as.getAddPrice();
+            reservation.addAdditionalService(as);
         }
-        return  days*price;
+        long days = ChronoUnit.DAYS.between(reservation.getReservationStart(), reservation.getReservationEnd());
+        price = price*(int)days;
+        reservation.setPrice((int) (price * (1 - reservation.getDiscount()/100)));
     }
+
 
     private boolean isUserNotForbidden(ReservationSearchDto searchDto, Cottage cottage){
         Customer customer = customerService.findCustomerById(searchDto.getId());

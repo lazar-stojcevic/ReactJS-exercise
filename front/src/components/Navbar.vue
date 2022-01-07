@@ -21,9 +21,6 @@
                    to="/complaint">Complaint</router-link>
 
       <!--COTTAGE_OWNER_ROLE-->
-      <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/usersCottage">MY COTTAGES</router-link>
-      <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/createCottage">CREATE COTTAGE</router-link>
-      <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/cottageOwnerProfile">PROFILE</router-link>
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/myCottageReservation">COTTAGE RESERVATIONS</router-link>
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/availability">COTTAGE AVAILABILITY</router-link>
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/availablePeriodsWithBenefits">CREATE BENEFITS</router-link>

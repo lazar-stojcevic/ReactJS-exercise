@@ -27,7 +27,6 @@
     <br>
     <div v-for="cottage in filtered" :key="cottage.id">
       <b-card
-          tag="cottage"
           style="max-width: 20rem;"
           class="mb-2"
       >
@@ -46,6 +45,7 @@
           Average mark: {{cottage.rating}}
         </b-card-text>
         <router-link class="btn btn-secondary" :to="'cottageProfile/'+cottage.id.toString()" style="margin: 5px">See cottage</router-link>
+        <router-link class="btn btn-secondary" :to="'cottageAvailablePeriod/'+cottage.id.toString()" style="margin: 5px">See available periods</router-link>
 
       </b-card>
     </div>

@@ -7,6 +7,7 @@ import com.example.backend.Dtos.CancelTermDto;
 import com.example.backend.Dtos.CustomerReserveCottageDto;
 import com.example.backend.Dtos.CustomerReserveTermDto;
 import com.example.backend.Dtos.ReservationSearchDto;
+import com.example.backend.Dtos.*;
 import com.example.backend.Services.CottageReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ public class CottageReservationController {
         return new ResponseEntity<>(cottageReservationService.getAllCottageReservations(), HttpStatus.OK);
     }
 
+
     @GetMapping(path = "/futureCustomerReservation/{customerId}")
     public ResponseEntity<Collection<CottageReservation>> getAllFutureTermsByCustomerId(
             @PathVariable long customerId){
@@ -47,9 +49,14 @@ public class CottageReservationController {
 
     @GetMapping(path = "/pastCustomerReservationWithoutComplaint/{customerId}")
     public ResponseEntity<Collection<CottageReservation>> getAllPastTermsByCustomerIdWithoutComplaint(
-            @PathVariable long customerId){
+            @PathVariable long customerId) {
         return new ResponseEntity<>(cottageReservationService.getAllPastTermsByCustomerId(customerId),
                 HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/fastReservations/")
+    public ResponseEntity<Collection<CottageReservation>> getFastCottageReservations(){
+        return new ResponseEntity<>(cottageReservationService.getAllFastReservations(), HttpStatus.OK);
     }
 
     @PostMapping(path = "/availableCottages/")
@@ -69,6 +76,23 @@ public class CottageReservationController {
     @PutMapping(path = "/cancelTerm/")
     public ResponseEntity<CottageReservation> CancelTerm(@RequestBody CancelTermDto cancel){
         CottageReservation cottageReservation = cottageReservationService.cancelTerm(cancel);
+        if (cottageReservation == null)
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(cottageReservation, HttpStatus.OK);
+    }
+
+
+    @PutMapping(path = "/fastReservationPeriod/")
+    public ResponseEntity<CottageReservation> FastReservationPeriod(@RequestBody FastReservationDto reservation) throws InterruptedException {
+        CottageReservation cottageReservation = cottageReservationService.makeFastReservationSlot(reservation);
+        if (cottageReservation == null)
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(cottageReservation, HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/reserveFastReservation/")
+    public ResponseEntity<CottageReservation> ReserveFastReservation(@RequestBody ReservingFastReservationDto reservation) throws InterruptedException {
+        CottageReservation cottageReservation = cottageReservationService.reserveFastReservation(reservation.getUserId(), reservation.getReservationId());
         if (cottageReservation == null)
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(cottageReservation, HttpStatus.OK);

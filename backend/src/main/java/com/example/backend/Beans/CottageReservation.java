@@ -38,6 +38,9 @@ public class CottageReservation {
     @Column(nullable = false)
     private int length;
 
+    @Column()
+    private boolean fast;
+
     private int price;
 
     @ManyToOne(fetch = FetchType.EAGER)
