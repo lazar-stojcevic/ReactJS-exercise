@@ -20,6 +20,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("cottage")
 public class CottageController {
+
     private final CottageService cottageService;
 
     @Autowired

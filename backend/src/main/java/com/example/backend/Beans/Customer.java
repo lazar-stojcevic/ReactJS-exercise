@@ -39,6 +39,10 @@ public class Customer extends User {
     @JsonIgnore
     private List<Cottage> prepaidCottages = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "prepaidCustomers", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Boat> prepaidBoats = new ArrayList<>();
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     @JsonIgnore
     private List<AdventureReservation> adventureReservations = new ArrayList<>();

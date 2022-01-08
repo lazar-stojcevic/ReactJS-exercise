@@ -37,11 +37,17 @@ public class BackendApplication implements CommandLineRunner {
     @Autowired
     private AvailablePeriodCottageRepository availablePeriodCottageRepository;
     @Autowired
+    private AvailablePeriodBoatRepository availablePeriodBoatRepository;
+    @Autowired
     private RoomRepository roomRepository;
     @Autowired
     private CottagePriceListRepository cottagePriceListRepository;
     @Autowired
     private CottageReservationRepository cottageReservationRepository;
+    @Autowired
+    private BoatRepository boatRepository;
+    @Autowired
+    private BoatReservationRepository boatReservationRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -663,6 +669,104 @@ public class BackendApplication implements CommandLineRunner {
         cottageReservation3.setFast(true);
 
         cottageReservationRepository.save(cottageReservation3);
+
+
+        Boat boat = new Boat();
+        boat.setName("Mala barka");
+        boat.setPromo("Super mesto za opustanje");
+        boat.setCapacity(4);
+        boat.setConductRules("Nemojte obuveni ulaziti");
+        boat.setAddress(new Address());
+        boat.getAddress().setCity("Sabac");
+        boat.getAddress().setStreet("Na savi");
+        boat.getAddress().setCountry("Srbija");
+        boat.setType("camac");
+        boat.setNumberOfEngines(2);
+        boat.setEnginePower(250);
+        boat.setTopSpeed(200);
+        boat.setBoatOwner(boatOwner1);
+        BoatPriceList priceList22 = new BoatPriceList();
+        priceList22.setPrice(10000);
+        boat.setPriceList(priceList22);
+
+        AdditionalBoatService additionalService44 = new AdditionalBoatService();
+        additionalService44.setName("Trening golfa");
+        additionalService44.setAddPrice(1000);
+        additionalService44.setPriceList(priceList22);
+
+        AdditionalBoatService additionalService45 = new AdditionalBoatService();
+        additionalService45.setName("Macevanje");
+        additionalService45.setAddPrice(500);
+        additionalService45.setPriceList(priceList22);
+
+        HashSet<AdditionalBoatService> serviceList4 = new HashSet<AdditionalBoatService>();
+        serviceList4.add(additionalService44);
+        serviceList4.add(additionalService45);
+        priceList22.setAdditionalServices(serviceList4);
+
+        AvailablePeriodBoat availablePeriodBoat1 = new AvailablePeriodBoat();
+        availablePeriodBoat1.setBoat(boat);
+        availablePeriodBoat1.setFromDate(LocalDateTime.of(2020, 2, 5, 5, 5));
+        availablePeriodBoat1.setToDate(LocalDateTime.of(2023, 1, 5, 5, 5));
+
+
+        boatRepository.save(boat);
+        availablePeriodBoatRepository.save(availablePeriodBoat1);
+
+        Boat boat1 = new Boat();
+        boat1.setName("Velika barka");
+        boat1.setPromo("Bas je kul");
+        boat1.setCapacity(7);
+        boat1.setConductRules("Bez kucnih ljubimaca");
+        boat1.setAddress(new Address());
+        boat1.getAddress().setCity("Sabac");
+        boat1.getAddress().setStreet("Na savi");
+        boat1.getAddress().setCountry("Srbija");
+        boat1.setType("ladja");
+        boat1.setNumberOfEngines(8);
+        boat1.setEnginePower(500);
+        boat1.setTopSpeed(150);
+        boat1.setBoatOwner(boatOwner1);
+        BoatPriceList priceList23 = new BoatPriceList();
+        priceList23.setPrice(50000);
+        boat1.setPriceList(priceList23);
+        AvailablePeriodBoat availablePeriodBoat2 = new AvailablePeriodBoat();
+        availablePeriodBoat2.setBoat(boat1);
+        availablePeriodBoat2.setFromDate(LocalDateTime.of(2020, 2, 5, 5, 5));
+        availablePeriodBoat2.setToDate(LocalDateTime.of(2023, 1, 5, 5, 5));
+
+        boatRepository.save(boat1);
+        availablePeriodBoatRepository.save(availablePeriodBoat2);
+
+        BoatReservation boatReservation = new BoatReservation();
+        boatReservation.setCustomer(customer1);
+        boatReservation.setBoat(boat);
+        boatReservation.setReservationStart(LocalDateTime.of(2022,3 ,15,10,20));
+        boatReservation.setReservationEnd(LocalDateTime.of(2022, 3,20,10,20));
+        boatReservation.setLength(5);
+        boatReservation.setDiscount(0);
+        boatReservation.setPrice(7000);
+        boatReservationRepository.save(boatReservation);
+
+        BoatReservation boatReservation1 = new BoatReservation();
+        boatReservation1.setCustomer(customer1);
+        boatReservation1.setBoat(boat1);
+        boatReservation1.setReservationStart(LocalDateTime.of(2022,3 ,25,10,20));
+        boatReservation1.setReservationEnd(LocalDateTime.of(2022, 3,30,10,20));
+        boatReservation1.setLength(5);
+        boatReservation1.setDiscount(0);
+        boatReservation1.setPrice(50000);
+        boatReservationRepository.save(boatReservation1);
+
+        BoatReservation boatReservation2 = new BoatReservation();
+        boatReservation2.setCustomer(customer2);
+        boatReservation2.setBoat(boat);
+        boatReservation2.setReservationStart(LocalDateTime.of(2022,4 ,15,10,20));
+        boatReservation2.setReservationEnd(LocalDateTime.of(2022, 4,20,10,20));
+        boatReservation2.setLength(3);
+        boatReservation2.setDiscount(0);
+        boatReservation2.setPrice(7000);
+        boatReservationRepository.save(boatReservation);
     }
 
 }

@@ -2,7 +2,9 @@ package com.example.backend.Services;
 
 import com.example.backend.Beans.Address;
 import com.example.backend.Beans.BoatOwner;
+import com.example.backend.Beans.CottageOwner;
 import com.example.backend.Dtos.BoatOwnerChangeDto;
+import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Dtos.UserRegistration;
 import com.example.backend.Repository.AddressRepository;
 import com.example.backend.Services.Interfaces.IBoatOwnerService;
@@ -94,5 +96,13 @@ public class BoatOwnerService implements IBoatOwnerService {
     @Override
     public void deleteBoatOwner(long id) {
         boatOwnerRepository.deleteById(id);
+    }
+
+    @Override
+    public BoatOwner changePassword(PasswordChangeDto passwordChangeDto) {
+        BoatOwner boatOwner = findBoatOwner(passwordChangeDto.getUserId());
+        boatOwner.setPassword(passwordEncoder.encode(passwordChangeDto.getPassword()));
+        boatOwner.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
+        return boatOwnerRepository.save(boatOwner);
     }
 }

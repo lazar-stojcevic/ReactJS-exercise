@@ -6,7 +6,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -56,11 +58,27 @@ public class Boat {
     @JsonIgnore
     private Set<BoatImage> images = new HashSet<>();
 
-
     @OneToOne(cascade = CascadeType.ALL)
     private BoatPriceList priceList;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address", referencedColumnName = "address_id")
     private Address address;
+
+    @OneToMany(mappedBy = "boat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<AvailablePeriodBoat> periods = new HashSet<AvailablePeriodBoat>();
+
+    @OneToMany(mappedBy = "boat", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<BoatReservation> reservations = new HashSet<BoatReservation>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinTable(name = "have_prepaid_on_boat",
+            joinColumns = @JoinColumn(name = "boat_id", referencedColumnName = "boat_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "user_id"))
+    private List<Customer> prepaidCustomers = new ArrayList<>();
+
+
 }

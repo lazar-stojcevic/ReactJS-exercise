@@ -8,7 +8,7 @@
       img-alt="Card Image"
       text-variant="white"
       title="Renting cottages"
-      :hidden="LogInService.userRole.trim() === 'ROLE_COTTAGE_OWNER'"
+      :hidden="LogInService.userRole.trim() === 'ROLE_COTTAGE_OWNER' || LogInService.userRole.trim() === 'ROLE_BOAT_OWNER'"
   >
     <b-card-text>
       Cottages in all environment.
@@ -50,6 +50,27 @@
         img-width="80vw"
         img-height="250vh"
         overlay
+        :img-src="slika3"
+        img-alt="Card Image"
+        text-variant="white"
+        title="Boats"
+        :hidden="LogInService.userRole.trim() !== 'ROLE_BOAT_OWNER'"
+    >
+      <b-card-text>
+        All my boats!
+      </b-card-text>
+      <br>
+      <br>
+      <br>
+      <br>
+      <router-link class="btn btn-secondary" to="/usersBoats" style="margin: 5px">See boats</router-link>
+      <router-link class="btn btn-secondary" to="/createBoats" style="margin: 5px">Create boat</router-link>
+    </b-card>
+    <br>
+    <b-card
+        img-width="80vw"
+        img-height="250vh"
+        overlay
         :img-src="slika4"
         img-alt="Card Image"
         text-variant="white"
@@ -71,11 +92,32 @@
         img-width="80vw"
         img-height="250vh"
         overlay
+        :img-src="slika5"
+        img-alt="Card Image"
+        text-variant="white"
+        title="User profile"
+        :hidden="LogInService.userRole.trim() !== 'ROLE_BOAT_OWNER'"
+    >
+      <b-card-text>
+
+      </b-card-text>
+      <br>
+      <br>
+      <br>
+      <br>
+      <router-link class="btn btn-secondary" to="/boatOwnerProfile" style="margin: 5px">See profile</router-link>
+
+    </b-card>
+    <br>
+    <b-card
+        img-width="80vw"
+        img-height="250vh"
+        overlay
         :img-src="slika2"
         img-alt="Card Image"
         text-variant="white"
         title="Fishing instructors"
-        :hidden="LogInService.userRole.trim() === 'ROLE_COTTAGE_OWNER'"
+        :hidden="LogInService.userRole.trim() === 'ROLE_COTTAGE_OWNER' || LogInService.userRole.trim() === 'ROLE_BOAT_OWNER'"
     >
       <b-card-text>
         Unforgettable avantures with experienced instructor!
@@ -100,7 +142,7 @@
         img-alt="Card Image"
         text-variant="white"
         title="Renting boats"
-        :hidden="LogInService.userRole.trim() === 'ROLE_COTTAGE_OWNER'"
+        :hidden="LogInService.userRole.trim() === 'ROLE_COTTAGE_OWNER' || LogInService.userRole.trim() === 'ROLE_BOAT_OWNER'"
     >
       <b-card-text>
         Boats of all types!
@@ -119,6 +161,7 @@ import slika1 from "@/assets/vikendica.jpg";
 import slika2 from "@/assets/fishing.jpg";
 import slika3 from "@/assets/boat.jpg";
 import slika4 from "@/assets/user-profile.jpg";
+import slika5 from "@/assets/sea.jpg";
 import LogInService from "@/Services/LogInService";
 export default {
   data() {
@@ -127,6 +170,7 @@ export default {
       slika2 : slika2,
       slika3 : slika3,
       slika4: slika4,
+      slika5: slika5,
       LogInService
     }
   },

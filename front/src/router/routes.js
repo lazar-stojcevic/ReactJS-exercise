@@ -39,6 +39,9 @@ import UserReservationProfile from "../components/CottageOwner/UserReservationPr
 import AvailablePeriodsWithBenefits from "../components/CottageOwner/AvailablePeriodsWithBenefits";
 import ReservationReport from "../components/CottageOwner/ReservationReport";
 import CreateReservation from "../components/CottageOwner/CreateReservation";
+import BoatOwnerProfile from "../components/BoatOwner/BoatOwnerProfile";
+import UsersBoats from "../components/BoatOwner/UsersBoats";
+import CreateBoat from "../components/BoatOwner/CreateBoat";
 
 
 
@@ -75,6 +78,7 @@ const routes = [
     {path: '/myCottageReservation', component: MyCottageReservation},
     {path: '/availability', component: Availability},
     {path: '/cottageOwnerProfile', component: CottageOwnerProfile},
+    {path: '/boatOwnerProfile', component: BoatOwnerProfile},
     {path: '/userReservationProfile', component: UserReservationProfile},
     {path: '/availablePeriodsWithBenefits', component: AvailablePeriodsWithBenefits},
     {path: '/reservationReport', component: ReservationReport},
@@ -83,6 +87,8 @@ const routes = [
     {path: '/newAdventureReservation/:id', component: NewAdventureReservation},
     {path: '/instructorActions/:id', component: InstructorActions},
     {path: '/reserveCottage', component: ReserveCottage},
+    {path: '/usersBoats', component: UsersBoats},
+    {path: '/createBoats', component: CreateBoat},
     {path: '/cottageActions/:id', component: CottageActions}
 ]
 

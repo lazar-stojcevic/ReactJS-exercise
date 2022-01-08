@@ -2,15 +2,22 @@ package com.example.backend.Services;
 
 import com.example.backend.Beans.*;
 import com.example.backend.Dtos.BoatDto;
+import com.example.backend.Dtos.NewSubcriptionDto;
+import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Repository.AddressRepository;
 import com.example.backend.Repository.BoatRepository;
 import com.example.backend.Repository.CottageRepository;
+import com.example.backend.Repository.CustomerRepository;
 import com.example.backend.Services.Interfaces.IBoatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 
+@Service
 public class BoatService implements IBoatService {
 
     @Autowired
@@ -21,6 +28,9 @@ public class BoatService implements IBoatService {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private CustomerService customerService;
 
     public BoatService( BoatRepository boatRepository){
         this.boatRepository = boatRepository;
@@ -49,7 +59,6 @@ public class BoatService implements IBoatService {
         boat.getAddress().setCountry(newBoat.getCountry());
         boat.setType(newBoat.getType());
         boat.setNumberOfEngines(newBoat.getNumberOfEngines());
-        boat.setCapacity(newBoat.getCapacity());
         boat.setEnginePower(newBoat.getEnginePower());
         boat.setTopSpeed(newBoat.getTopSpeed());
         boat.setBoatOwner(boatOwnerService.findBoatOwner(newBoat.getBoatOwnerId()));
@@ -82,4 +91,36 @@ public class BoatService implements IBoatService {
     public void deleteBoat(long id) {
         boatRepository.deleteById(id);
     }
+
+    public boolean isUserSubcribed(long boatId, long userId){
+        Boat boat = findById(boatId);
+        Customer customer = customerService.findCustomerById(userId);
+
+        return boat.getPrepaidCustomers().contains(customer);
+    }
+
+    public void newSubscription(NewSubcriptionDto newSubcription){
+        if(isUserSubcribed(newSubcription.getAdvertiserId(), newSubcription.getUserId())){
+            return;
+        }
+
+        Boat boat = findById(newSubcription.getAdvertiserId());
+        Customer customer = customerService.findCustomerById(newSubcription.getUserId());
+
+        boat.getPrepaidCustomers().add(customer);
+        boatRepository.save(boat);
+    }
+
+    public void unsubscribe(NewSubcriptionDto toUnsubscribe){
+        if(!isUserSubcribed(toUnsubscribe.getAdvertiserId(), toUnsubscribe.getUserId())){
+            return;
+        }
+
+        Boat boat = findById(toUnsubscribe.getAdvertiserId());
+        Customer customer = customerService.findCustomerById(toUnsubscribe.getUserId());
+
+        boat.getPrepaidCustomers().remove(customer);
+        boatRepository.save(boat);
+    }
+
 }

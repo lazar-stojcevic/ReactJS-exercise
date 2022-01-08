@@ -5,7 +5,9 @@ import com.example.backend.Dtos.AdditionalServiceDto;
 import com.example.backend.Repository.AdditionalBoatServiceRepository;
 import com.example.backend.Services.Interfaces.IAdditionalBoatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AdditionalBoatServiceService implements IAdditionalBoatService {
 
     @Autowired
