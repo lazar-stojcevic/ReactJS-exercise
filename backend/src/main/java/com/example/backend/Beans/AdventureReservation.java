@@ -48,8 +48,7 @@ public class AdventureReservation {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "complaint", referencedColumnName = "complaint_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Complaint complaint;
 
     @ManyToMany(fetch = FetchType.LAZY)

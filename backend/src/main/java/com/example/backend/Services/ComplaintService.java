@@ -1,15 +1,19 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.*;
+import com.example.backend.Dtos.ComplaintForReviewDto;
 import com.example.backend.Dtos.NewComplaintDto;
 import com.example.backend.Dtos.ReviewComplaintDto;
 import com.example.backend.Repository.ComplaintRepository;
 import com.example.backend.Repository.AdventureReservationRepository;
 import com.example.backend.Repository.CottageReservationRepository;
+import com.example.backend.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class ComplaintService {
@@ -21,6 +25,8 @@ public class ComplaintService {
     private final CottageReservationRepository cottageReservationRepository;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private UserRepository userRepository;
 
     public ComplaintService(AdventureReservationRepository adventureReservationRepository, ComplaintRepository complaintRepository, CottageReservationRepository cottageReservationRepository) {
         this.adventureReservationRepository = adventureReservationRepository;
@@ -34,8 +40,8 @@ public class ComplaintService {
             Complaint ac = new Complaint();
             ac.setText(complaint.getText());
             ac.setReviewed(false);
-            ar.setComplaint(save(ac));
-
+            //ar.setComplaint(save(ac));
+            ar.setComplaint(ac);
             adventureReservationRepository.save(ar);
             return true;
         }catch (Exception e){
@@ -50,7 +56,8 @@ public class ComplaintService {
             cc.setText(complaint.getText());
             cc.setReviewed(false);
 
-            cr.setComplaint(save(cc));
+            //cr.setComplaint(save(cc));
+            cr.setComplaint(cc);
             cottageReservationRepository.save(cr);
             return true;
         }catch (Exception e){
@@ -58,45 +65,29 @@ public class ComplaintService {
         }
     }
 
-    public Collection<Complaint> getAllNotReviewedAdventureComplaint(){
-        return complaintRepository.getAllNotReviewedAdventureComplaint();
+    public Collection<ComplaintForReviewDto> getAllNotReviewedComplaint(){
+        List<ComplaintForReviewDto> list = new ArrayList<>();
+
+        for(AdventureReservation ar : adventureReservationRepository.getAllNotReviewedAdventureComplaint())
+            list.add(new ComplaintForReviewDto(ar));
+
+        for(CottageReservation cr : cottageReservationRepository.getAllNotReviewedCottageComplaint())
+            list.add(new ComplaintForReviewDto(cr));
+
+        return list;
     }
 
+    /*
     public Complaint findAdventureComplaintById(long id){
         return complaintRepository.findById(id).orElse(null);
     }
-
-    public boolean reviewComplaint(ReviewComplaintDto dto){
-        if(dto.getComplaintType().equals("AC")){
-            return reviewAdventureComplaint(dto);
-        }
-        else if(dto.getComplaintType().equals("CC")){
-            return reviewCottageComplaint(dto);
-        }
-        else{
-            return reviewBoatComplaint(dto);
-        }
-    }
-
-    private boolean reviewBoatComplaint(ReviewComplaintDto dto) {
-        return false;
-    }
-
-    private boolean reviewCottageComplaint(ReviewComplaintDto dto) {
-        return false;
-    }
-
-    private boolean reviewAdventureComplaint(ReviewComplaintDto dto) {
-        Complaint complaint = findAdventureComplaintById(dto.getComplaintId());
+    */
+    public void reviewComplaint(ReviewComplaintDto dto){
+        Complaint complaint = complaintRepository.getById(dto.getComplaintId());
         complaint.setReviewed(true);
         save(complaint);
-        /*
-        sendMails(complaint.getReservation().getCustomer(),
-                complaint.getReservation().getAdventure().getInstructor(),
-                dto);
-
-         */
-        return true;
+        sendMails(userRepository.findByEmail(dto.getCustomerMail()),
+                userRepository.findByEmail(dto.getOwnerMail()), dto);
     }
 
     private void sendMails(User customer, User owner, ReviewComplaintDto dto) {

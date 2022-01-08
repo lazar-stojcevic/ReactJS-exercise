@@ -24,4 +24,7 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
     @Query("select cr from CottageReservation cr where cr.customer.id = ?1" +
             " and cr.reservationStart < ?2 and cr.complaint is null")
     Collection<CottageReservation> getAllReservationOfCustomerInPastWithoutComplaint(long id, LocalDateTime now);
+
+    @Query("select cr from CottageReservation cr where cr.complaint.reviewed = false")
+    Iterable<? extends CottageReservation> getAllNotReviewedCottageComplaint();
 }

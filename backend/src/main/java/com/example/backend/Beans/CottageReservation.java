@@ -51,8 +51,8 @@ public class CottageReservation {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "complaint", referencedColumnName = "complaint_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //@JoinColumn(name = "complaint", referencedColumnName = "complaint_id")
     private Complaint complaint;
 
     @Column()

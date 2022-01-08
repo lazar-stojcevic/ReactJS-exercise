@@ -29,20 +29,20 @@
     </div>
     <table class="table table-striped">
       <thead>
-        <th>SUBMITTER FULL NAME</th>
-        <th>OWNER FULL NAME</th>
+        <th>SUBMITTER MAIL</th>
+        <th>OWNER MAIL</th>
         <th>COMPLAINT TEXT</th>
       </thead>
       <tbody>
         <tr v-for="c in complaints" :key="c.id">
           <td class="col-md-3">
-            {{c.reservation.customer.firstname}} {{c.reservation.customer.lastName}}
+            {{c.customerMail}}
           </td>
           <td class="col-md-2">
-            {{c.reservation.adventure.instructor.firstname}} {{c.reservation.adventure.instructor.lastName}}
+            {{c.ownerMail}}
           </td>
-          <td class="col-md-6">{{c.text}}</td>
-          <td class="col-md-1"><button class="btn-sm btn-success" @click="prepareAnswer(c.id)"
+          <td class="col-md-6">{{c.comment}}</td>
+          <td class="col-md-1"><button class="btn-sm btn-success" @click="prepareAnswer(c.id, c.customerMail, c.ownerMail)"
                     data-bs-toggle="modal" data-bs-target="#exampleModal">ANSWER</button></td>
         </tr>
       </tbody>
@@ -57,7 +57,7 @@ export default {
   data(){
     return{
       complaints: [],
-      answer: {complaintId: '', mailForOwner: '', mailForCustomer: '', complaintType: 'AC'}
+      answer: {complaintId: '', mailForOwner: '', mailForCustomer: '', customerMail: '', ownerMail: ''}
     }
   },
 
@@ -67,19 +67,24 @@ export default {
 
   methods:{
     loadAdventureComplaints(){
-      ComplaintService.loadAllAdventureComplaints().then(res => {this.complaints = res.data}).catch(() => {
+      ComplaintService.loadAllNotReviewedComplaints().then(res => {this.complaints = res.data}).catch(() => {
         alert("THERE IS SOME ERROR WITH LOADING ADVENTURE COMPLAINTS");
       })
     },
 
-    prepareAnswer(id){
-      this.answer = {complaintId: id, mailForOwner: '', mailForCustomer: '', complaintType: 'AC'};
+    prepareAnswer(id, customerMail, ownerMail){
+      this.answer = {complaintId: id, mailForOwner: '', mailForCustomer: '', ownerMail: ownerMail, customerMail: customerMail};
     },
 
     submitAnswer() {
-      ComplaintService.reviewComplaint(this.answer).then(() => {this.loadAdventureComplaints()}).catch(() => {
+      alert("Please wait...")
+      ComplaintService.reviewComplaint(this.answer).then(() => {
+        this.loadAdventureComplaints()
+        alert("COMPLAINT IS REPORTED")
+      }).catch(() => {
         alert("THERE IS SOME PROBLEM WITH SENDING COMPLAINT");
       })
+      //alert(JSON.stringify(this.answer));
     }
   }
 }

@@ -39,13 +39,13 @@ class ComplaintService{
         return axios.put(URL + "/reviewComplaint", JSON.stringify(data), {headers});
     }
 
-    loadAllAdventureComplaints(){
+    loadAllNotReviewedComplaints(){
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
-        return axios.get(URL + "/adventureComplaint", {headers});
+        return axios.get(URL + "/notReviewedComplaints", {headers});
     }
 
 }

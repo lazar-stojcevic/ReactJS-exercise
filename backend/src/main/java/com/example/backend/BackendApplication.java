@@ -309,6 +309,11 @@ public class BackendApplication implements CommandLineRunner {
         //reservation2.setPrice(2500);
         reservation2.setReservationStart(LocalDateTime.of(2022, 1,10,10,20));
         reservation2.setLastDateToReserve(LocalDateTime.of(2021, 12, 31, 15, 0));
+        reservation2.setCustomer(customer1);
+        Complaint complaint1 = new Complaint();
+        complaint1.setText("aaaaaa");
+        complaint1.setReviewed(false);
+        reservation2.setComplaint(complaint1);
         adventureReservationRepository.save(reservation2);
 
         AdventureReservation reservation3 = new AdventureReservation();
@@ -582,11 +587,12 @@ public class BackendApplication implements CommandLineRunner {
         reservation23.setLength(4);
         reservation23.setReservationStart(LocalDateTime.of(2021, 9,10,10,20));
         reservation23.setLastDateToReserve(LocalDateTime.of(2021, 10, 10, 15, 0));
+
         Complaint complaint = new Complaint();
         complaint.setText("NEKI TEKST");
         complaint.setReviewed(false);
         reservation23.setComplaint(complaint);
-        complaintRepository.save(complaint);
+
         adventureReservationRepository.save(reservation23);
 
 
@@ -639,6 +645,12 @@ public class BackendApplication implements CommandLineRunner {
         cottageReservation2.setLength(4);
         cottageReservation2.setDiscount(0);
         cottageReservation2.setPrice(7000);
+
+        Complaint complaint2 = new Complaint();
+        complaint2.setReviewed(false);
+        complaint2.setText("Tekst za vikendicu");
+        cottageReservation2.setComplaint(complaint2);
+
         cottageReservationRepository.save(cottageReservation2);
     }
 

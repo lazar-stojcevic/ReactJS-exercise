@@ -1,6 +1,6 @@
 package com.example.backend.Controllers;
 
-import com.example.backend.Beans.Complaint;
+import com.example.backend.Dtos.ComplaintForReviewDto;
 import com.example.backend.Dtos.NewComplaintDto;
 import com.example.backend.Dtos.ReviewComplaintDto;
 import com.example.backend.Services.ComplaintService;
@@ -35,17 +35,16 @@ public class ComplaintController {
                 HttpStatus.OK);
     }
 
-    @GetMapping(path = "/adventureComplaint")
+    @GetMapping(path = "/notReviewedComplaints")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Collection<Complaint>> getAllAdventureComplaintForRevision(){
-        return new ResponseEntity<>(complaintService.getAllNotReviewedAdventureComplaint(), HttpStatus.OK);
+    public ResponseEntity<Collection<ComplaintForReviewDto>> getAllAdventureComplaintForRevision(){
+        return new ResponseEntity<>(complaintService.getAllNotReviewedComplaint(), HttpStatus.OK);
     }
 
     @PutMapping(path = "/reviewComplaint")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> makeReviewOnComplaint(@RequestBody ReviewComplaintDto dto){
-        if(complaintService.reviewComplaint(dto))
-            return new ResponseEntity<>(HttpStatus.OK);
-        else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        complaintService.reviewComplaint(dto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

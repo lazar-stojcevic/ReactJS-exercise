@@ -13,13 +13,12 @@ import javax.persistence.*;
 @Setter
 @ToString
 @NoArgsConstructor
-@Table(name = "complaint")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Complaint {
     @Id
-    @SequenceGenerator(name = "myGen_complaint", sequenceName = "mySeq_complaint",
+    @SequenceGenerator(name = "myGen_complaint1", sequenceName = "mySeq_complaint1",
             initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myGen_complaint")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myGen_complaint1")
     @Column(name = "complaint_id", unique = true, nullable = false)
     private long id;
 

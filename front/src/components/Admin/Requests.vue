@@ -8,7 +8,7 @@
           <option value="report">BAD REPORTS REQUESTS</option>
           <option value="delete">REQUESTS FOR DELETING PROFILE</option>
           <option value="grade">GRADE REVISION</option>
-          <option value="adventure">ADVENTURE COMPLAINTS REVISION</option>
+          <option value="adventure">COMPLAINTS REVISION</option>
         </select>
 
           <!--USER REQUEST-->

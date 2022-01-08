@@ -11,6 +11,6 @@ public class ReviewComplaintDto {
     private long complaintId;
     private String mailForOwner;
     private String mailForCustomer;
-    //AC, CC, BC
-    private String complaintType;
+    private String ownerMail;
+    private String customerMail;
 }

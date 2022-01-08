@@ -7,6 +7,5 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Collection;
 
 public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
-    @Query("select c from Complaint c where c.reviewed = false")
-    Collection<Complaint> getAllNotReviewedAdventureComplaint();
+
 }
