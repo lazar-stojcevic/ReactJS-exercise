@@ -652,6 +652,17 @@ public class BackendApplication implements CommandLineRunner {
         cottageReservation2.setComplaint(complaint2);
 
         cottageReservationRepository.save(cottageReservation2);
+
+        CottageReservation cottageReservation3 = new CottageReservation();
+        cottageReservation3.setCottage(cottage1);
+        cottageReservation3.setReservationStart(LocalDateTime.of(2022, 1,22,10,20));
+        cottageReservation3.setReservationEnd(LocalDateTime.of(2022, 1,25,10,20));
+        cottageReservation3.setLength(4);
+        cottageReservation3.setDiscount(10);
+        cottageReservation3.setPrice(6300);
+        cottageReservation3.setFast(true);
+
+        cottageReservationRepository.save(cottageReservation3);
     }
 
 }

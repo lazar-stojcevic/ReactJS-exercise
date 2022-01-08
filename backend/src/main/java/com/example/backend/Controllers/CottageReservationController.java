@@ -59,6 +59,11 @@ public class CottageReservationController {
         return new ResponseEntity<>(cottageReservationService.getAllFastReservations(), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/nextActions/{id}")
+    public ResponseEntity<Collection<CottageReservation>> getFastCottageReservations(@PathVariable long id){
+        return new ResponseEntity<>(cottageReservationService.getAllNextActionsOfCottage(id), HttpStatus.OK);
+    }
+
     @PostMapping(path = "/availableCottages/")
     public ResponseEntity<Collection<Cottage>> getAllAvailableCottages(@RequestBody ReservationSearchDto search){
         return new ResponseEntity<>(cottageReservationService.getAllAvailableCottagesForSearch(search),

@@ -27,4 +27,8 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
 
     @Query("select cr from CottageReservation cr where cr.complaint.reviewed = false")
     Iterable<? extends CottageReservation> getAllNotReviewedCottageComplaint();
+
+    @Query("select cr from CottageReservation cr where cr.cottage.id = ?1 and cr.customer is null" +
+            " and cr.reservationStart > ?2 and cr.fast = true ")
+    Collection<CottageReservation> getAllFreeFutureActionsOfCottage(long id, LocalDateTime now);
 }

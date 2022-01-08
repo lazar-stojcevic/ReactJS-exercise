@@ -45,6 +45,7 @@ class CottageReservationService {
         return axios.get(URL + '/futureCustomerReservation/' + customerId, {headers});
     }
 
+    //OVO MI NE TREBA
     getAllFastReservations(){
         const headers = {
             'Accept': 'application/json',
@@ -92,6 +93,15 @@ class CottageReservationService {
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
         return axios.get(URL + '/pastCustomerReservationWithOutComplaint/' + customerId, {headers});
+    }
+
+    getAllNextActionsOfCottage(id) {
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/nextActions/' + id, {headers});
     }
 
     ReserveFastReservation(reservationId){

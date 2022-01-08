@@ -67,7 +67,10 @@ export default {
         this.actions.sort((a,b) => (a.length < b.length) ? 1 : ((b.length < a.length) ? -1 : 0))
     },
     reserve(id){
-      AdventureReservationService.reserveAdventureOnAction(id);
+      AdventureReservationService.reserveAdventureOnAction(id).then(() => {
+        alert("Reservation created");
+        this.$router.push('/');
+      })
     }
   }
 }

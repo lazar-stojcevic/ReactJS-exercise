@@ -22,8 +22,9 @@ import OneInstructor from "@/components/Customer/ShowOne/OneInstructor";
 import OneCottage from "@/components/Customer/ShowOne/OneCottage";
 import ReserveAdventure from "@/components/Customer/Reserve/ReserveAvanture"
 import NewAdventureReservation from "@/components/Customer/Reserve/NewAdventureReservation"
-import InstructorActions from "@/components/Customer/InstructorActions"
+import InstructorActions from "@/components/Customer/Actions/InstructorActions"
 import ReserveCottage from "@/components/Customer/Reserve/ReserveCottage"
+import CottageActions from "@/components/Customer/Actions/CottageActions"
 
 import AdminProfile from "@/components/Admin/AdminProfile";
 import ProfileRequests from "@/components/Admin/Requests";
@@ -81,7 +82,8 @@ const routes = [
     {path: '/reserveAdventure', component: ReserveAdventure},
     {path: '/newAdventureReservation/:id', component: NewAdventureReservation},
     {path: '/instructorActions/:id', component: InstructorActions},
-    {path: '/reserveCottage', component: ReserveCottage}
+    {path: '/reserveCottage', component: ReserveCottage},
+    {path: '/cottageActions/:id', component: CottageActions}
 ]
 
 export default routes;

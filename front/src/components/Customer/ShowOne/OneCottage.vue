@@ -14,6 +14,8 @@
     <p>Description: {{cottage.promo}} </p>
     <br>
     <h3>Rating: {{cottage.rating}} </h3>
+    <br>
+    <router-link class="btn btn-success" :to='"/cottageActions/" + this.id'>ACTIONS</router-link>
   </div>
 </template>
 

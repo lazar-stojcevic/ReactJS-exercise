@@ -137,11 +137,10 @@ public class CottageReservationService {
         forbidden.setReservationEnd(reservation.getReservationEnd());
 
         forbiddenCustomerToCottageRepository.save(forbidden);
-        reservation.setCottage(null);
+        if (!reservation.isFast())
+            reservation.setCottage(null);
         reservation.setCustomer(null);
         save(reservation);
-        //TODO
-        //cottageReservationRepository.delete(cottageReservationRepository.getById(reservation.getId()));
         return reservation;
     }
 
@@ -354,5 +353,9 @@ public class CottageReservationService {
         CottageReservation cottageReservation = findCottageReservationById(reservationId);
         cottageReservation.setRated(true);
         return save(cottageReservation);
+    }
+
+    public Collection<CottageReservation> getAllNextActionsOfCottage(long id) {
+        return cottageReservationRepository.getAllFreeFutureActionsOfCottage(id, LocalDateTime.now());
     }
 }
