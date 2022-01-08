@@ -35,5 +35,76 @@ class CottageReservationService {
 
         return axios.put(URL + '/reserveTerm/', JSON.stringify(data), {headers});
     }
+
+    getAllFutureTermsByCustomerId(customerId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/futureCustomerReservation/' + customerId, {headers});
+    }
+
+    getAllFastReservations(){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/fastReservations/', {headers});
+    }
+
+    cancelReservation(reservation){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.reservationId = reservation.id;
+        data.userId = LogInService.userId;
+
+        return axios.put(URL + '/cancelTerm/', JSON.stringify(data), {headers});
+    }
+
+    getAllPastTermsByCustomerId(customerId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/pastCustomerReservation/' + customerId, {headers});
+    }
+
+    AddPeriodForFastReservation(period) {
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.put(URL + '/fastReservationPeriod/', JSON.stringify(period), {headers});
+    }
+
+    getAllPastTermsByCustomerIdWithPutComplaint(customerId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/pastCustomerReservationWithOutComplaint/' + customerId, {headers});
+    }
+
+    ReserveFastReservation(reservationId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.reservationId = reservationId;
+        data.userId = LogInService.userId;
+
+        return axios.put(URL + '/reserveFastReservation/', JSON.stringify(data), {headers});
+    }
 }
 export default new CottageReservationService()

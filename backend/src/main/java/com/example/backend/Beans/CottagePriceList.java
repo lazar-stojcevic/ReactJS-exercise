@@ -25,7 +25,7 @@ public class CottagePriceList {
     @Column
     private int price;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "priceList", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "priceList", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<AdditionalCottageService> additionalServices = new HashSet<>();
 

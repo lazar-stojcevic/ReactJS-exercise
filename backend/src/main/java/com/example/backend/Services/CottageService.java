@@ -2,6 +2,7 @@ package com.example.backend.Services;
 
 import com.example.backend.Beans.*;
 import com.example.backend.Dtos.CottageDto;
+import com.example.backend.Dtos.NewSubcriptionDto;
 import com.example.backend.Repository.AddressRepository;
 import com.example.backend.Repository.CottageRepository;
 import com.example.backend.Services.Interfaces.ICottageService;
@@ -22,6 +23,8 @@ public class CottageService implements ICottageService {
 
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private CustomerService customerService;
 
     public CottageService(CottageRepository cottageRepository){
         this.cottageRepository = cottageRepository;
@@ -67,6 +70,37 @@ public class CottageService implements ICottageService {
         cottage.setConductRules(changeDto.getConductRules());
         cottage.getCottagePriceList().setPrice(changeDto.getPrice());
         return cottageRepository.save(cottage);
+    }
+
+    public boolean isUserSubcribed(long instructorId, long userId){
+        Cottage cottage = findById(instructorId);
+        Customer customer = customerService.findCustomerById(userId);
+
+        return cottage.getPrepaidCustomers().contains(customer);
+    }
+
+    public void newSubscription(NewSubcriptionDto newSubcription){
+        if(isUserSubcribed(newSubcription.getAdvertiserId(), newSubcription.getUserId())){
+            return;
+        }
+
+        Cottage cottage = findById(newSubcription.getAdvertiserId());
+        Customer customer = customerService.findCustomerById(newSubcription.getUserId());
+
+        cottage.getPrepaidCustomers().add(customer);
+        cottageRepository.save(cottage);
+    }
+
+    public void unsubscribe(NewSubcriptionDto toUnsubscribe){
+        if(!isUserSubcribed(toUnsubscribe.getAdvertiserId(), toUnsubscribe.getUserId())){
+            return;
+        }
+
+        Cottage cottage = findById(toUnsubscribe.getAdvertiserId());
+        Customer customer = customerService.findCustomerById(toUnsubscribe.getUserId());
+
+        cottage.getPrepaidCustomers().remove(customer);
+        cottageRepository.save(cottage);
     }
 
     @Override

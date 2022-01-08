@@ -1,5 +1,6 @@
 package com.example.backend.Controllers;
 
+import com.example.backend.Beans.Cottage;
 import com.example.backend.Beans.Customer;
 import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Dtos.CustomerChangeDto;
@@ -86,5 +87,11 @@ public class CustomerControler {
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<Collection<FishingInstructor>> getAllCustomersInstructorSubscriptions(@PathVariable long userId){
         return new ResponseEntity<>(customerService.getCustomerInstructorsSubscription(userId), HttpStatus.OK);
+    }
+
+    @GetMapping (path = "/cottageSubscriptions/{userId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<Collection<Cottage>> getAllCustomersCottageSubscriptions(@PathVariable long userId){
+        return new ResponseEntity<>(customerService.getCustomerCottagesSubscription(userId), HttpStatus.OK);
     }
 }

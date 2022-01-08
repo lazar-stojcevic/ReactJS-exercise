@@ -1,12 +1,11 @@
 package com.example.backend.Services;
 
-import com.example.backend.Beans.AdventureComplaint;
-import com.example.backend.Beans.AdventureReservation;
-import com.example.backend.Beans.User;
+import com.example.backend.Beans.*;
 import com.example.backend.Dtos.NewComplaintDto;
 import com.example.backend.Dtos.ReviewComplaintDto;
-import com.example.backend.Repository.AdventureComplaintRepository;
+import com.example.backend.Repository.ComplaintRepository;
 import com.example.backend.Repository.AdventureReservationRepository;
+import com.example.backend.Repository.CottageReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,26 +16,26 @@ public class ComplaintService {
     @Autowired
     private final AdventureReservationRepository adventureReservationRepository;
     @Autowired
-    private final AdventureComplaintRepository adventureComplaintRepository;
+    private final ComplaintRepository complaintRepository;
+    @Autowired
+    private final CottageReservationRepository cottageReservationRepository;
     @Autowired
     private EmailService emailService;
 
-    public ComplaintService(AdventureReservationRepository adventureReservationRepository, AdventureComplaintRepository adventureComplaintRepository) {
+    public ComplaintService(AdventureReservationRepository adventureReservationRepository, ComplaintRepository complaintRepository, CottageReservationRepository cottageReservationRepository) {
         this.adventureReservationRepository = adventureReservationRepository;
-        this.adventureComplaintRepository = adventureComplaintRepository;
+        this.complaintRepository = complaintRepository;
+        this.cottageReservationRepository = cottageReservationRepository;
     }
 
     public boolean SaveAdventureComplaint(NewComplaintDto complaint){
         try {
             AdventureReservation ar = adventureReservationRepository.getById(complaint.getId());
-            AdventureComplaint ac = new AdventureComplaint();
-            ac.setReservation(ar);
+            Complaint ac = new Complaint();
             ac.setText(complaint.getText());
             ac.setReviewed(false);
+            ar.setComplaint(save(ac));
 
-            ar.setComplaint(ac);
-
-            adventureComplaintRepository.save(ac);
             adventureReservationRepository.save(ar);
             return true;
         }catch (Exception e){
@@ -44,12 +43,27 @@ public class ComplaintService {
         }
     }
 
-    public Collection<AdventureComplaint> getAllNotReviewedAdventureComplaint(){
-        return adventureComplaintRepository.getAllNotReviewedAdventureComplaint();
+    public boolean SaveCottageComplaint(NewComplaintDto complaint){
+        try {
+            CottageReservation cr = cottageReservationRepository.getById(complaint.getId());
+            Complaint cc = new Complaint();
+            cc.setText(complaint.getText());
+            cc.setReviewed(false);
+
+            cr.setComplaint(save(cc));
+            cottageReservationRepository.save(cr);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
-    public AdventureComplaint findAdventureComplaintById(long id){
-        return adventureComplaintRepository.findById(id).orElse(null);
+    public Collection<Complaint> getAllNotReviewedAdventureComplaint(){
+        return complaintRepository.getAllNotReviewedAdventureComplaint();
+    }
+
+    public Complaint findAdventureComplaintById(long id){
+        return complaintRepository.findById(id).orElse(null);
     }
 
     public boolean reviewComplaint(ReviewComplaintDto dto){
@@ -73,12 +87,15 @@ public class ComplaintService {
     }
 
     private boolean reviewAdventureComplaint(ReviewComplaintDto dto) {
-        AdventureComplaint adventureComplaint = findAdventureComplaintById(dto.getComplaintId());
-        adventureComplaint.setReviewed(true);
-        saveAdventureComplaint(adventureComplaint);
-        sendMails(adventureComplaint.getReservation().getCustomer(),
-                adventureComplaint.getReservation().getAdventure().getInstructor(),
+        Complaint complaint = findAdventureComplaintById(dto.getComplaintId());
+        complaint.setReviewed(true);
+        save(complaint);
+        /*
+        sendMails(complaint.getReservation().getCustomer(),
+                complaint.getReservation().getAdventure().getInstructor(),
                 dto);
+
+         */
         return true;
     }
 
@@ -89,7 +106,7 @@ public class ComplaintService {
         }catch (Exception ignored){ }
     }
 
-    private void saveAdventureComplaint(AdventureComplaint adventureComplaint){
-        adventureComplaintRepository.save(adventureComplaint);
+    private Complaint save(Complaint complaint){
+        return complaintRepository.save(complaint);
     }
 }

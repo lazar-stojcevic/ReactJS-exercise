@@ -4,6 +4,7 @@ import com.example.backend.Beans.CottageReservation;
 import com.example.backend.Beans.Customer;
 import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Beans.User;
+import com.example.backend.Dtos.FastReservationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -89,6 +90,21 @@ public class EmailService {
                 " je upravo kreirana nova brza rezervacija u okviru avanture/časova precanja na kojoj/kojima" +
                 "ste pretplaćeni." +
                 "\n\nS poštovanjem admin tim.");
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendNotificationForCreatingFastReservation(Customer user, FastReservationDto reservation, String cottageName)
+            throws MailException, InterruptedException{
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Obaveštenje o kreiranju nove brze rezervacije.");
+        mail.setText("Pozdrav " + user.getFirstname() + ", \n\nobaveštavamo vas da" +
+                " je upravo kreirana nova brza rezervacija u okviru vikendice na kojoj" +
+                "ste pretplaćeni." + "\n Ponuda: " + "Možete rezervisati vikendicu "+cottageName + " u periodu od "+ reservation.getDate1() +
+                " do " + reservation.getDate2() + " Tom prilikom ostvarujete " + reservation.getSale() + "% popusta. \n" + reservation.getDescription()
+                + "\n\nS poštovanjem admin tim.");
         javaMailSender.send(mail);
     }
 

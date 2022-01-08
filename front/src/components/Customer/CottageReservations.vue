@@ -14,24 +14,48 @@
       </b-input-group>
     </div>
     <br>
-    <p>Cottage adventures</p>
+    <p>Cottage reservation:</p>
     <div v-for="reservation in reservations" :key="reservation.id">
       <b-card
-          tag="cottage"
-          style="max-width: 20rem;"
+          name="cottage"
+          style="max-width: 50rem; margin-left: 20px; margin-right: 20px"
           class="mb-2"
       >
         <b-card-title>
-          {{reservation.cottageName}}
+          {{reservation.cottage.name}}
         </b-card-title>
-        <b-card-text>
-          {{ reservation.dateFrom | formatDate}} - {{ reservation.dateTo | formatDate}}
-        </b-card-text>
         <br>
+        <b-card-sub-title>
+          Cottage owner: {{reservation.cottage.cottageOwner.firstname}} {{reservation.cottage.cottageOwner.lastName}}
+        </b-card-sub-title>
+        <br>
+        <b-card-sub-title>
+          Description: {{reservation.cottage.promo}}
+        </b-card-sub-title>
+
+        <b-card-text>
+          {{ reservation.reservationStart | formatDate}} - {{ reservation.reservationEnd | formatDate}}
+        </b-card-text>
         <b-card-text>
           PRICE:  {{ reservation.price }}
         </b-card-text>
-        <br>
+        <div v-if="!reservation.rated">
+          <b-form-rating v-model="reservation.mark" variant="warning" class="mb-2"></b-form-rating>
+          <b-form-textarea
+              id="textarea"
+              v-model="reservation.text"
+              placeholder="Enter you comment here"
+              rows="3"
+              max-rows="6"
+          ></b-form-textarea>
+          <br>
+          <button @click="sendGrade(reservation.id, reservation.mark, reservation.text)" type="reset" class="btn-danger">RATE</button>
+        </div>
+        <div v-else>
+          <b-card-text>
+            Already rated.
+          </b-card-text>
+        </div>
       </b-card>
     </div>
   </div>
@@ -39,6 +63,9 @@
 
 <script>
 import moment from "moment";
+import LogInService from "@/Services/LogInService";
+import GradeService from "@/Services/GradeService";
+import CottageReservationService from "@/Services/CottageReservationService";
 
 export default {
   name: "CottageReservations",
@@ -56,13 +83,14 @@ export default {
     }
   },
   mounted() {
-    //DUMMY
-    this.reservations = [
-      {id: 1, dateFrom: new Date(2020, 12,1, 0, 0, 0, 0), dateTo: new Date(2020, 12,10), price: 200, cottageName: "Zlatiborska carda", length: 10},
-      {id: 2, dateFrom: new Date(2020, 7,1,1, 0, 0, 0), dateTo: new Date(2020, 7,21), price: 150, cottageName: "Backa Tvrdjava", length: 20},
-      {id: 3, dateFrom: new Date(2020, 6,1,1, 0, 0, 0), dateTo: new Date(2020, 6,3), price: 100, cottageName: "Zlatiborska carda", length: 3},
-    ];
-    this.reservations.sort((a,b) => (a.dateFrom > b.dateFrom) ? 1 : ((b.dateFrom > a.dateFrom) ? -1 : 0))
+    CottageReservationService.getAllPastTermsByCustomerId(LogInService.userId).then(res =>  {
+      console.log(res.data)
+      this.reservations = res.data;
+      for(let reservation of this.reservations){
+        reservation.text = '';
+        reservation.mark = 1;
+      }
+    });
   },
   methods:{
     search(){
@@ -82,6 +110,18 @@ export default {
         this.reservations.sort((a,b) => (a.length > b.length) ? 1 : ((b.length > a.length) ? -1 : 0))
       else if (this.sort === 'lengthDESC')
         this.reservations.sort((a,b) => (a.length < b.length) ? 1 : ((b.length < a.length) ? -1 : 0))
+    },
+    sendGrade(id, mark, text){
+      let data = {
+        rating : mark,
+        revision: text,
+        entityId: id,
+        entityType: 'C'
+      };
+      GradeService.saveGrade(data).then(()=>{
+        alert("Grade successfully added");
+        this.$router.push('/');
+      }).catch(() => alert("Some error occurred"));
     }
   }
 }

@@ -77,5 +77,13 @@ class CustomerService{
         };
         return axios.get(CUSTOMER_URL + '/instructorSubscriptions/' + userId, {headers});
     }
+
+    getAllCustomerCottagesSubscriptions(userId){
+        const headers = {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(CUSTOMER_URL + '/cottageSubscriptions/' + userId, {headers});
+    }
 }
 export default new CustomerService()

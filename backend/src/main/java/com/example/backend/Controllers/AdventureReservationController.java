@@ -125,6 +125,13 @@ public class AdventureReservationController {
                 HttpStatus.OK);
     }
 
+    @GetMapping(path = "/pastCustomerReservation/{customerId}")
+    public ResponseEntity<Collection<AdventureReservation>> getAllPastTermsByCustomerId(
+            @PathVariable long customerId){
+        return new ResponseEntity<>(adventureReservationService.getAllPastTermsByCustomerId(customerId),
+                HttpStatus.OK);
+    }
+
     @GetMapping(path = "/pastReservation/{instructorId}")
     public ResponseEntity<Collection<AdventureReservation>> getAllPastReservationOfInstructor(
             @PathVariable long instructorId){

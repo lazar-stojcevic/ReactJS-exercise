@@ -2,6 +2,7 @@ package com.example.backend.Beans;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Setter
 @ToString
 @Table(name = "CottageReservations")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CottageReservation {
     @Id
     @SequenceGenerator(name = "myGen_cottageReservation", sequenceName = "mySeq_cottageReservation",
@@ -36,6 +38,9 @@ public class CottageReservation {
     @Column(nullable = false)
     private int length;
 
+    @Column()
+    private boolean fast;
+
     private int price;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -46,11 +51,18 @@ public class CottageReservation {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "complaint", referencedColumnName = "complaint_id")
+    private Complaint complaint;
+
     @Column()
     private boolean rated = false;
 
     @Column()
     private double discount = 0;
+
+    @Column()
+    private boolean reported = false;
 
     private double mark = 0;
 

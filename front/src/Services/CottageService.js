@@ -57,6 +57,40 @@ class CottageService{
         };
         return axios.get(URL + '/additionalServices/' + cottageId, {headers});
     }
+
+    subscribeCottage(userId, instructorId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.userId = userId;
+        data.advertiserId = instructorId;
+        return axios.put(URL + '/subscribe/', JSON.stringify(data),
+            {headers} );
+    }
+
+    unsubscribeCottage(userId, instructorId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.userId = userId;
+        data.advertiserId = instructorId;
+        return axios.put(URL + '/unsubscribe/', JSON.stringify(data),
+            {headers} );
+    }
+
+    IsUserSubscribed(userId, cottageId){
+        const headers = {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/isSubcribed/' + cottageId + '/' + userId, {headers});
+    }
 }
 
 export default new CottageService()

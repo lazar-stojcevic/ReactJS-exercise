@@ -25,15 +25,15 @@
             <br>
             <p>Description: {{cottage.promo}} </p>
             <br>
-            <h3>Price: {{cottage.priceList.price}} </h3>
+            <h3>Price: {{cottage.cottagePriceList.price}} </h3>
             <br>
             <h3>Rating: {{cottage.rating}} </h3>
           </b-card>
 
-            <h3>Sobe: </h3>
+            <h3>Rooms: </h3>
             <div class="container" v-for="room in rooms" :key="room.id">
               <b-card>
-              <p>Price: {{room.roomDescription}} </p>
+              <p>Description: {{room.roomDescription}} </p>
               <br>
               <p>Rating: {{room.numberOfBeds}} </p>
               <br>
@@ -131,7 +131,7 @@
             <b-form-group id="input-price" label="Price for day:" label-for="price">
               <b-form-input
                   id="price"
-                  v-model="cottage.priceList.price"
+                  v-model="cottage.cottagePriceList.price"
                   required
               ></b-form-input>
             </b-form-group>
@@ -162,7 +162,7 @@ export default {
           city: '',
           country: ''
         },
-      priceList:{ price:0}
+      cottagePriceList:{ price:0}
       },
       rooms:[],
       photos:[],
@@ -252,7 +252,7 @@ export default {
                               "country": this.cottage.address.country,
                               "promo": this.cottage.promo,
                               "cottageOwnerId": LogInService.userId,
-                              "price": this.cottage.priceList.price
+                              "price": this.cottage.cottagePriceList.price
                             }).then(res => {this.user = res.data;
                             this.changeModeToNeutral()}).catch(() => {
   alert("SERVER ERROR");

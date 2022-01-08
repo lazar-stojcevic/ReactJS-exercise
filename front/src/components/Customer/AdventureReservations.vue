@@ -17,7 +17,7 @@
     <p>Adventure adventures</p>
     <div v-for="reservation in adventures" :key="reservation.id">
       <b-card
-          tag="adventure"
+          name="adventure"
           style="max-width: 50rem; margin-left: 20px; margin-right: 20px"
           class="mb-2"
       >

@@ -33,13 +33,15 @@ public class BackendApplication implements CommandLineRunner {
     @Autowired
     private DeleteProfileRequestRepository deleteProfileRequestRepository;
     @Autowired
-    private AdventureComplaintRepository adventureComplaintRepository;
+    private ComplaintRepository complaintRepository;
     @Autowired
     private AvailablePeriodCottageRepository availablePeriodCottageRepository;
     @Autowired
     private RoomRepository roomRepository;
     @Autowired
     private CottagePriceListRepository cottagePriceListRepository;
+    @Autowired
+    private CottageReservationRepository cottageReservationRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -451,7 +453,7 @@ public class BackendApplication implements CommandLineRunner {
         address7.setCountry("Srbija");
         address7.setStreet("Ustanicka");
         cottage2.setAddress(address7);
-        cottage2.setCottageOwner(cottageOwner2);
+        cottage2.setCottageOwner(cottageOwner1);
         CottagePriceList priceList15 = new CottagePriceList();
         priceList15.setPrice(6500);
         cottage2.setCottagePriceList(priceList15);
@@ -580,13 +582,15 @@ public class BackendApplication implements CommandLineRunner {
         reservation23.setLength(4);
         reservation23.setReservationStart(LocalDateTime.of(2021, 9,10,10,20));
         reservation23.setLastDateToReserve(LocalDateTime.of(2021, 10, 10, 15, 0));
+        Complaint complaint = new Complaint();
+        complaint.setText("NEKI TEKST");
+        complaint.setReviewed(false);
+        reservation23.setComplaint(complaint);
+        complaintRepository.save(complaint);
         adventureReservationRepository.save(reservation23);
 
-        AdventureComplaint adventureComplaint = new AdventureComplaint();
-        adventureComplaint.setText("NEKI TEKST");
-        adventureComplaint.setReviewed(false);
-        adventureComplaint.setReservation(reservation23);
-        adventureComplaintRepository.save(adventureComplaint);
+
+
 
         //TESTIRANJE OBAVESTENJA O PRIHODIMA
         AdventureReservation reservation91 = new AdventureReservation();
@@ -616,6 +620,26 @@ public class BackendApplication implements CommandLineRunner {
         adventureReservationRepository.save(reservation91);
         adventureReservationRepository.save(reservation92);
         adventureReservationRepository.save(reservation93);
+
+        CottageReservation cottageReservation1 = new CottageReservation();
+        cottageReservation1.setCustomer(customer1);
+        cottageReservation1.setCottage(cottage1);
+        cottageReservation1.setReservationStart(LocalDateTime.of(2022, 1,15,10,20));
+        cottageReservation1.setReservationEnd(LocalDateTime.of(2022, 1,20,10,20));
+        cottageReservation1.setLength(6);
+        cottageReservation1.setDiscount(0);
+        cottageReservation1.setPrice(7000);
+        cottageReservationRepository.save(cottageReservation1);
+
+        CottageReservation cottageReservation2 = new CottageReservation();
+        cottageReservation2.setCustomer(customer1);
+        cottageReservation2.setCottage(cottage1);
+        cottageReservation2.setReservationStart(LocalDateTime.of(2022, 1,2,10,20));
+        cottageReservation2.setReservationEnd(LocalDateTime.of(2022, 1,5,10,20));
+        cottageReservation2.setLength(4);
+        cottageReservation2.setDiscount(0);
+        cottageReservation2.setPrice(7000);
+        cottageReservationRepository.save(cottageReservation2);
     }
 
 }

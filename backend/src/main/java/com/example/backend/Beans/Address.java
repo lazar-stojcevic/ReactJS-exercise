@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 public class Address {
     @Id
     @SequenceGenerator(name = "generator", sequenceName = "sequenceAddress", allocationSize = 1)
