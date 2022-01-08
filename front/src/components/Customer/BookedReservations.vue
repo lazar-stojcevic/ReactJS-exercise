@@ -93,12 +93,17 @@ export default {
       return moment(inThreeDays).isBefore(moment(date));
     },
     cancelReservation(adventure){
-      AdventureReservationService.cancelReservation(adventure);
-      alert("Reservation canceled");
+      AdventureReservationService.cancelReservation(adventure).then(() => {
+        alert("Reservation canceled");
+        this.$router.push('/');
+      })
     },
     cancelCottageReservation(cottageReservation){
-      CottageReservationService.cancelReservation(cottageReservation);
-      alert("Reservation canceled");
+      CottageReservationService.cancelReservation(cottageReservation).then(() => {
+        alert("Reservation canceled");
+        this.$router.push('/');
+      })
+
     }
   }
 }

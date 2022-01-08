@@ -67,9 +67,12 @@ export default {
         this.actions.sort((a,b) => (a.length < b.length) ? 1 : ((b.length < a.length) ? -1 : 0))
     },
     reserve(id){
+      alert("Please wait a moment...");
       AdventureReservationService.reserveAdventureOnAction(id).then(() => {
         alert("Reservation created");
         this.$router.push('/');
+      }).catch(() => {
+        alert("You can't reserve this cottage");
       })
     }
   }

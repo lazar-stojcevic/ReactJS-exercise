@@ -94,6 +94,9 @@ public class AdventureReservationService {
             if (isReservationsOverlap(ar, adventureReservation))
                 return null;
         }
+        if (IsForbiddenToCustomer(adventureReservation, customer.getId()))
+            return null;
+
         adventureReservation.setCustomer(customer);
         emailService.sendAdventureReservationConfirm(customer);
         return save(adventureReservation);
@@ -248,6 +251,7 @@ public class AdventureReservationService {
         AdventureReservation reservation = new AdventureReservation();
         if(dto.getReservationStart().isBefore(LocalDateTime.now()))
             return null;
+
         reservation.setReservationStart(dto.getReservationStart());
         reservation.setAdventure(this.adventureService.findAdventureById(dto.getAdventureId()));
         reservation.setLength(dto.getLength());
@@ -259,11 +263,15 @@ public class AdventureReservationService {
     }
 
     //PROVERA DA LI CUSTOMER IMA NEKE REZERVACIJE U TO VREME
-    //TODO: DA LI TREBA DODATI I PROVERE ZA VIKENDICE?
+    //TODO: DA LI TREBA DODATI I PROVERE ZA BRODOVE?
     private boolean addCustomerToReservation(AdventureReservation reservation, ReserveAdventureDto dto) {
         Customer customer = this.customerService.findByEmail(dto.getCustomerMail());
         for(AdventureReservation ar : customer.getAdventureReservations()){
             if(isReservationsOverlap(ar, reservation))
+                return false;
+        }
+        for (CottageReservation cr : customer.getCottageReservations()){
+            if(isReservationsOverlapForCottages(cr, reservation))
                 return false;
         }
         reservation.setCustomer(customer);
@@ -292,6 +300,23 @@ public class AdventureReservationService {
             AdventureReservation existingReservation, AdventureReservation newReservation){
         LocalDateTime existingReservationEndTime = existingReservation.getReservationStart()
                 .plusHours(existingReservation.getLength());
+        LocalDateTime newReservationEndTime = newReservation.getReservationStart()
+                .plusHours(newReservation.getLength());
+        if(newReservation.getReservationStart().isAfter(existingReservation.getReservationStart()) &&
+                newReservation.getReservationStart().isBefore(existingReservationEndTime))
+            return true;
+        else if(newReservationEndTime.isAfter(existingReservation.getReservationStart()) &&
+                newReservationEndTime.isBefore(existingReservationEndTime))
+            return true;
+        else if(newReservation.getReservationStart().isEqual(existingReservation.getReservationStart()))
+            return true;
+        else return newReservation.getReservationStart().isBefore(existingReservation.getReservationStart()) &&
+                    newReservationEndTime.isAfter(existingReservationEndTime);
+    }
+
+    private boolean isReservationsOverlapForCottages(
+            CottageReservation existingReservation, AdventureReservation newReservation){
+        LocalDateTime existingReservationEndTime = existingReservation.getReservationEnd();
         LocalDateTime newReservationEndTime = newReservation.getReservationStart()
                 .plusHours(newReservation.getLength());
         if(newReservation.getReservationStart().isAfter(existingReservation.getReservationStart()) &&

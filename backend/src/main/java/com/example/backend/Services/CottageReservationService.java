@@ -179,9 +179,22 @@ public class CottageReservationService {
         return fastReservations;
     }
 
-    public CottageReservation reserveFastReservation(long usedId, long reservationId){
+    public CottageReservation reserveFastReservation(long usedId, long reservationId) throws InterruptedException {
         CottageReservation cottageReservation = findCottageReservationById(reservationId);
-        cottageReservation.setCustomer(customerService.findCustomerById(usedId));
+        Customer customer = customerService.findCustomerById(usedId);
+        if (IsCustomersReservationsOverlapsWithNew(customer, cottageReservation)){
+            return null;
+        }
+        ReservationSearchDto pom = new ReservationSearchDto();
+        pom.setDateFrom(cottageReservation.getReservationStart());
+        pom.setDateTo(cottageReservation.getReservationEnd());
+        pom.setId(customer.getId());
+        if(!isUserNotForbidden(pom, cottageReservation.getCottage())) {
+            return null;
+        }
+
+        cottageReservation.setCustomer(customer);
+        emailService.sendCottageReservationConfirm(customer, cottageReservation);
         return save(cottageReservation);
     }
 
@@ -228,6 +241,7 @@ public class CottageReservationService {
         return beds >= numberOfBeds;
     }
 
+    //TODO: Treba dodati proveru za brodove!!!
     private boolean IsCustomersReservationsOverlapsWithNew(Customer customer, CottageReservation newReservation){
         for (AdventureReservation ar : customer.getAdventureReservations()){
             if (isReservationsOverlapWithAdventureReservations(ar, newReservation))
@@ -240,6 +254,8 @@ public class CottageReservationService {
             }
         }
 
+        if (newReservation.isFast()) //Ova provera je napravljena kod pravljenja brze rezervacije
+            return false;
         for (CottageReservation cr: newReservation.getCottage().getReservations()){
             if (isReservationsOverlapWithCottageReservations(cr, newReservation)){
                 return true;

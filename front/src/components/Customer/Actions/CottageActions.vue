@@ -49,9 +49,12 @@ export default {
   },
   methods:{
     reserve(id){
+      alert("Please wait a moment...");
       CottageReservationService.ReserveFastReservation(id).then(() => {
         alert("Reservation created");
         this.$router.push('/');
+      }).catch(() => {
+        alert("You can't reserve this cottage");
       })
     }
   }
