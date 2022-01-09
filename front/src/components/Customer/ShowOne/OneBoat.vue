@@ -17,6 +17,7 @@
     <br>
     <h4 style="color:cornflowerblue">Max capacity: {{boat.capacity}} </h4>
     <br>
+    <h4 style="color:cornflowerblue">Address: {{boat.address.street}},{{boat.address.city}},{{boat.address.country}} </h4>
     <br>
     <router-link class="btn btn-success" :to='"/boatActions/" + this.id'>ACTIONS</router-link>
   </div>

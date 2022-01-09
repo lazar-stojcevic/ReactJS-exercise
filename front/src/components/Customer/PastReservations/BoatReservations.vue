@@ -14,28 +14,26 @@
       </b-input-group>
     </div>
     <br>
-    <p>Cottage reservation:</p>
+    <p>Boat adventures</p>
     <div v-for="reservation in reservations" :key="reservation.id">
       <b-card
-          name="cottage"
-          style="max-width: 50rem; margin-left: 20px; margin-right: 20px"
+          tag="boat"
+          style="max-width: 20rem;"
           class="mb-2"
       >
         <b-card-title>
-          {{reservation.cottage.name}}
+          {{reservation.boat.name}}
         </b-card-title>
-        <br>
-        <b-card-sub-title>
-          Cottage owner: {{reservation.cottage.cottageOwner.firstname}} {{reservation.cottage.cottageOwner.lastName}}
-        </b-card-sub-title>
-        <br>
-        <b-card-sub-title>
-          Description: {{reservation.cottage.promo}}
-        </b-card-sub-title>
-
+        <b-card-text>
+          Description: {{reservation.boat.promo}}
+        </b-card-text>
+        <b-card-text>
+          Address: {{reservation.boat.address.street}},{{reservation.boat.address.city}},{{reservation.boat.address.country}}
+        </b-card-text>
         <b-card-text>
           {{ reservation.reservationStart | formatDate}} - {{ reservation.reservationEnd | formatDate}}
         </b-card-text>
+        <br>
         <b-card-text>
           PRICE:  {{ reservation.price }}
         </b-card-text>
@@ -56,6 +54,7 @@
             Already rated.
           </b-card-text>
         </div>
+        <br>
       </b-card>
     </div>
   </div>
@@ -63,12 +62,12 @@
 
 <script>
 import moment from "moment";
+import BoatReservationService from "@/Services/BoatReservationService";
 import LogInService from "@/Services/LogInService";
 import GradeService from "@/Services/GradeService";
-import CottageReservationService from "@/Services/CottageReservationService";
 
 export default {
-  name: "CottageReservations",
+  name: "BoatReservations",
   data() {
     return {
       reservations : [],
@@ -83,7 +82,7 @@ export default {
     }
   },
   mounted() {
-    CottageReservationService.getAllPastTermsByCustomerId(LogInService.userId).then(res =>  {
+    BoatReservationService.getAllPastTermsByCustomerId(LogInService.userId).then(res =>  {
       console.log(res.data)
       this.reservations = res.data;
       for(let reservation of this.reservations){
@@ -96,12 +95,12 @@ export default {
     search(){
       if (this.sort === 'dateASC')
         this.reservations.sort((a,b) =>
-            (moment(a.dateFrom).format("dd-mm-yyyy") > moment(b.dateFrom).format("dd-mm-yyyy"))
-            ? 1 : ((moment(b.dateFrom).format("dd-mm-yyyy") > moment(a.dateFrom).format("dd-mm-yyyy")) ? -1 : 0))
+            (moment(a.reservationStart).format("dd-mm-yyyy") > moment(b.reservationStart).format("dd-mm-yyyy"))
+                ? 1 : ((moment(b.reservationStart).format("dd-mm-yyyy") > moment(a.reservationStart).format("dd-mm-yyyy")) ? -1 : 0))
       else if (this.sort === 'dateDESC')
         this.reservations.sort((a,b) =>
-            (moment(a.dateFrom).format("dd-mm-yyyy") < moment(b.dateFrom).format("dd-mm-yyyy"))
-                ? 1 : ((moment(b.dateFrom).format("dd-mm-yyyy") < moment(a.dateFrom).format("dd-mm-yyyy")) ? -1 : 0))
+            (moment(a.reservationStart).format("dd-mm-yyyy") < moment(b.reservationStart).format("dd-mm-yyyy"))
+                ? 1 : ((moment(b.reservationStart).format("dd-mm-yyyy") < moment(a.reservationStart).format("dd-mm-yyyy")) ? -1 : 0))
       else if (this.sort === 'priceASC')
         this.reservations.sort((a,b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0))
       else if (this.sort === 'priceDESC')
@@ -116,7 +115,7 @@ export default {
         rating : mark,
         revision: text,
         entityId: id,
-        entityType: 'C'
+        entityType: 'B'
       };
       GradeService.saveGrade(data).then(()=>{
         alert("Grade successfully added");
@@ -137,3 +136,4 @@ export default {
   flex-wrap: nowrap;
 }
 </style>
+

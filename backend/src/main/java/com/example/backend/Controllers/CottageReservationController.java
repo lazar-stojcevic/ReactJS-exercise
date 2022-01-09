@@ -32,7 +32,6 @@ public class CottageReservationController {
         return new ResponseEntity<>(cottageReservationService.getAllCottageReservations(), HttpStatus.OK);
     }
 
-
     @GetMapping(path = "/futureCustomerReservation/{customerId}")
     public ResponseEntity<Collection<CottageReservation>> getAllFutureTermsByCustomerId(
             @PathVariable long customerId){

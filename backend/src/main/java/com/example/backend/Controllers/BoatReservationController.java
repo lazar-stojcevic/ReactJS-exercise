@@ -39,6 +39,13 @@ public class BoatReservationController {
                 HttpStatus.OK);
     }
 
+    @GetMapping(path = "/pastCustomerReservation/{customerId}")
+    public ResponseEntity<Collection<BoatReservation>> getAllPastTermsByCustomerId(
+            @PathVariable long customerId){
+        return new ResponseEntity<>(boatReservationService.getAllPastTermsByCustomerId(customerId),
+                HttpStatus.OK);
+    }
+
     @PostMapping(path = "/availableBoats/")
     public ResponseEntity<Collection<Boat>> getAllAvailableCottages(@RequestBody ReservationSearchDto search){
         return new ResponseEntity<>(boatReservationService.getAllAvailableBoatsForSearch(search),

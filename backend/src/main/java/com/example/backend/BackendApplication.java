@@ -738,6 +738,26 @@ public class BackendApplication implements CommandLineRunner {
         boatRepository.save(boat1);
         availablePeriodBoatRepository.save(availablePeriodBoat2);
 
+        BoatReservation boatReservationOld = new BoatReservation();
+        boatReservationOld.setCustomer(customer2);
+        boatReservationOld.setBoat(boat);
+        boatReservationOld.setReservationStart(LocalDateTime.of(2021,3 ,15,10,20));
+        boatReservationOld.setReservationEnd(LocalDateTime.of(2021, 3,20,10,20));
+        boatReservationOld.setLength(5);
+        boatReservationOld.setDiscount(0);
+        boatReservationOld.setPrice(7000);
+        boatReservationRepository.save(boatReservationOld);
+
+        BoatReservation boatReservationOld1 = new BoatReservation();
+        boatReservationOld1.setCustomer(customer2);
+        boatReservationOld1.setBoat(boat);
+        boatReservationOld1.setReservationStart(LocalDateTime.of(2021,5 ,8,10,20));
+        boatReservationOld1.setReservationEnd(LocalDateTime.of(2021, 5,20,10,20));
+        boatReservationOld1.setLength(12);
+        boatReservationOld1.setDiscount(0);
+        boatReservationOld1.setPrice(9500);
+        boatReservationRepository.save(boatReservationOld1);
+
         BoatReservation boatReservation = new BoatReservation();
         boatReservation.setCustomer(customer1);
         boatReservation.setBoat(boat);
@@ -759,7 +779,7 @@ public class BackendApplication implements CommandLineRunner {
         boatReservationRepository.save(boatReservation1);
 
         BoatReservation boatReservation2 = new BoatReservation();
-        boatReservation2.setCustomer(customer2);
+        boatReservation2.setCustomer(customer1);
         boatReservation2.setBoat(boat);
         boatReservation2.setReservationStart(LocalDateTime.of(2022,4 ,15,10,20));
         boatReservation2.setReservationEnd(LocalDateTime.of(2022, 4,20,10,20));

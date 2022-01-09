@@ -35,5 +35,10 @@ public class Grade {
     @ToString.Exclude
     private Cottage cottage;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "boat_id")
+    @ToString.Exclude
+    private Boat boat;
+
     private boolean enabled = false;
 }
