@@ -8,7 +8,9 @@ import com.example.backend.Dtos.AvailablePeriodDto;
 import com.example.backend.Repository.AdditionalCottageServiceRepository;
 import com.example.backend.Repository.AvailablePeriodCottageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AvailablePeriodCottageService {
     @Autowired
     private final AvailablePeriodCottageRepository availablePeriodCottageRepository;

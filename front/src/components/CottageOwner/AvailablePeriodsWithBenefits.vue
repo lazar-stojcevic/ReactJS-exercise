@@ -7,11 +7,11 @@
       </b-form-select>
     </div>
     <div class="input-group mb-3">
-      <span class="input-group-text">BEGINNING OF AVAILABLE PERIOD</span>
+      <span class="input-group-text">BEGINNING OF RESERVATION PERIOD</span>
       <input type="datetime-local" class="form-control" v-model="period.date1">
     </div>
     <div class="input-group mb-3">
-      <span class="input-group-text">END OF AVAILABLE PERIOD</span>
+      <span class="input-group-text">END OF RESERVATION PERIOD</span>
       <input type="datetime-local" class="form-control" v-model="period.date2">
     </div>
     <div class="input-group mb-3">

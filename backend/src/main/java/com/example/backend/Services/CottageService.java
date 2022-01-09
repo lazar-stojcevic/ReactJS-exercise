@@ -1,6 +1,7 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.*;
+import com.example.backend.Dtos.AdditionalServiceDto;
 import com.example.backend.Dtos.CottageDto;
 import com.example.backend.Dtos.NewSubcriptionDto;
 import com.example.backend.Repository.AddressRepository;
@@ -69,6 +70,16 @@ public class CottageService implements ICottageService {
         cottage.setPromo(changeDto.getPromo());
         cottage.setConductRules(changeDto.getConductRules());
         cottage.getCottagePriceList().setPrice(changeDto.getPrice());
+        return cottageRepository.save(cottage);
+    }
+
+    public Cottage addAdditionalService(AdditionalServiceDto serviceDto){
+        Cottage cottage = findById(serviceDto.getPriceList());
+        AdditionalCottageService additionalService45 = new AdditionalCottageService();
+        additionalService45.setName(serviceDto.getName());
+        additionalService45.setAddPrice(serviceDto.getAddPrice());
+        additionalService45.setPriceList(cottage.getCottagePriceList());
+        cottage.getCottagePriceList().getAdditionalServices().add(additionalService45);
         return cottageRepository.save(cottage);
     }
 

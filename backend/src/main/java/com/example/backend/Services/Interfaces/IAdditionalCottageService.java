@@ -10,4 +10,6 @@ public interface IAdditionalCottageService {
 
     AdditionalCottageService createCottageService(AdditionalServiceDto serviceDto);
 
+    void delete(long id);
+
 }

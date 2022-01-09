@@ -1,6 +1,7 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.*;
+import com.example.backend.Dtos.AdditionalServiceDto;
 import com.example.backend.Dtos.BoatDto;
 import com.example.backend.Dtos.NewSubcriptionDto;
 import com.example.backend.Dtos.PasswordChangeDto;
@@ -121,6 +122,16 @@ public class BoatService implements IBoatService {
 
         boat.getPrepaidCustomers().remove(customer);
         boatRepository.save(boat);
+    }
+
+    public Boat addAdditionalService(AdditionalServiceDto serviceDto){
+        Boat boat = findById(serviceDto.getPriceList());
+        AdditionalBoatService additionalService45 = new AdditionalBoatService();
+        additionalService45.setName(serviceDto.getName());
+        additionalService45.setAddPrice(serviceDto.getAddPrice());
+        additionalService45.setPriceList(boat.getPriceList());
+        boat.getPriceList().getAdditionalServices().add(additionalService45);
+        return boatRepository.save(boat);
     }
 
 }

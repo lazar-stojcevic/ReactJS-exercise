@@ -1,12 +1,14 @@
 package com.example.backend.Controllers;
 
-import com.example.backend.Beans.AdditionalCottageService;
-import com.example.backend.Beans.AdditionalService;
-import com.example.backend.Beans.Adventure;
-import com.example.backend.Beans.Cottage;
+import com.example.backend.Beans.*;
+import com.example.backend.Dtos.AdditionalServiceDto;
+import com.example.backend.Dtos.AvailablePeriodDto;
 import com.example.backend.Dtos.CottageDto;
 import com.example.backend.Dtos.NewSubcriptionDto;
+import com.example.backend.Repository.CottagePriceListRepository;
+import com.example.backend.Services.AdditionalCottageServiceService;
 import com.example.backend.Services.AdminService;
+import com.example.backend.Services.AvailablePeriodCottageService;
 import com.example.backend.Services.CottageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,12 @@ import java.util.Collection;
 public class CottageController {
 
     private final CottageService cottageService;
+
+    @Autowired
+    private AdditionalCottageServiceService additionalCottageServiceService;
+
+    @Autowired
+    private AvailablePeriodCottageService availablePeriodCottageService;
 
     @Autowired
     public CottageController(CottageService cottageService){
@@ -50,6 +58,13 @@ public class CottageController {
                 HttpStatus.OK);
     }
 
+    @GetMapping(path = "/availablePeriod/{cottageId}")
+    public ResponseEntity<Collection<AvailablePeriodCottage>> getAvailablePeriodOfCottage(
+            @PathVariable long cottageId){
+        return new ResponseEntity<>(cottageService.findById(cottageId).getPeriods(),
+                HttpStatus.OK);
+    }
+
     @GetMapping (path = "isSubcribed/{cottageId}/{userId}")
     public ResponseEntity<Boolean> isCustomerSubscribedToCottage(@PathVariable long cottageId, @PathVariable long userId){
 
@@ -65,6 +80,16 @@ public class CottageController {
     public Cottage update(@RequestBody CottageDto cottage){
 
         return this.cottageService.updateCottage(cottage);
+    }
+
+    @PutMapping(path = "additionalService/")
+    public Cottage addAdditionalService(@RequestBody AdditionalServiceDto serviceDto){
+        return this.cottageService.addAdditionalService(serviceDto);
+    }
+
+    @PutMapping(path = "availablePeriod/")
+    public AvailablePeriodCottage addAvailablePeriod(@RequestBody AvailablePeriodDto periodDto){
+        return this.availablePeriodCottageService.createCottageAvailablePeriod(periodDto);
     }
 
     @PutMapping(path = "/subscribe", consumes = "application/json")
@@ -92,6 +117,12 @@ public class CottageController {
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> delete(@PathVariable long id){
         cottageService.deleteCottage(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "additionalService/{id}")
+    public ResponseEntity<?> deleteAddService(@PathVariable long id){
+        additionalCottageServiceService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

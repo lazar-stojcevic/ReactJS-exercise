@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 public class AvailablePeriodDto {
     long id;
     long entityId;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private LocalDateTime fromDate;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private LocalDateTime toDate;
 }

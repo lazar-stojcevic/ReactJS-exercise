@@ -1,14 +1,9 @@
 package com.example.backend.Controllers;
 
-import com.example.backend.Beans.AdditionalBoatService;
-import com.example.backend.Beans.AdditionalCottageService;
-import com.example.backend.Beans.Boat;
-import com.example.backend.Beans.Cottage;
-import com.example.backend.Dtos.BoatDto;
-import com.example.backend.Dtos.CottageDto;
-import com.example.backend.Dtos.NewSubcriptionDto;
-import com.example.backend.Services.BoatService;
-import com.example.backend.Services.CottageService;
+import com.example.backend.Beans.*;
+import com.example.backend.Dtos.*;
+import com.example.backend.Services.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +17,12 @@ import java.util.Collection;
 public class BoatController {
 
     private final BoatService boatService;
+
+    @Autowired
+    private AdditionalBoatServiceService additionalBoatServiceService;
+
+    @Autowired
+    private AvailablePeriodsBoatService availablePeriodsBoatService;
 
     public BoatController(BoatService boatService){ this.boatService = boatService;}
 
@@ -47,6 +48,13 @@ public class BoatController {
                 HttpStatus.OK);
     }
 
+    @GetMapping(path = "/availablePeriod/{boatId}")
+    public ResponseEntity<Collection<AvailablePeriodBoat>> getAvailablePeriodOfBoat(
+            @PathVariable long boatId){
+        return new ResponseEntity<>(boatService.findById(boatId).getPeriods(),
+                HttpStatus.OK);
+    }
+
    @GetMapping (path = "isSubcribed/{cottageId}/{userId}")
     public ResponseEntity<Boolean> isCustomerSubscribedToCottage(@PathVariable long boatId, @PathVariable long userId){
 
@@ -62,6 +70,11 @@ public class BoatController {
     public Boat update(@RequestBody BoatDto boatDto){
 
         return this.boatService.updateBoat(boatDto);
+    }
+
+    @PutMapping(path = "availablePeriod/")
+    public AvailablePeriodBoat addAvailablePeriod(@RequestBody AvailablePeriodDto periodDto){
+        return this.availablePeriodsBoatService.createBoatAvailablePeriod(periodDto);
     }
 
     @PutMapping(path = "/subscribe", consumes = "application/json")
@@ -90,6 +103,17 @@ public class BoatController {
     public ResponseEntity<?> delete(@PathVariable long id){
         boatService.deleteBoat(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "additionalService/{id}")
+    public ResponseEntity<?> deleteAddService(@PathVariable long id){
+        additionalBoatServiceService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(path = "additionalService/")
+    public Boat addAdditionalService(@RequestBody AdditionalServiceDto serviceDto){
+        return this.boatService.addAdditionalService(serviceDto);
     }
 
 }

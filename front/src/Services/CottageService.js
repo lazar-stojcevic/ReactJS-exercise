@@ -58,6 +58,15 @@ class CottageService{
         return axios.get(URL + '/additionalServices/' + cottageId, {headers});
     }
 
+    getAvailablePeriodsOfCottage(cottageId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/availablePeriod/' + cottageId, {headers});
+    }
+
     subscribeCottage(userId, instructorId){
         const headers = {
             'Accept': 'application/json',
@@ -90,6 +99,33 @@ class CottageService{
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
         return axios.get(URL + '/isSubcribed/' + cottageId + '/' + userId, {headers});
+    }
+
+    AddAdditionalService(newService){
+        let headers = {
+            'Accept': 'application/json;charset=utf-8',
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.put(URL+ '/additionalService/', newService, {headers}).then();
+    }
+
+    AddAvailablePeriod(newPeriod){
+        let headers = {
+            'Accept': 'application/json;charset=utf-8',
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.put(URL+ '/availablePeriod/', newPeriod, {headers}).then();
+    }
+
+    DeleteAdditionalService(id){
+        let headers = {
+            'Accept': 'application/json;charset=utf-8',
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.delete(URL + '/additionalService/' + id, {headers}).then();
     }
 }
 

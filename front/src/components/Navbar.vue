@@ -22,7 +22,6 @@
 
       <!--COTTAGE_OWNER_ROLE-->
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/myCottageReservation">COTTAGE RESERVATIONS</router-link>
-      <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/availability">COTTAGE AVAILABILITY</router-link>
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/availablePeriodsWithBenefits">CREATE BENEFITS</router-link>
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/reservationReport">CREATE REPORT</router-link>
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/createReservationForCustomer">CREATE RESERVATION</router-link>

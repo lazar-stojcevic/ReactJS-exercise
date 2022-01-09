@@ -34,4 +34,9 @@ public class AdditionalCottageServiceService implements IAdditionalCottageServic
         additionalCottageService.setPriceList(cottageService.findById(serviceDto.getPriceList()).getCottagePriceList());
         return additionalServiceRepository.save(additionalCottageService);
     }
+
+    @Override
+    public void delete(long id) {
+        additionalServiceRepository.deleteById(id);
+    }
 }

@@ -6,4 +6,5 @@ import com.example.backend.Dtos.AdditionalServiceDto;
 public interface IAdditionalBoatService {
     AdditionalBoatService findAdditionalServiceById(long id);
     AdditionalBoatService createBoatService(AdditionalServiceDto serviceDto);
+    void delete(long id);
 }

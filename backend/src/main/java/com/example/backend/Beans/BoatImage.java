@@ -25,6 +25,6 @@ public class BoatImage {
     @ToString.Exclude
     private Boat boat;
 
-    @Column
+    @Column(length = 400000)
     private String base64;
 }

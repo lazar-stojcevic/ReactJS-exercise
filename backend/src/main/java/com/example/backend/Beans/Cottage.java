@@ -50,7 +50,7 @@ public class Cottage {
     @JsonIgnore
     private Set<CottageImage> images = new HashSet<CottageImage>();
 
-    @OneToMany(mappedBy = "cottage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cottage", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<AvailablePeriodCottage> periods = new HashSet<AvailablePeriodCottage>();
 

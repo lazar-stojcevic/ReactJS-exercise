@@ -7,9 +7,8 @@
           <div class="btn-group-sm" style="margin: 5px">
             <button @click="changeModeToInfo" v-if="mode === 'neutral'" class="btn-info">CHANGE YOUR INFO</button>
             <button @click="changeModeToAddPhoto" v-if="mode === 'neutral'" class="btn-info">ADD PHOTO</button>
-            <button @click="changeModeToAddRoom" v-if="mode === 'neutral'" class="btn-info">ADD ROOM</button>
             <button @click="changeModeToAddService" v-if="mode === 'neutral'" class="btn-info">ADD SERVICE</button>
-            <button @click="deleteCottage(cottage.id)" v-if="mode === 'neutral'" class="btn-danger">DELETE</button>
+            <button @click="deleteBoat(boat.id)" v-if="mode === 'neutral'" class="btn-danger">DELETE</button>
           </div>
 
           <div v-if="mode === 'neutral'">
@@ -18,29 +17,28 @@
             </b-card>
 
             <b-card>
-            <h1>Name: {{cottage.name}}</h1>
-            <br>
-            <h2>Rules: {{cottage.conductRules}} </h2>
-            <br>
-            <h3>Address: {{cottage.address.street}},{{cottage.address.city}},{{cottage.address.country}} </h3>
-            <br>
-            <p>Description: {{cottage.promo}} </p>
-            <br>
-            <h3>Price: {{cottage.cottagePriceList.price}} </h3>
-            <br>
-            <h3>Rating: {{cottage.rating}} </h3>
-          </b-card>
-
-            <h3>Rooms: </h3>
-            <div class="container" v-for="room in rooms" :key="room.id">
-              <b-card>
-              <p>Description: {{room.roomDescription}} </p>
+              <h1>Name: {{boat.name}}</h1>
               <br>
-              <p>Rating: {{room.numberOfBeds}} </p>
+              <h2>Rules: {{boat.conductRules}} </h2>
               <br>
-              <button @click="deleteRoom(room.id)" class="btn-info">DELETE</button>
-              </b-card>
-            </div>
+              <h3>Address: {{boat.address.street}},{{boat.address.city}},{{boat.address.country}} </h3>
+              <br>
+              <p>Description: {{boat.promo}} </p>
+              <br>
+              <h3>Price: {{boat.priceList.price}} </h3>
+              <br>
+              <h3>Rating: {{boat.rating}} </h3>
+              <br>
+              <h3>Type: {{boat.type}} </h3>
+              <br>
+              <h3>Number of engines: {{boat.numberOfEngines}} </h3>
+              <br>
+              <h3>Engine power: {{boat.enginePower}} </h3>
+              <br>
+              <h3>Top speed: {{boat.topSpeed}} </h3>
+              <br>
+              <h3>Capacity: {{boat.capacity}} </h3>
+            </b-card>
 
             <h3>Additional services: </h3>
             <div class="container" v-for="service in additionalServices" :key="service.id">
@@ -52,18 +50,15 @@
                 <button @click="deleteService(service.id)" class="btn-info">DELETE</button>
               </b-card>
             </div>
+
           </div>
 
-
-          <div v-if="mode === 'addRoom'" class="container">
-            <form @submit.prevent="addRoom">
+          <div v-if="mode === 'addPhoto'" class="container">
+            <form @submit.prevent="addPhoto">
               <div class="input-group mb-3">
-                <span class="input-group-text">ROOM DESCRIPTION</span>
-                <input type="text" class="form-control" v-model="newRoom.description">
-              </div>
-              <div class="input-group mb-3">
-                <span class="input-group-text">NUMBER OF BEDS</span>
-                <input type="number" class="form-control" v-model="newRoom.number">
+                <span class="input-group-text">PHOTO</span>
+                <br>
+                <input type="file" accept="image/jpeg/*" @change="uploadImage()"/>
               </div>
               <div class="input-group mb-3">
                 <div class="btn-group-sm">
@@ -93,28 +88,12 @@
             </form>
           </div>
 
-            <div v-if="mode === 'addPhoto'" class="container">
-              <form @submit.prevent="addPhoto">
-                <div class="input-group mb-3">
-                  <span class="input-group-text">PHOTO</span>
-                  <br>
-                  <input type="file" accept="image/jpeg/*" @change="uploadImage()"/>
-                </div>
-                <div class="input-group mb-3">
-                  <div class="btn-group-sm">
-                    <button type="submit" class="btn-info">CONFIRM</button>
-                    <button @click="changeModeToNeutral()" type="reset" class="btn-danger">CLOSE</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-
-            <b-form @submit="update" v-if="mode === 'changeInfo'">
+          <b-form @submit="update" v-if="mode === 'changeInfo'">
 
             <b-form-group id="input-name" label="Cottage name:" label-for="name">
               <b-form-input
                   id="name"
-                  v-model="cottage.name"
+                  v-model="boat.name"
                   placeholder="Enter cottage name"
                   required
               ></b-form-input>
@@ -123,7 +102,7 @@
             <b-form-group id="input-conduct-rules" label="Conduct rules:" label-for="conduct-rules">
               <b-form-input
                   id="conduct-rules"
-                  v-model="cottage.conductRules"
+                  v-model="boat.conductRules"
                   placeholder="Enter conduct rules"
               ></b-form-input>
             </b-form-group>
@@ -131,7 +110,7 @@
             <b-form-group id="input-street" label="Your Street:" label-for="street">
               <b-form-input
                   id="street"
-                  v-model="cottage.address.street"
+                  v-model="boat.address.street"
                   required
               ></b-form-input>
             </b-form-group>
@@ -139,7 +118,7 @@
             <b-form-group id="input-city" label="Your City:" label-for="city">
               <b-form-input
                   id="city"
-                  v-model="cottage.address.city"
+                  v-model="boat.address.city"
                   required
               ></b-form-input>
             </b-form-group>
@@ -147,7 +126,7 @@
             <b-form-group id="input-country" label="Your Country:" label-for="country">
               <b-form-input
                   id="country"
-                  v-model="cottage.address.country"
+                  v-model="boat.address.country"
                   required
               ></b-form-input>
             </b-form-group>
@@ -155,14 +134,57 @@
             <b-form-group id="input-promo" label="Your promo:" label-for="promo">
               <b-form-input
                   id="promo"
-                  v-model="cottage.promo"
+                  v-model="boat.promo"
+              ></b-form-input>
+            </b-form-group>
+
+            <b-form-group id="input-type" label="Boat type:" label-for="type">
+              <b-form-input
+                  id="type"
+                  v-model="boat.type"
+              ></b-form-input>
+            </b-form-group>
+
+            <b-form-group id="input-numberOfEngines" label="Number of engines:" label-for="numberOfEngines">
+              <b-form-input
+                  id="numberOfEngines"
+                  type="number"
+                  v-model="boat.numberOfEngines"
+                  required
+              ></b-form-input>
+            </b-form-group>
+
+            <b-form-group id="input-enginePower" label="Engine power:" label-for="enginePower">
+              <b-form-input
+                  id="enginePower"
+                  type="number"
+                  v-model="boat.enginePower"
+                  required
+              ></b-form-input>
+            </b-form-group>
+
+            <b-form-group id="input-topSpeed" label="Top speed:" label-for="topSpeed">
+              <b-form-input
+                  id="topSpeed"
+                  type="number"
+                  v-model="boat.topSpeed"
+                  required
+              ></b-form-input>
+            </b-form-group>
+
+            <b-form-group id="input-capacity" label="Capacity:" label-for="capacity">
+              <b-form-input
+                  id="capacity"
+                  type="number"
+                  v-model="boat.capacity"
+                  required
               ></b-form-input>
             </b-form-group>
 
             <b-form-group id="input-price" label="Price for day:" label-for="price">
               <b-form-input
                   id="price"
-                  v-model="cottage.cottagePriceList.price"
+                  v-model="boat.priceList.price"
                   required
               ></b-form-input>
             </b-form-group>
@@ -178,112 +200,78 @@
 </template>
 
 <script>
-import CottageService from "../../Services/CottageService";
-import RoomService from "../../Services/RoomService";
 import LogInService from "../../Services/LogInService";
-import CottageImageService from "../../Services/CottageImageService";
+import BoatService from "../../Services/BoatService";
+import BoatImageService from "../../Services/BoatImageService";
 
 export default {
-  name: "CottageProfile",
+  name: "BoatProfile",
   data(){
     return{
       id:'',
-      cottage: {address: {
+      boat: {address: {
           street: '',
           city: '',
           country: ''
         },
-      cottagePriceList:{ price:0}
+        priceList:{ price:0}
       },
-      rooms:[],
       photos:[],
       additionalServices:[],
-      newRoom:{
-        description: '',
-        number:''
-      },
+      mode: 'neutral',
+      newBoatInfo: '',
       newService:{
         priceList: '',
         name: '',
         addPrice: ''
       },
-      mode: 'neutral',
-      newCottageInfo: '',
       response:'',
       photo: []
     }
   },
   mounted() {
     this.id = this.$route.params.id;
-    CottageService.getCottageById(this.id).then(res => {
-      this.cottage = res.data;
-      this.newCottageInfo = res.data;
+    BoatService.getOneBoat(this.id).then(res => {
+      this.boat = res.data;
+      this.newBoatInfo = res.data;
     });
-    RoomService.getRoomById(this.id).then(res=>{
-      this.rooms = res.data;
-    });
-    CottageImageService.getImageById(this.id).then(res=>{
+    BoatImageService.getImageById(this.id).then(res=>{
       for(let img of res.data){
         this.photos.push(img.base64.replaceAll('"', ''));
       }
     });
-    CottageService.getAdditionalServicesOfCottage(this.id).then(res=>{
+    BoatService.getAdditionalServicesOfBoat(this.id).then(res=>{
       this.additionalServices = res.data;
     });
 
   },
   methods: {
     changeModeToNeutral(){
-      if(this.mode == 'addRoom'){
-        this.newRoom.description = '';
-        this.newRoom.number = 0;
-      }
       if (this.mode == 'changeInfo'){
-        CottageService.getCottageById(this.id).then(res => {
-          this.cottage = res.data;
-          this.newCottageInfo = res.data;
+        BoatService.getOneBoat(this.id).then(res => {
+          this.boat = res.data;
+          this.newBoatInfo = res.data;
         });
       }
       this.mode = 'neutral';
     },
     changeModeToInfo(){
       this.mode = 'changeInfo';
-      this.newUserInfo = JSON.parse(JSON.stringify(this.user));
     },
     changeModeToAddPhoto(){
       this.mode = 'addPhoto'
     },
-
-    changeModeToAddRoom(){
-      this.mode = 'addRoom'
-    },
-
     changeModeToAddService(){
       this.mode = 'addService'
     },
 
-
-    addRoom(){
-      RoomService.create({
-        "cottageId": this.id,
-        "roomDescription": this.newRoom.description,
-        "numberOfBeds": this.newRoom.number
-      }).then(response=>{
-        RoomService.getRoomById(this.id).then(res=>{
-          this.rooms = res.data;
-        });
-        this.response=response;
-          })
-      this.changeModeToNeutral();
-    },
-
     addService(){
-      CottageService.AddAdditionalService({
+      BoatService.AddAdditionalService({
         "priceList": this.id,
         "name": this.newService.name,
         "addPrice": this.newService.addPrice
       }).then(response=>{
-        CottageService.getAdditionalServicesOfCottage(this.id).then(res=>{
+        BoatService.getAdditionalServicesOfBoat(this.id).then(res=>{
           this.additionalServices = res.data;
         });
         this.response=response;
@@ -291,44 +279,41 @@ export default {
       this.changeModeToNeutral();
     },
 
-    deleteRoom(id){
-      RoomService.delete(id).then(response=>{
-        RoomService.getRoomById(this.id).then(res=>{
-          this.rooms = res.data;
-        });
-        this.response=response;
-      })
-    },
-
-    update(){
-      CottageService.update({
-                              "id": this.id,
-                              "name": this.cottage.name,
-                              "conductRules": this.cottage.conductRules,
-                              "street": this.cottage.address.street,
-                              "city": this.cottage.address.city,
-                              "country": this.cottage.address.country,
-                              "promo": this.cottage.promo,
-                              "cottageOwnerId": LogInService.userId,
-                              "price": this.cottage.cottagePriceList.price
-                            }).then(res => {this.user = res.data;
-                            this.changeModeToNeutral()}).catch(() => {
-  alert("SERVER ERROR");
-});
-    },
-
-    deleteCottage(id){
-      CottageService.delete(id).then(response=>{
-        this.$router.push('/usersCottage');
-        this.response=response;
-      })
-    },
-
     deleteService(id){
-      CottageService.DeleteAdditionalService(id).then(response=>{
-        CottageService.getAdditionalServicesOfCottage(this.id).then(res=>{
+      BoatService.DeleteAdditionalService(id).then(response=>{
+        BoatService.getAdditionalServicesOfBoat(this.id).then(res=>{
           this.additionalServices = res.data;
         });
+        this.response=response;
+      })
+    },
+
+
+    update(){
+      BoatService.update({
+        "id": this.id,
+        "name": this.boat.name,
+        "conductRules": this.boat.conductRules,
+        "street": this.boat.address.street,
+        "city": this.boat.address.city,
+        "country": this.boat.address.country,
+        "promo": this.boat.promo,
+        "cottageOwnerId": LogInService.userId,
+        "price": this.boat.priceList.price,
+        "type": this.boat.type,
+        "numberOfEngines": this.boat.numberOfEngines,
+        "enginePower": this.boat.enginePower,
+        "topSpeed": this.boat.topSpeed,
+        "capacity": this.boat.capacity
+      }).then(res => {this.user = res.data;
+        this.changeModeToNeutral()}).catch(() => {
+        alert("SERVER ERROR");
+      });
+    },
+
+    deleteBoat(id){
+      BoatService.delete(id).then(response=>{
+        this.$router.push('/usersBoats');
         this.response=response;
       })
     },
@@ -345,11 +330,11 @@ export default {
 
 
     addPhoto(){
-      CottageImageService.create({
-        "cottageId": this.id,
+      BoatImageService.create({
+        "boatId": this.id,
         "base64": this.photo
       }).then(response=>{
-        CottageImageService.getImageById(this.id).then(res=>{
+        BoatImageService.getImageById(this.id).then(res=>{
           for(let img of res.data){
             this.photos.push(img.base64.replaceAll('"', ''));
           }
@@ -358,11 +343,6 @@ export default {
       })
       this.changeModeToNeutral();
     },
-
-    a(){
-      alert(this.photos[0]);
-    }
-
 
   }
 }
