@@ -4,7 +4,7 @@
     <p>Future adventure adventures</p>
     <div v-for="reservation in adventures" :key="reservation.id">
       <b-card
-          tag="adventure"
+          name="adventure"
           style="max-width: 20rem;"
           class="mb-2"
       >
@@ -27,10 +27,10 @@
         <b-button v-if="isInNext3Days(reservation.reservationStart)" @click="cancelReservation(reservation)" variant="danger">Cancel</b-button>
       </b-card>
     </div>
-
+    <p>Future cottage reservations:</p>
     <div v-for="cottage in cottages" :key="cottage.id">
       <b-card
-          tag="adventure"
+          name="cottage"
           style="max-width: 20rem;"
           class="mb-2"
       >
@@ -53,6 +53,37 @@
         <b-button v-if="isInNext3Days(cottage.reservationStart)" @click="cancelCottageReservation(cottage)" variant="danger">Cancel</b-button>
       </b-card>
     </div>
+
+    <p>Future boat reservations:</p>
+    <div v-for="boat in boats" :key="boat.id">
+      <b-card
+          name="boat"
+          style="max-width: 20rem;"
+          class="mb-2"
+      >
+        <b-card-title>
+          {{boat.boat.name}}
+        </b-card-title>
+        <br>
+        <b-card-sub-title>
+          Description: {{boat.boat.promo}}
+        </b-card-sub-title>
+        <br>
+        <b-card-sub-title>
+          Address: {{boat.boat.address.country}}, {{boat.boat.address.city}}, {{boat.boat.address.street}}
+        </b-card-sub-title>
+
+        <b-card-text>
+          {{ boat.reservationStart | formatDate}} - {{ boat.reservationEnd | formatDate}}
+        </b-card-text>
+        <br>
+        <b-card-text>
+          PRICE:  {{ boat.price }}
+        </b-card-text>
+        <br>
+        <b-button v-if="isInNext3Days(boat.reservationStart)" @click="cancelBoatReservation(boat)" variant="danger">Cancel</b-button>
+      </b-card>
+    </div>
   </div>
 </template>
 
@@ -62,6 +93,7 @@ import moment from "moment";
 import AdventureReservationService from "@/Services/AdventureReservationService";
 import CottageReservationService from "@/Services/CottageReservationService";
 import LogInService from "@/Services/LogInService";
+import BoatReservationService from "@/Services/BoatReservationService";
 
 export default {
   name: "BookedReservations",
@@ -69,6 +101,7 @@ export default {
     return {
       adventures : [],
       cottages : [],
+      boats: [],
       filter: {
         dateFrom: new Date(),
         dateTo: new Date(),
@@ -83,9 +116,11 @@ export default {
       this.adventures = res.data;
     });
     CottageReservationService.getAllFutureTermsByCustomerId(LogInService.userId).then(res =>  {
-      console.log(res.data)
       this.cottages = res.data;
     });
+    BoatReservationService.getAllFutureTermsByCustomerId(LogInService.userId).then(res => {
+      this.boats = res.data;
+    })
   },
   methods:{
     isInNext3Days(date){
@@ -103,8 +138,13 @@ export default {
         alert("Reservation canceled");
         this.$router.push('/');
       })
-
-    }
+    },
+    cancelBoatReservation(boatReservation){
+      BoatReservationService.cancelReservation(boatReservation).then(() => {
+        alert("Reservation canceled");
+        this.$router.push('/');
+      })
+    },
   }
 }
 </script>

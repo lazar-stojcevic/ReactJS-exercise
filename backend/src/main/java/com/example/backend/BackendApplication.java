@@ -766,7 +766,18 @@ public class BackendApplication implements CommandLineRunner {
         boatReservation2.setLength(3);
         boatReservation2.setDiscount(0);
         boatReservation2.setPrice(7000);
-        boatReservationRepository.save(boatReservation);
+        boatReservationRepository.save(boatReservation2);
+
+        BoatReservation boatReservation3 = new BoatReservation();
+        boatReservation3.setCustomer(null);
+        boatReservation3.setBoat(boat);
+        boatReservation3.setReservationStart(LocalDateTime.of(2022,4 ,15,10,20));
+        boatReservation3.setReservationEnd(LocalDateTime.of(2022, 4,20,10,20));
+        boatReservation3.setLength(3);
+        boatReservation3.setDiscount(10);
+        boatReservation3.setPrice(35000);
+        boatReservation3.setFast(true);
+        boatReservationRepository.save(boatReservation3);
     }
 
 }

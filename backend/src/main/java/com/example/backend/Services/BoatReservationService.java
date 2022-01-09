@@ -177,9 +177,22 @@ public class BoatReservationService {
     }
 
     //TODO URADI SUTRA
-    public BoatReservation reserveFastReservation(long usedId, long reservationId){
+    public BoatReservation reserveFastReservation(long usedId, long reservationId) throws InterruptedException {
         BoatReservation boatReservation = findBoatReservationById(reservationId);
-        boatReservation.setCustomer(customerService.findCustomerById(usedId));
+        Customer customer = customerService.findCustomerById(usedId);
+        if (IsCustomersReservationsOverlapsWithNew(customer, boatReservation)){
+            return null;
+        }
+        ReservationSearchDto pom = new ReservationSearchDto();
+        pom.setDateFrom(boatReservation.getReservationStart());
+        pom.setDateTo(boatReservation.getReservationEnd());
+        pom.setId(customer.getId());
+        if(!isUserNotForbidden(pom, boatReservation.getBoat())) {
+            return null;
+        }
+
+        boatReservation.setCustomer(customer);
+        emailService.sendBoatReservationConfirm(customer, boatReservation);
         return save(boatReservation);
     }
 
@@ -244,65 +257,42 @@ public class BoatReservationService {
 
     private boolean isReservationsOverlapWithAdventureReservations(
             AdventureReservation existingReservation, BoatReservation newReservation){
-        LocalDateTime existingReservationEndTime = existingReservation.getReservationStart()
-                .plusHours(existingReservation.getLength());
-        LocalDateTime newReservationEndTime = newReservation.getReservationEnd();
-        if(newReservation.getReservationStart().isAfter(existingReservation.getReservationStart()) &&
-                newReservation.getReservationStart().isBefore(existingReservationEndTime))
-            return true;
-        else if(newReservationEndTime.isAfter(existingReservation.getReservationStart()) &&
-                newReservationEndTime.isBefore(existingReservationEndTime))
-            return true;
-        else if(newReservation.getReservationStart().isEqual(existingReservation.getReservationStart()))
-            return true;
-        else return newReservation.getReservationStart().isBefore(existingReservation.getReservationStart()) &&
-                    newReservationEndTime.isAfter(existingReservationEndTime);
+        LocalDateTime existingStart = existingReservation.getReservationStart();
+        LocalDateTime existingEnd = existingReservation.getReservationStart().plusHours(existingReservation.getLength());
+        LocalDateTime newStart = newReservation.getReservationStart();
+        LocalDateTime newEnd = newReservation.getReservationEnd();
+        return isToRangesOverlaps(existingStart, existingEnd, newStart, newEnd);
     }
 
     private boolean isReservationsOverlapWithCottageReservations(
             CottageReservation existingReservation, BoatReservation newReservation){
-        LocalDateTime existingReservationEndTime = existingReservation.getReservationEnd();
-        LocalDateTime newReservationEndTime = newReservation.getReservationEnd();
-        if(newReservation.getReservationStart().isAfter(existingReservation.getReservationStart()) &&
-                newReservation.getReservationStart().isBefore(existingReservationEndTime))
-            return true;
-        else if(newReservationEndTime.isAfter(existingReservation.getReservationStart()) &&
-                newReservationEndTime.isBefore(existingReservationEndTime))
-            return true;
-        else if(newReservation.getReservationStart().isEqual(existingReservation.getReservationStart()))
-            return true;
-        else return newReservation.getReservationStart().isBefore(existingReservation.getReservationStart()) &&
-                    newReservationEndTime.isAfter(existingReservationEndTime);
+        LocalDateTime existingStart = existingReservation.getReservationStart();
+        LocalDateTime existingEnd = existingReservation.getReservationEnd();
+        LocalDateTime newStart = newReservation.getReservationStart();
+        LocalDateTime newEnd = newReservation.getReservationEnd();
+        return isToRangesOverlaps(existingStart, existingEnd, newStart, newEnd);
     }
 
     private boolean isReservationsOverlapWithBoatReservations(
             BoatReservation existingReservation, BoatReservation newReservation){
-        LocalDateTime existingReservationEndTime = existingReservation.getReservationEnd();
-        LocalDateTime newReservationEndTime = newReservation.getReservationEnd();
-        if(newReservation.getReservationStart().isAfter(existingReservation.getReservationStart()) &&
-                newReservation.getReservationStart().isBefore(existingReservationEndTime))
-            return true;
-        else if(newReservationEndTime.isAfter(existingReservation.getReservationStart()) &&
-                newReservationEndTime.isBefore(existingReservationEndTime))
-            return true;
-        else if(newReservation.getReservationStart().isEqual(existingReservation.getReservationStart()))
-            return true;
-        else return newReservation.getReservationStart().isBefore(existingReservation.getReservationStart()) &&
-                    newReservationEndTime.isAfter(existingReservationEndTime);
+        LocalDateTime existingStart = existingReservation.getReservationStart();
+        LocalDateTime existingEnd = existingReservation.getReservationEnd();
+        LocalDateTime newStart = newReservation.getReservationStart();
+        LocalDateTime newEnd = newReservation.getReservationEnd();
+        return isToRangesOverlaps(existingStart, existingEnd, newStart, newEnd);
     }
 
     private boolean isToRangesOverlaps(LocalDateTime existingStart, LocalDateTime existingEnd,
                                        LocalDateTime newStart, LocalDateTime newEnd){
-        if(newStart.isAfter(existingStart) &&
-                newStart.isBefore(existingStart))
+        if(existingStart.isAfter(newStart) && existingStart.isBefore(newEnd))
             return true;
-        else if(newEnd.isAfter(existingStart) &&
-                newEnd.isBefore(existingEnd))
+        else if (existingEnd.isAfter(newStart) && existingEnd.isBefore(newEnd))
             return true;
-        else if(newStart.isEqual(existingStart))
+        else if (newStart.isAfter(existingStart) && newStart.isBefore(existingEnd))
             return true;
-        else return newStart.isBefore(existingStart) &&
-                    newEnd.isAfter(existingEnd);
+        else if (newStart.isEqual(existingStart) && newEnd.isEqual(existingEnd))
+            return true;
+        else return newEnd.isAfter(existingStart) && newEnd.isBefore(existingEnd);
     }
 
     private List<AdditionalBoatService> findAllSelectedAdditionalServices(List<Long> ids){
@@ -338,7 +328,6 @@ public class BoatReservationService {
 
 
     private boolean isUserNotForbidden(ReservationSearchDto searchDto, Boat boat){
-        Customer customer = customerService.findCustomerById(searchDto.getId());
         for (ForbiddenCustomerToBoat fc : forbiddenCustomerToBoatRepository.getAllCancellationsOfCustomerToBoat(searchDto.getId(), boat.getId())){
             if (isToRangesOverlaps(fc.getReservationStart(), fc.getReservationEnd(), searchDto.getDateFrom(), searchDto.getDateTo())){
                 return false;

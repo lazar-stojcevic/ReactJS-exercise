@@ -76,7 +76,16 @@ public class AdventureReservationService {
        Customer customer = customerService.findCustomerById(reservation.getUserId());
        AdventureReservation adventureReservation = getAdventureReservationById(reservation.getReservationId());
         for (AdventureReservation ar : customer.getAdventureReservations()){
-            if (isReservationsOverlap(ar, adventureReservation))
+            if (isReservationsOverlapForAdventures(ar, adventureReservation))
+                return null;
+        }
+        for (CottageReservation cr : customer.getCottageReservations()){
+            if(isReservationsOverlapForCottages(cr, adventureReservation))
+                return null;
+        }
+
+        for(BoatReservation br: customer.getBoatReservations()){
+            if(isReservationsOverlapForBoats(br, adventureReservation))
                 return null;
         }
         List<AdditionalService> services = findAllSelectedAdditionalServices(reservation.getServices());
@@ -91,13 +100,13 @@ public class AdventureReservationService {
         Customer customer = customerService.findCustomerById(reservation.getUserId());
         AdventureReservation adventureReservation = getAdventureReservationById(reservation.getReservationId());
         for (AdventureReservation ar : customer.getAdventureReservations()){
-            if (isReservationsOverlap(ar, adventureReservation))
+            if (isReservationsOverlapForAdventures(ar, adventureReservation))
                 return null;
         }
         if (IsForbiddenToCustomer(adventureReservation, customer.getId()))
             return null;
 
-        adventureReservation.setCustomer(customer);
+
         emailService.sendAdventureReservationConfirm(customer);
         return save(adventureReservation);
     }
@@ -175,7 +184,7 @@ public class AdventureReservationService {
         if(!isReservationInAvailableTimespanOfInstructor(adventureReservation, dto.getInstructorId()))
             return null;
         for(AdventureReservation ar : getAllNextReservationsOfInstructor(dto.getInstructorId())){
-            if(isReservationsOverlap(ar, adventureReservation))
+            if(isReservationsOverlapForAdventures(ar, adventureReservation))
                 return null;
         }
         adventureReservation.setAdventure(adventureService.findAdventureById(dto.getAdventureId()));
@@ -263,15 +272,19 @@ public class AdventureReservationService {
     }
 
     //PROVERA DA LI CUSTOMER IMA NEKE REZERVACIJE U TO VREME
-    //TODO: DA LI TREBA DODATI I PROVERE ZA BRODOVE?
     private boolean addCustomerToReservation(AdventureReservation reservation, ReserveAdventureDto dto) {
         Customer customer = this.customerService.findByEmail(dto.getCustomerMail());
         for(AdventureReservation ar : customer.getAdventureReservations()){
-            if(isReservationsOverlap(ar, reservation))
+            if(isReservationsOverlapForAdventures(ar, reservation))
                 return false;
         }
         for (CottageReservation cr : customer.getCottageReservations()){
             if(isReservationsOverlapForCottages(cr, reservation))
+                return false;
+        }
+
+        for(BoatReservation br: customer.getBoatReservations()){
+            if(isReservationsOverlapForBoats(br, reservation))
                 return false;
         }
         reservation.setCustomer(customer);
@@ -296,39 +309,44 @@ public class AdventureReservationService {
     }
 
     //METODA PROVERAVA DA LI SE DVA TERMINA PREKLAPAJU
-    private boolean isReservationsOverlap(
+    private boolean isReservationsOverlapForAdventures(
             AdventureReservation existingReservation, AdventureReservation newReservation){
-        LocalDateTime existingReservationEndTime = existingReservation.getReservationStart()
-                .plusHours(existingReservation.getLength());
-        LocalDateTime newReservationEndTime = newReservation.getReservationStart()
-                .plusHours(newReservation.getLength());
-        if(newReservation.getReservationStart().isAfter(existingReservation.getReservationStart()) &&
-                newReservation.getReservationStart().isBefore(existingReservationEndTime))
-            return true;
-        else if(newReservationEndTime.isAfter(existingReservation.getReservationStart()) &&
-                newReservationEndTime.isBefore(existingReservationEndTime))
-            return true;
-        else if(newReservation.getReservationStart().isEqual(existingReservation.getReservationStart()))
-            return true;
-        else return newReservation.getReservationStart().isBefore(existingReservation.getReservationStart()) &&
-                    newReservationEndTime.isAfter(existingReservationEndTime);
+        LocalDateTime existingStart = existingReservation.getReservationStart();
+        LocalDateTime existingEnd = existingReservation.getReservationStart().plusHours(existingReservation.getLength());
+        LocalDateTime newStart = newReservation.getReservationStart();
+        LocalDateTime newEnd = newReservation.getReservationStart().plusHours(newReservation.getLength());
+        return isToRangesOverlaps(existingStart, existingEnd, newStart, newEnd);
     }
 
     private boolean isReservationsOverlapForCottages(
             CottageReservation existingReservation, AdventureReservation newReservation){
-        LocalDateTime existingReservationEndTime = existingReservation.getReservationEnd();
-        LocalDateTime newReservationEndTime = newReservation.getReservationStart()
-                .plusHours(newReservation.getLength());
-        if(newReservation.getReservationStart().isAfter(existingReservation.getReservationStart()) &&
-                newReservation.getReservationStart().isBefore(existingReservationEndTime))
+        LocalDateTime existingStart = existingReservation.getReservationStart();
+        LocalDateTime existingEnd = existingReservation.getReservationEnd();
+        LocalDateTime newStart = newReservation.getReservationStart();
+        LocalDateTime newEnd = newReservation.getReservationStart().plusHours(newReservation.getLength());
+        return isToRangesOverlaps(existingStart, existingEnd, newStart, newEnd);
+    }
+
+    private boolean isReservationsOverlapForBoats(
+            BoatReservation existingReservation, AdventureReservation newReservation){
+        LocalDateTime existingStart = existingReservation.getReservationStart();
+        LocalDateTime existingEnd = existingReservation.getReservationEnd();
+        LocalDateTime newStart = newReservation.getReservationStart();
+        LocalDateTime newEnd = newReservation.getReservationStart().plusHours(newReservation.getLength());
+        return isToRangesOverlaps(existingStart, existingEnd, newStart, newEnd);
+    }
+
+    private boolean isToRangesOverlaps(LocalDateTime existingStart, LocalDateTime existingEnd,
+                                       LocalDateTime newStart, LocalDateTime newEnd){
+        if(existingStart.isAfter(newStart) && existingStart.isBefore(newEnd))
             return true;
-        else if(newReservationEndTime.isAfter(existingReservation.getReservationStart()) &&
-                newReservationEndTime.isBefore(existingReservationEndTime))
+        else if (existingEnd.isAfter(newStart) && existingEnd.isBefore(newEnd))
             return true;
-        else if(newReservation.getReservationStart().isEqual(existingReservation.getReservationStart()))
+        else if (newStart.isAfter(existingStart) && newStart.isBefore(existingEnd))
             return true;
-        else return newReservation.getReservationStart().isBefore(existingReservation.getReservationStart()) &&
-                    newReservationEndTime.isAfter(existingReservationEndTime);
+        else if (newStart.isEqual(existingStart) && newEnd.isEqual(existingEnd))
+            return true;
+        else return newEnd.isAfter(existingStart) && newEnd.isBefore(existingEnd);
     }
 
     private boolean isReservationInAvailableTimespanOfInstructor(
@@ -368,13 +386,10 @@ public class AdventureReservationService {
         return this.adventureReservationRepository.save(adventureReservation);
     }
 
-
     //PROVERA DA LI JE ZABRANJENO KORISNIKU DA ZAKAZUJE PONOVO OVAJ TERMIN
     private boolean IsForbiddenToCustomer(AdventureReservation ar, long id){
         Customer customer = customerService.findCustomerById(id);
-        if (ar.getForbidenCustomers().contains(customer))
-            return true;
-        return false;
+        return ar.getForbidenCustomers().contains(customer);
     }
 
     //TODO: MENJANO NAKNADNO U SLUCAJU BAGOVA

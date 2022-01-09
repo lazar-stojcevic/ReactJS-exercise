@@ -20,12 +20,14 @@ import HistoryOfReservations from "@/components/FishingInstructor/HistoryOfReser
 import OneBoat from "@/components/Customer/ShowOne/OneBoat";
 import OneInstructor from "@/components/Customer/ShowOne/OneInstructor";
 import OneCottage from "@/components/Customer/ShowOne/OneCottage";
-import ReserveAdventure from "@/components/Customer/Reserve/ReserveAvanture"
-import NewAdventureReservation from "@/components/Customer/Reserve/NewAdventureReservation"
-import InstructorActions from "@/components/Customer/Actions/InstructorActions"
-import ReserveCottage from "@/components/Customer/Reserve/ReserveCottage"
-import CottageActions from "@/components/Customer/Actions/CottageActions"
-import ReserveBoat from "@/components/Customer/Reserve/ReserveBoat"
+import ReserveAdventure from "@/components/Customer/Reserve/ReserveAvanture";
+import NewAdventureReservation from "@/components/Customer/Reserve/NewAdventureReservation";
+import InstructorActions from "@/components/Customer/Actions/InstructorActions";
+import ReserveCottage from "@/components/Customer/Reserve/ReserveCottage";
+import CottageActions from "@/components/Customer/Actions/CottageActions";
+import ReserveBoat from "@/components/Customer/Reserve/ReserveBoat";
+import BoatActions from "@/components/Customer/Actions/BoatActions";
+
 
 import AdminProfile from "@/components/Admin/AdminProfile";
 import ProfileRequests from "@/components/Admin/Requests";
@@ -43,8 +45,6 @@ import CreateReservation from "../components/CottageOwner/CreateReservation";
 import BoatOwnerProfile from "../components/BoatOwner/BoatOwnerProfile";
 import UsersBoats from "../components/BoatOwner/UsersBoats";
 import CreateBoat from "../components/BoatOwner/CreateBoat";
-
-
 
 const routes = [
     {path: '/', component: Home},
@@ -91,6 +91,7 @@ const routes = [
     {path: '/usersBoats', component: UsersBoats},
     {path: '/createBoats', component: CreateBoat},
     {path: '/cottageActions/:id', component: CottageActions},
+    {path: '/boatActions/:id', component: BoatActions},
     {path: '/reserveBoat', component: ReserveBoat},
 ]
 

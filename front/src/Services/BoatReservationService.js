@@ -34,5 +34,49 @@ class BoatReservationService {
 
         return axios.put(URL + '/reserveTerm/', JSON.stringify(data), {headers});
     }
+
+    getAllFutureTermsByCustomerId(customerId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/futureCustomerReservation/' + customerId, {headers});
+    }
+
+    cancelReservation(reservation){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.reservationId = reservation.id;
+        data.userId = LogInService.userId;
+
+        return axios.put(URL + '/cancelTerm/', JSON.stringify(data), {headers});
+    }
+
+    getAllNextActionsOfBoat(id) {
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/nextActions/' + id, {headers});
+    }
+
+    ReserveFastReservation(reservationId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.reservationId = reservationId;
+        data.userId = LogInService.userId;
+
+        return axios.put(URL + '/reserveFastReservation/', JSON.stringify(data), {headers});
+    }
 }
 export default new BoatReservationService()
