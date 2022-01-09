@@ -35,6 +35,12 @@ public class ComplaintController {
                 HttpStatus.OK);
     }
 
+    @PostMapping(path = "/boat")
+    public ResponseEntity<Boolean> createBoatComplaint(@RequestBody NewComplaintDto complaintDto){
+        return new ResponseEntity<>(complaintService.SaveBoatComplaint(complaintDto),
+                HttpStatus.OK);
+    }
+
     @GetMapping(path = "/notReviewedComplaints")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Collection<ComplaintForReviewDto>> getAllAdventureComplaintForRevision(){

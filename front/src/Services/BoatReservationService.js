@@ -87,5 +87,14 @@ class BoatReservationService {
         };
         return axios.get(URL + '/pastCustomerReservation/' + customerId, {headers});
     }
+
+    getAllPastTermsByCustomerIdWithPutComplaint(customerId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/pastCustomerReservationWithOutComplaint/' + customerId, {headers});
+    }
 }
 export default new BoatReservationService()

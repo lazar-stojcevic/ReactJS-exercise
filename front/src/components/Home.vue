@@ -45,7 +45,6 @@
       <router-link class="btn btn-secondary" to="/createCottage" style="margin: 5px">Create cottage</router-link>
 
     </b-card>
-    <br>
     <b-card
         img-width="80vw"
         img-height="250vh"
@@ -66,7 +65,7 @@
       <router-link class="btn btn-secondary" to="/usersBoats" style="margin: 5px">See boats</router-link>
       <router-link class="btn btn-secondary" to="/createBoats" style="margin: 5px">Create boat</router-link>
     </b-card>
-    <br>
+
     <b-card
         img-width="80vw"
         img-height="250vh"
@@ -87,7 +86,6 @@
       <router-link class="btn btn-secondary" to="/cottageOwnerProfile" style="margin: 5px">See profile</router-link>
 
     </b-card>
-    <br>
     <b-card
         img-width="80vw"
         img-height="250vh"
@@ -108,7 +106,6 @@
       <router-link class="btn btn-secondary" to="/boatOwnerProfile" style="margin: 5px">See profile</router-link>
 
     </b-card>
-    <br>
     <b-card
         img-width="80vw"
         img-height="250vh"

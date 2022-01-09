@@ -157,6 +157,10 @@ public class CustomerService implements IUserService {
         return findCustomerById(userId).getPrepaidCottages();
     }
 
+    public List<Boat>getCustomerBoatSubscription(long userId){
+        return findCustomerById(userId).getPrepaidBoats();
+    }
+
     private DeleteProfileRequest getDeleteProfileRequest(DeleteUserRequestDto deleteUserRequestDto) {
         DeleteProfileRequest saveVal = new DeleteProfileRequest();
         saveVal.setRequestText(deleteUserRequestDto.getRequestText());

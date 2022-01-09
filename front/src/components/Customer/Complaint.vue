@@ -79,6 +79,44 @@
       </b-card>
     </div>
     <br>
+    <h3 style="margin-left: 5px; color: darkred">Boats:</h3>
+    <div v-for="reservation in boats" :key="reservation.id">
+      <b-card
+          name="cottage"
+          style="max-width: 50rem; margin-left: 20px; margin-right: 20px"
+          class="mb-2"
+      >
+        <b-card-title>
+          {{reservation.boat.name}}
+        </b-card-title>
+        <br>
+        <b-card-sub-title>
+          Boat owner: {{reservation.boat.boatOwner.firstname}} {{reservation.boat.boatOwner.lastName}}
+        </b-card-sub-title>
+        <br>
+        <b-card-sub-title>
+          Description: {{reservation.boat.promo}}
+        </b-card-sub-title>
+
+        <b-card-text>
+          {{ reservation.reservationStart | formatDate}} - {{ reservation.reservationEnd | formatDate}}
+        </b-card-text>
+        <br>
+        <b-card-text>
+          PRICE:  {{ reservation.price }}
+        </b-card-text>
+        <b-form-textarea
+            id="textarea"
+            v-model="reservation.text"
+            placeholder="Enter you complaint here"
+            rows="3"
+            max-rows="6"
+        ></b-form-textarea>
+        <br>
+        <button @click="writeComplaintForBoat(reservation.id, reservation.text)" type="reset" class="btn-danger">SEND COMPLAINT</button>
+      </b-card>
+    </div>
+    <br>
   </div>
 </template>
 
@@ -87,13 +125,15 @@ import AdventureReservationService from "@/Services/AdventureReservationService"
 import ComplaintService from "@/Services/ComplaintService";
 import LogInService from "@/Services/LogInService";
 import CottageReservationService from "@/Services/CottageReservationService";
+import BoatReservationService from "@/Services/BoatReservationService";
 
 export default {
   name: "Complaint",
   data() {
     return {
       adventures : [],
-      cottages: []
+      cottages: [],
+      boats: [],
     }
   },
   mounted() {
@@ -110,6 +150,12 @@ export default {
       for (let cr of this.cottages)
         cr.text = '';
     });
+    BoatReservationService.getAllPastTermsByCustomerIdWithPutComplaint(LogInService.userId).then(res => {
+      console.log(res.data);
+      this.boats = res.data;
+      for (let br of this.boats)
+        br.text = '';
+    });
 
   },
   methods:{
@@ -121,6 +167,12 @@ export default {
     },
     writeComplaintForCottage(id, text){
       ComplaintService.writeComplaintForCottage(id, text).then(()=>{
+        alert("Complaint successfully added");
+        this.$router.push('/');
+      }).catch(() => alert("Some error occurred"));
+    },
+    writeComplaintForBoat(id, text){
+      ComplaintService.writeComplaintForBoat(id, text).then(()=>{
         alert("Complaint successfully added");
         this.$router.push('/');
       }).catch(() => alert("Some error occurred"));

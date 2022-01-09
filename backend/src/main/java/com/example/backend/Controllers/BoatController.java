@@ -75,7 +75,6 @@ public class BoatController {
         }
     }
 
-
     @PutMapping(path = "/unsubscribe", consumes = "application/json")
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<?> unsubscribe(@RequestBody NewSubcriptionDto forUnsubscribe){

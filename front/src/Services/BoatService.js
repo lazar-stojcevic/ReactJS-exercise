@@ -30,5 +30,31 @@ class BoatService{
         };
         return axios.get(URL + '/additionalServices/' + cottageId, {headers});
     }
+
+    subscribeBoat(userId, instructorId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.userId = userId;
+        data.advertiserId = instructorId;
+        return axios.put(URL + '/subscribe/', JSON.stringify(data),
+            {headers} );
+    }
+
+    unsubscribeBoat(userId, boatId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.userId = userId;
+        data.advertiserId = boatId;
+        return axios.put(URL + '/unsubscribe/', JSON.stringify(data),
+            {headers} );
+    }
 }
 export default new BoatService()

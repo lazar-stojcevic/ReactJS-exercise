@@ -43,7 +43,7 @@
         </b-card-text>
         <br>
         <b-card-text>
-          Mark: {{instructor.mark}}
+          Mark: {{instructor.rating}}
         </b-card-text>
 
         <router-link class="btn btn-secondary" :to="'instructor/'+instructor.id.toString()" style="margin: 5px">See adventures</router-link>
@@ -56,7 +56,6 @@
 
 <script>
 import FishingInstructorService from "@/Services/FishingInstructorService";
-import GradeService from "@/Services/GradeService";
 
 export default {
   name: "AllFishingInstructors",
@@ -77,25 +76,6 @@ export default {
       this.instructors = res.data;
       this.filtered = res.data;
       return this.instructors
-    }).then((res) => {
-      this.instructors = res;
-      this.filtered = res;
-      for(let ad in this.instructors){
-        GradeService.getAllGradeOfInstructor(this.instructors[ad].id).then(res =>{
-          this.instructors[ad].mark = 0
-          this.instructors[ad].mark = res.data.avgRating;
-          if (isNaN(this.instructors[ad].mark))
-            this.instructors[ad].mark = 0
-        });
-      }
-      for(let ad2 in this.filtered){
-        GradeService.getAllGradeOfInstructor(this.filtered[ad2].id).then(res =>{
-          this.filtered[ad2].mark = 0
-          this.filtered[ad2].mark = res.data.avgRating;
-          if (isNaN(this.filtered[ad2].mark))
-            this.filtered[ad2].mark = 0
-        });
-      }
     });
     },
   methods:{
@@ -104,7 +84,7 @@ export default {
       for (let instructor of this.instructors){
         if ((instructor.firstname.includes(this.filter.name) || (instructor.lastName.includes(this.filter.name))) && (instructor.address.city.includes(this.filter.location) ||
                 instructor.address.country.includes(this.filter.location) || instructor.address.street.includes(this.filter.location)) &&
-            instructor.mark >= this.filter.mark){
+            instructor.rating >= this.filter.mark){
           this.filtered.push(instructor)
         }
       }
@@ -113,9 +93,9 @@ export default {
       else if (this.sort === 'nameASC')
         this.filtered.sort((a,b) => (a.firstname < b.firstname) ? 1 : ((b.firstname < a.firstname) ? -1 : 0))
       else if (this.sort === 'markDESC')
-        this.filtered.sort((a,b) => (a.mark > b.mark) ? 1 : ((b.mark > a.mark) ? -1 : 0))
+        this.filtered.sort((a,b) => (a.rating > b.rating) ? 1 : ((b.rating > a.rating) ? -1 : 0))
       else if (this.sort === 'markASC')
-        this.filtered.sort((a,b) => (a.mark < b.mark) ? 1 : ((b.mark < a.mark) ? -1 : 0))
+        this.filtered.sort((a,b) => (a.rating < b.rating) ? 1 : ((b.rating < a.rating) ? -1 : 0))
       else if (this.sort === 'cityDESC')
         this.filtered.sort((a,b) => (a.address.city > b.city) ? 1 : ((b.address.city > a.address.city) ? -1 : 0))
       else if (this.sort === 'cityASC')

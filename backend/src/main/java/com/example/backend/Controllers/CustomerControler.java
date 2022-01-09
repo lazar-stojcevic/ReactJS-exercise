@@ -1,5 +1,6 @@
 package com.example.backend.Controllers;
 
+import com.example.backend.Beans.Boat;
 import com.example.backend.Beans.Cottage;
 import com.example.backend.Beans.Customer;
 import com.example.backend.Beans.FishingInstructor;
@@ -93,5 +94,11 @@ public class CustomerControler {
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<Collection<Cottage>> getAllCustomersCottageSubscriptions(@PathVariable long userId){
         return new ResponseEntity<>(customerService.getCustomerCottagesSubscription(userId), HttpStatus.OK);
+    }
+
+    @GetMapping (path = "/boatSubscriptions/{userId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<Collection<Boat>> getAllCustomersBoatSubscriptions(@PathVariable long userId){
+        return new ResponseEntity<>(customerService.getCustomerBoatSubscription(userId), HttpStatus.OK);
     }
 }

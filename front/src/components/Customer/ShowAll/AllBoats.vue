@@ -8,7 +8,7 @@
         <b-form-input aria-label="Boat location" v-model="filter.location"></b-form-input>
       </b-input-group>
       <b-input-group prepend="Minimum mark" class="mt-2">
-        <b-form-input type="range" min="-1" max="5" v-model="filter.mark"></b-form-input>
+        <b-form-input type="range" min="0" max="5" v-model="filter.mark"></b-form-input>
       </b-input-group>
       <b-form-select v-model="sort" class="m-3">
         <b-form-select-option value="nameASC">name descending</b-form-select-option>

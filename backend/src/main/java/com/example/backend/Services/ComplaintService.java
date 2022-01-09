@@ -4,10 +4,7 @@ import com.example.backend.Beans.*;
 import com.example.backend.Dtos.ComplaintForReviewDto;
 import com.example.backend.Dtos.NewComplaintDto;
 import com.example.backend.Dtos.ReviewComplaintDto;
-import com.example.backend.Repository.ComplaintRepository;
-import com.example.backend.Repository.AdventureReservationRepository;
-import com.example.backend.Repository.CottageReservationRepository;
-import com.example.backend.Repository.UserRepository;
+import com.example.backend.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +21,17 @@ public class ComplaintService {
     @Autowired
     private final CottageReservationRepository cottageReservationRepository;
     @Autowired
+    private final BoatReservationRepository boatReservationRepository;
+    @Autowired
     private EmailService emailService;
     @Autowired
     private UserRepository userRepository;
 
-    public ComplaintService(AdventureReservationRepository adventureReservationRepository, ComplaintRepository complaintRepository, CottageReservationRepository cottageReservationRepository) {
+    public ComplaintService(AdventureReservationRepository adventureReservationRepository, ComplaintRepository complaintRepository, CottageReservationRepository cottageReservationRepository, BoatReservationRepository boatReservationRepository) {
         this.adventureReservationRepository = adventureReservationRepository;
         this.complaintRepository = complaintRepository;
         this.cottageReservationRepository = cottageReservationRepository;
+        this.boatReservationRepository = boatReservationRepository;
     }
 
     public boolean SaveAdventureComplaint(NewComplaintDto complaint){
@@ -59,6 +59,22 @@ public class ComplaintService {
             //cr.setComplaint(save(cc));
             cr.setComplaint(cc);
             cottageReservationRepository.save(cr);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean SaveBoatComplaint(NewComplaintDto complaint){
+        try {
+            BoatReservation br = boatReservationRepository.getById(complaint.getId());
+            Complaint cc = new Complaint();
+            cc.setText(complaint.getText());
+            cc.setReviewed(false);
+
+            //cr.setComplaint(save(cc));
+            br.setComplaint(cc);
+            boatReservationRepository.save(br);
             return true;
         }catch (Exception e){
             return false;
@@ -100,4 +116,5 @@ public class ComplaintService {
     private Complaint save(Complaint complaint){
         return complaintRepository.save(complaint);
     }
+
 }

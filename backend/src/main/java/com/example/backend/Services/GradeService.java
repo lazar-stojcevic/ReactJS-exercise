@@ -6,6 +6,9 @@ import com.example.backend.Beans.CottageReservation;
 import com.example.backend.Beans.Grade;
 import com.example.backend.Dtos.GradeToSaveDto;
 import com.example.backend.Dtos.GradeToShowDto;
+import com.example.backend.Repository.BoatRepository;
+import com.example.backend.Repository.CottageRepository;
+import com.example.backend.Repository.FishingInstructorRepository;
 import com.example.backend.Repository.GradeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +39,15 @@ public class GradeService {
 
     @Autowired
     private BoatReservationService boatReservationService;
+
+    @Autowired
+    private FishingInstructorRepository fishingInstructorRepository;
+
+    @Autowired
+    private CottageRepository cottageRepository;
+
+    @Autowired
+    private BoatRepository boatRepository;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -71,7 +83,57 @@ public class GradeService {
         Grade grade = findGradeById(gradeId);
         grade.setEnabled(true);
         saveGrade(grade);
+        if(grade.getInstructor() != null) {
+            grade.getInstructor().setRating(CalculateNewAverageGradeForInstructor(gradeRepository.findAllGradesOfInstructor(grade.getInstructor().getId())));
+            fishingInstructorRepository.save(grade.getInstructor());
+        }
+        else if (grade.getCottage() != null) {
+            grade.getCottage().setRating(CalculateNewAverageGradeForCottage(gradeRepository.findAllGradesOfCottage(grade.getCottage().getId())));
+            cottageRepository.save(grade.getCottage());
+        }
+        else if (grade.getBoat() != null) {
+            grade.getBoat().setRating(CalculateNewAverageGradeForBoat(gradeRepository.findAllGradesOfBoat(grade.getBoat().getId())));
+            boatRepository.save(grade.getBoat());
+        }
+        else
+            return;
         findUserToSandMail(grade);
+    }
+
+    private double CalculateNewAverageGradeForInstructor(Collection<Grade> allGradesOfInstructor) {
+        double sum = 0;
+        int amount = 0;
+        for (Grade grade : allGradesOfInstructor){
+            sum += grade.getRating();
+            ++amount;
+        }
+        if (amount!=0)
+            return sum/amount;
+        return 0;
+    }
+
+    private double CalculateNewAverageGradeForCottage(Collection<Grade> allGradesOfCottage) {
+        double sum = 0;
+        int amount = 0;
+        for (Grade grade : allGradesOfCottage){
+            sum += grade.getRating();
+            ++amount;
+        }
+        if (amount!=0)
+            return sum/amount;
+        return 0;
+    }
+
+    private double CalculateNewAverageGradeForBoat(Collection<Grade> allGradesOfBoat) {
+        double sum = 0;
+        int amount = 0;
+        for (Grade grade : allGradesOfBoat){
+            sum += grade.getRating();
+            ++amount;
+        }
+        if (amount!=0)
+            return sum/amount;
+        return 0;
     }
 
     //PROSLEDI SE LISTA SVIH OCENA ODREDJENOG ENTITETA I VRATI SE DTO OBJEKAT ZA PRIKAZ

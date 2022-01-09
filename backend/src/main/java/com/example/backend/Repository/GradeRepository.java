@@ -15,4 +15,10 @@ public interface GradeRepository extends JpaRepository<Grade, Long> {
 
     @Query("select g from Grade g where g.instructor.id = ?1 and g.enabled = true")
     Collection<Grade> findAllGradesOfInstructor(long id);
+
+    @Query("select g from Grade g where g.cottage.id = ?1 and g.enabled = true")
+    Collection<Grade> findAllGradesOfCottage(long id);
+
+    @Query("select g from Grade g where g.boat.id = ?1 and g.enabled = true")
+    Collection<Grade> findAllGradesOfBoat(long id);
 }
