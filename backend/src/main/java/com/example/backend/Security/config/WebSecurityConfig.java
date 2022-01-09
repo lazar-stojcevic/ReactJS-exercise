@@ -90,6 +90,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/adventureReservation/nextActions/{instructorId}").permitAll()
                 .antMatchers("/cottage/getAll").permitAll()
                 .antMatchers("/cottageReservation/nextActions/{id}").permitAll()
+                .antMatchers("/boat/getAll").permitAll()
+                .antMatchers("/boat/getOne/{id}").permitAll()
 
                 // za svaki drugi zahtev korisnik mora biti autentifikovan
                 .anyRequest().authenticated().and()

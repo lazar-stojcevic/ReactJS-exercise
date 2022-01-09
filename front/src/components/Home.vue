@@ -152,6 +152,9 @@
       <br>
       <br>
       <router-link class="btn btn-secondary" to="/allboats" style="margin: 5px">See boats</router-link>
+      <router-link class="btn btn-secondary" :hidden="LogInService.userRole.trim() !== 'ROLE_CUSTOMER'" to="/reserveBoat" style="margin: 5px">
+        Reserve boat
+      </router-link>
     </b-card>
   </div>
 </template>

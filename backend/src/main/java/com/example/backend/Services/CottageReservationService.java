@@ -215,15 +215,6 @@ public class CottageReservationService {
                     end.isAfter(existingReservation.getReservationEnd());
     }
 
-    private boolean isReservationInAvailablePeriod(CottageReservation newReservation){
-        for (AvailablePeriodCottage periodCottage: cottageService.findById(newReservation.getCottage().getId()).getPeriods()) {
-            if(newReservation.getReservationStart().isAfter(periodCottage.getFromDate()) &&
-                    newReservation.getReservationEnd().isBefore(periodCottage.getToDate()))
-                return true;
-        }
-        return false;
-    }
-
     private boolean isSearchInCottageAvailablePeriod(LocalDateTime start, LocalDateTime end, Cottage cottage){
          for(AvailablePeriodCottage periodCottage: cottage.getPeriods()){
              if (start.isAfter(periodCottage.getFromDate()) && end.isBefore(periodCottage.getToDate())) {
@@ -241,7 +232,6 @@ public class CottageReservationService {
         return beds >= numberOfBeds;
     }
 
-    //TODO: Treba dodati proveru za brodove!!!
     private boolean IsCustomersReservationsOverlapsWithNew(Customer customer, CottageReservation newReservation){
         for (AdventureReservation ar : customer.getAdventureReservations()){
             if (isReservationsOverlapWithAdventureReservations(ar, newReservation))
@@ -250,6 +240,12 @@ public class CottageReservationService {
 
         for (CottageReservation cr : customer.getCottageReservations()){
             if (isReservationsOverlapWithCottageReservations(cr, newReservation)){
+                return true;
+            }
+        }
+
+        for (BoatReservation br: customer.getBoatReservations()){
+            if (isReservationsOverlapWithBoatReservations(br, newReservation)){
                 return true;
             }
         }
@@ -295,6 +291,22 @@ public class CottageReservationService {
 
     private boolean isReservationsOverlapWithCottageReservations(
             CottageReservation existingReservation, CottageReservation newReservation){
+        LocalDateTime existingReservationEndTime = existingReservation.getReservationEnd();
+        LocalDateTime newReservationEndTime = newReservation.getReservationEnd();
+        if(newReservation.getReservationStart().isAfter(existingReservation.getReservationStart()) &&
+                newReservation.getReservationStart().isBefore(existingReservationEndTime))
+            return true;
+        else if(newReservationEndTime.isAfter(existingReservation.getReservationStart()) &&
+                newReservationEndTime.isBefore(existingReservationEndTime))
+            return true;
+        else if(newReservation.getReservationStart().isEqual(existingReservation.getReservationStart()))
+            return true;
+        else return newReservation.getReservationStart().isBefore(existingReservation.getReservationStart()) &&
+                    newReservationEndTime.isAfter(existingReservationEndTime);
+    }
+
+    private boolean isReservationsOverlapWithBoatReservations(
+            BoatReservation existingReservation, CottageReservation newReservation){
         LocalDateTime existingReservationEndTime = existingReservation.getReservationEnd();
         LocalDateTime newReservationEndTime = newReservation.getReservationEnd();
         if(newReservation.getReservationStart().isAfter(existingReservation.getReservationStart()) &&

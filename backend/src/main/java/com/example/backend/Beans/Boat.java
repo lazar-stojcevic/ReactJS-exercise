@@ -53,6 +53,9 @@ public class Boat {
     @Column()
     private int capacity;
 
+    @Column
+    private double rating;
+
     @OneToMany(mappedBy = "boat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
     @JsonIgnore
@@ -80,5 +83,6 @@ public class Boat {
             inverseJoinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "user_id"))
     private List<Customer> prepaidCustomers = new ArrayList<>();
 
-
+    //Polja dodata zvog vue nedostatka
+    private int services;
 }

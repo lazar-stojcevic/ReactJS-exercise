@@ -8,7 +8,7 @@
         <b-form-input aria-label="Boat location" v-model="filter.location"></b-form-input>
       </b-input-group>
       <b-input-group prepend="Minimum mark" class="mt-2">
-        <b-form-input type="range" min="0" max="5" v-model="filter.mark"></b-form-input>
+        <b-form-input type="range" min="-1" max="5" v-model="filter.mark"></b-form-input>
       </b-input-group>
       <b-form-select v-model="sort" class="m-3">
         <b-form-select-option value="nameASC">name descending</b-form-select-option>
@@ -27,7 +27,7 @@
     <br>
     <div v-for="boat in filtered" :key="boat.id">
       <b-card
-          tag="boat"
+          name="boat"
           style="max-width: 20rem;"
           class="mb-2"
       >
@@ -35,15 +35,21 @@
           {{boat.name}}
         </b-card-title>
         <b-card-text>
-          {{ boat.description }}
+          Type: {{ boat.type }}
+        </b-card-text>
+        <b-card-text>
+          {{ boat.promo }}
+        </b-card-text>
+        <b-card-text>
+          Capacity: {{ boat.capacity }}
         </b-card-text>
         <br>
         <b-card-text>
-          ADDRESS:  {{ boat.street }} , {{ boat.city }}, {{boat.country}}
+          ADDRESS: {{boat.address.country}}, {{ boat.address.city }}, {{ boat.address.street }}
         </b-card-text>
         <br>
         <b-card-text>
-          Average mark: {{boat.mark}}
+          Average mark: {{boat.rating}}
         </b-card-text>
         <router-link class="btn btn-secondary" :to="'boat/'+boat.id.toString()" style="margin: 5px">See more</router-link>
 
@@ -54,6 +60,7 @@
 </template>
 
 <script>
+import BoatService from "@/Services/BoatService";
 export default {
   name: "AllBoats",
   data() {
@@ -69,41 +76,34 @@ export default {
     }
   },
   mounted() {
-    //DUMMY
-    this.boats = [
-      {id: 1, name : "Neko ime broda 1", city : "Beograd" , street : "Ustanicka", country : "Serbia" , description: "Very nice", mark: 3.5},
-      {id: 2, name : "Neko ime broda 2", city : "Novi Sad" , street : "Dositejeva", country : "Serbia", description: "Very nice", mark: 1.5},
-      {id: 3, name : "Neko ime broda 3", city : "Karavukovo" , street : "Karadjodja", country : "Serbia", description: "Very nice", mark: 4.9},
-    ];
-    this.filtered = [
-      {id: 1, name : "Neko ime 1", city : "Beograd" , street : "Ustanicka", country : "Serbia" , description: "Very nice", mark: 3.5},
-      {id: 2, name : "Neko ime 2", city : "Novi Sad" , street : "Dositejeva", country : "Serbia", description: "Very nice", mark: 1.5},
-      {id: 3, name : "Neko ime 2", city : "Karavukovo" , street : "Karadjodja", country : "Serbia", description: "Very nice", mark: 4.9},
-    ];
-    this.filtered.sort((a,b) => (a.city > b.city) ? 1 : ((b.city > a.city) ? -1 : 0))
+    BoatService.getAllBoats().then((res) => {
+      this.boats = res.data;
+      this.filtered = res.data;
+    })
+    this.filtered.sort((a,b) => (a.address.city > b.address.city) ? 1 : ((b.address.city > a.address.city) ? -1 : 0))
   },
   methods:{
     search(){
       this.filtered = [];
       for (let boat of this.boats){
-        if (boat.name.includes(this.filter.name) && (boat.city.includes(this.filter.location) ||
-                boat.country.includes(this.filter.location) || boat.street.includes(this.filter.location)) &&
-            boat.mark >= this.filter.mark){
+        if (boat.name.includes(this.filter.name) && (boat.address.city.includes(this.filter.location) ||
+                boat.address.city.includes(this.filter.location) || boat.address.street.includes(this.filter.location)) &&
+            boat.rating >= this.filter.mark){
           this.filtered.push(boat)
         }
       }
-      if (this.sort === 'nameDESC')
+      if (this.sort === 'nameASC')
         this.filtered.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
-      else if (this.sort === 'nameASC')
+      else if (this.sort === 'nameDESC')
         this.filtered.sort((a,b) => (a.name < b.name) ? 1 : ((b.name < a.name) ? -1 : 0))
       else if (this.sort === 'markDESC')
-        this.filtered.sort((a,b) => (a.mark > b.mark) ? 1 : ((b.mark > a.mark) ? -1 : 0))
+        this.filtered.sort((a,b) => (a.rating > b.rating) ? 1 : ((b.rating > a.rating) ? -1 : 0))
       else if (this.sort === 'markASC')
-        this.filtered.sort((a,b) => (a.mark < b.mark) ? 1 : ((b.mark < a.mark) ? -1 : 0))
+        this.filtered.sort((a,b) => (a.rating < b.rating) ? 1 : ((b.rating < a.rating) ? -1 : 0))
       else if (this.sort === 'cityDESC')
-        this.filtered.sort((a,b) => (a.city > b.city) ? 1 : ((b.city > a.city) ? -1 : 0))
+        this.filtered.sort((a,b) => (a.address.city > b.address.city) ? 1 : ((b.address.city > a.address.city) ? -1 : 0))
       else if (this.sort === 'cityASC')
-        this.filtered.sort((a,b) => (a.city < b.city) ? 1 : ((b.city < a.city) ? -1 : 0))
+        this.filtered.sort((a,b) => (a.address.city < b.address.city) ? 1 : ((b.address.city < a.address.city) ? -1 : 0))
       //this.filtered.concat(pom);
     }
   }

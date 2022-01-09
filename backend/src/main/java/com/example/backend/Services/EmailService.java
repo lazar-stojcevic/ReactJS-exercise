@@ -1,9 +1,6 @@
 package com.example.backend.Services;
 
-import com.example.backend.Beans.CottageReservation;
-import com.example.backend.Beans.Customer;
-import com.example.backend.Beans.FishingInstructor;
-import com.example.backend.Beans.User;
+import com.example.backend.Beans.*;
 import com.example.backend.Dtos.FastReservationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -52,6 +49,19 @@ public class EmailService {
                 "Vas termin traje od" + System.lineSeparator() + cottageReservation.getReservationStart() +
                 "do " + cottageReservation.getReservationEnd() + System.lineSeparator() +
                 "Adresa vikendice: " + cottageReservation.getCottage().getAddress().toString());
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendBoatReservationConfirm(Customer user, BoatReservation cottageReservation) throws MailException, InterruptedException {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Potvrda o izdavanju broda");
+        mail.setText("Uspesno ste zakupili brod!" + System.lineSeparator() +
+                "Vas termin traje od" + System.lineSeparator() + cottageReservation.getReservationStart() +
+                "do " + cottageReservation.getReservationEnd() + System.lineSeparator() +
+                "Adresa broda: " + cottageReservation.getBoat().getAddress().toString());
         javaMailSender.send(mail);
     }
 
@@ -187,4 +197,5 @@ public class EmailService {
                 "\n\nS poštovanjem admin tim.");
         javaMailSender.send(mail);
     }
+
 }

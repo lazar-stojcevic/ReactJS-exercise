@@ -70,7 +70,6 @@ export default {
     }
   },
   mounted() {
-    //DUMMY
     CottageService.getAllCottages().then((res) => {
       this.cottages = res.data;
       this.filtered = res.data;

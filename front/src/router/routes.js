@@ -25,6 +25,7 @@ import NewAdventureReservation from "@/components/Customer/Reserve/NewAdventureR
 import InstructorActions from "@/components/Customer/Actions/InstructorActions"
 import ReserveCottage from "@/components/Customer/Reserve/ReserveCottage"
 import CottageActions from "@/components/Customer/Actions/CottageActions"
+import ReserveBoat from "@/components/Customer/Reserve/ReserveBoat"
 
 import AdminProfile from "@/components/Admin/AdminProfile";
 import ProfileRequests from "@/components/Admin/Requests";
@@ -89,7 +90,8 @@ const routes = [
     {path: '/reserveCottage', component: ReserveCottage},
     {path: '/usersBoats', component: UsersBoats},
     {path: '/createBoats', component: CreateBoat},
-    {path: '/cottageActions/:id', component: CottageActions}
+    {path: '/cottageActions/:id', component: CottageActions},
+    {path: '/reserveBoat', component: ReserveBoat},
 ]
 
 export default routes;
