@@ -47,6 +47,7 @@ import CreateBoat from "../components/BoatOwner/CreateBoat";
 import BoatProfile from "../components/BoatOwner/BoatProfile";
 import AvailablePeriods from "../components/CottageOwner/AvailablePeriods";
 import AvailablePeriodsBoat from "../components/BoatOwner/AvailablePeriodsBoat";
+import AvailablePeriodsWithBenefitsBoat from "../components/BoatOwner/AvailablePeriodsWithBenefitsBoat";
 
 const routes = [
     {path: '/', component: Home},
@@ -86,6 +87,7 @@ const routes = [
     {path: '/boatOwnerProfile', component: BoatOwnerProfile},
     {path: '/userReservationProfile', component: UserReservationProfile},
     {path: '/availablePeriodsWithBenefits', component: AvailablePeriodsWithBenefits},
+    {path: '/availablePeriodsWithBenefitsBoats', component: AvailablePeriodsWithBenefitsBoat},
     {path: '/reservationReport', component: ReservationReport},
     {path: '/createReservationForCustomer', component: CreateReservation},
     {path: '/reserveAdventure', component: ReserveAdventure},

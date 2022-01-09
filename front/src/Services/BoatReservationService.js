@@ -44,6 +44,15 @@ class BoatReservationService {
         return axios.get(URL + '/futureCustomerReservation/' + customerId, {headers});
     }
 
+    AddPeriodForFastReservation(period) {
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.put(URL + '/fastReservationPeriod/', JSON.stringify(period), {headers});
+    }
+
     cancelReservation(reservation){
         const headers = {
             'Accept': 'application/json',

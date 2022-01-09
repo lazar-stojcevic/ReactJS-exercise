@@ -4,10 +4,7 @@ import com.example.backend.Beans.Boat;
 import com.example.backend.Beans.BoatReservation;
 import com.example.backend.Beans.Cottage;
 import com.example.backend.Beans.CottageReservation;
-import com.example.backend.Dtos.CancelTermDto;
-import com.example.backend.Dtos.CustomerReserveCottageDto;
-import com.example.backend.Dtos.ReservationSearchDto;
-import com.example.backend.Dtos.ReservingFastReservationDto;
+import com.example.backend.Dtos.*;
 import com.example.backend.Services.BoatReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,6 +59,14 @@ public class BoatReservationController {
     @PutMapping(path = "/reserveTerm/")
     public ResponseEntity<BoatReservation> ReserveTerm(@RequestBody CustomerReserveCottageDto reservation) throws InterruptedException {
         BoatReservation boatReservation = boatReservationService.makeNewAppointment(reservation);
+        if (boatReservation == null)
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(boatReservation, HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/fastReservationPeriod/")
+    public ResponseEntity<BoatReservation> FastReservationPeriod(@RequestBody FastReservationDto reservation) throws InterruptedException {
+        BoatReservation boatReservation = boatReservationService.makeFastReservationSlot(reservation);
         if (boatReservation == null)
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(boatReservation, HttpStatus.OK);

@@ -22,9 +22,13 @@
 
       <!--COTTAGE_OWNER_ROLE-->
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/myCottageReservation">COTTAGE RESERVATIONS</router-link>
-      <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/availablePeriodsWithBenefits">CREATE BENEFITS</router-link>
+      <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/availablePeriodsWithBenefits">CREATE FAST RESERVATION</router-link>
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/reservationReport">CREATE REPORT</router-link>
       <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_COTTAGE_OWNER'" to="/createReservationForCustomer">CREATE RESERVATION</router-link>
+
+      <!--BOAT_OWNER_ROLE-->
+      <router-link class="btn btn-secondary m-2" :hidden="LogInService.userRole !== 'ROLE_BOAT_OWNER'" to="/availablePeriodsWithBenefitsBoats">CREATE FAST RESERVATION</router-link>
+
     </div>
 
     <!--FISHING_INSTRUCTOR_ROLE-->
