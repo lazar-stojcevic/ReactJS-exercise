@@ -5,7 +5,7 @@ const URL = 'http://localhost:8080/cottageReservation';
 
 class CottageReservationService {
 
-    getAllAvailableCottagesTerms(dateFromPar, dateToPar, persons){
+    getAllAvailableCottagesTerms(dateFromPar, dateToPar, persons, city, country){
         let headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -15,6 +15,8 @@ class CottageReservationService {
             dateFrom: dateFromPar.replaceAll('T', ' '),
             dateTo: dateToPar.replaceAll('T', ' '),
             persons: persons,
+            city: city,
+            country: country,
             id: LogInService.userId
         }
         return axios.post(URL + '/availableCottages/', JSON.stringify(body), {headers});

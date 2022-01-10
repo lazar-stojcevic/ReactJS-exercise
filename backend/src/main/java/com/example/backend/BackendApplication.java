@@ -151,8 +151,8 @@ public class BackendApplication implements CommandLineRunner {
         fishingInstructor.setAvailable(availableTimespan);
 
         Address address = new Address();
-        address.setStreet("Dostojevskog");
-        address.setCity("Jarkovac");
+        address.setStreet("Svetog Save 56");
+        address.setCity("Karavukovo");
         address.setCountry("Srbija");
         FishingInstructor fishingInstructor1 = new FishingInstructor();
         fishingInstructor1.setEmail("bojanlupulov0909@gmail.com");
@@ -177,8 +177,8 @@ public class BackendApplication implements CommandLineRunner {
         cottageOwner1.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         Address address2 = new Address();
         address2.setCountry("Srbija");
-        address2.setCity("Sabac");
-        address2.setStreet("Pop Lukina");
+        address2.setCity("Cicevac");
+        address2.setStreet("Antona Cehova 12");
         cottageOwner1.setAddress(address2);
 
         CottageOwner cottageOwner2 = new CottageOwner();
@@ -341,7 +341,7 @@ public class BackendApplication implements CommandLineRunner {
         AdventureReservation reservation5 = new AdventureReservation();
         reservation5.setAdventure(adventure);
         reservation5.setLength(4);
-        reservation5.setPrice(2500);
+        reservation5.setPrice(4500);
         reservation5.setReservationStart(LocalDateTime.of(2022, 1,17,10,20));
         reservation5.setLastDateToReserve(LocalDateTime.of(2021, 12, 30, 15, 0));
         adventureReservationRepository.save(reservation5);
@@ -391,10 +391,10 @@ public class BackendApplication implements CommandLineRunner {
 
         AdventureReservation reservation7 = new AdventureReservation();
         reservation7.setAdventure(adventure);
-        reservation7.setLength(4);
-        reservation7.setPrice(2500);
+        reservation7.setLength(9);
+        reservation7.setPrice(4800);
         reservation7.setReservationStart(LocalDateTime.of(2021, 2,17,10,20));
-        reservation7.setLastDateToReserve(LocalDateTime.of(2020, 12, 30, 15, 0));
+        reservation7.setLastDateToReserve(LocalDateTime.of(2020, 12, 30, 19, 0));
         reservation7.setCustomer(customer2);
         adventureReservationRepository.save(reservation7);
 
@@ -410,7 +410,7 @@ public class BackendApplication implements CommandLineRunner {
 
         Cottage cottage1 = new Cottage();
         cottage1.setConductRules("Budite fini");
-        cottage1.setName("Mala kuca");
+        cottage1.setName("Velika kuca");
         cottage1.setPromo("Kod nas ce biti lud provod");
         cottage1.setRating(4.1);
         Address address6 = new Address();
@@ -677,8 +677,8 @@ public class BackendApplication implements CommandLineRunner {
         boat.setCapacity(4);
         boat.setConductRules("Nemojte obuveni ulaziti");
         boat.setAddress(new Address());
-        boat.getAddress().setCity("Sabac");
-        boat.getAddress().setStreet("Na savi");
+        boat.getAddress().setCity("Bogojevo");
+        boat.getAddress().setStreet("Vikend naselje 45");
         boat.getAddress().setCountry("Srbija");
         boat.setType("camac");
         boat.setNumberOfEngines(2);

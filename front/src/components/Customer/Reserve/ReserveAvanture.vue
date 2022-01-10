@@ -2,16 +2,24 @@
 <div>
   <b-form inline style="display: flex" @submit.prevent="searchAvailableAdventures">
     <span class="input-group mb-lg-2">
-      <span class="input-group-text">DATE FROM</span>
-      <input type="datetime-local" class="form-control" v-model="inputData.firstDay" required/>
+      <span class="input-group-text">DATE FROM*</span>
+      <input type="datetime-local" class="form-control" v-model="inputData.firstDay" :max="inputData.lastDay" required/>
     </span>
     <span class="input-group mb-lg-2">
-      <span class="input-group-text">DATE TO</span>
-      <input type="datetime-local" class="form-control" v-model="inputData.lastDay" required/>
+      <span class="input-group-text">DATE TO*</span>
+      <input type="datetime-local" class="form-control" v-model="inputData.lastDay"  :min="inputData.firstDay" required/>
     </span>
     <span class="input-group mb-lg-2">
-      <span class="input-group-text">PERSONS</span>
+      <span class="input-group-text">PERSONS*</span>
       <input type="number" class="form-control" v-model="inputData.persons" required/>
+    </span>
+    <span class="input-group mb-lg-2">
+      <span class="input-group-text">COUNTRY</span>
+      <input type="text" class="form-control" v-model="inputData.country"/>
+    </span>
+    <span class="input-group mb-lg-2">
+      <span class="input-group-text">CITY</span>
+      <input type="text" class="form-control" v-model="inputData.city"/>
     </span>
     <button type="submit" class="btn-info">Search</button>
   </b-form>
@@ -49,6 +57,9 @@
         RULES: {{adventure.adventure.conductRules}}
       </b-card-text>
       <b-card-text style="margin: 5px">
+        Address: {{adventure.adventure.address.country}}, {{adventure.adventure.address.city}}, {{adventure.adventure.address.street}}
+      </b-card-text>
+      <b-card-text style="margin: 5px">
         Base price: {{adventure.price}}
       </b-card-text>
       <b-card-text style="margin: 5px">
@@ -72,17 +83,18 @@ export default {
       AdventureReservationService,
       inputData: {
         firstDay: '',
-        lastDat: '',
+        lastDay: '',
+        city: '',
+        country: '',
         persons: 1
       },
       adventures: [],
-      sort : 'markDESC'
-
+      sort : 'markDESC',
     }
   },
   methods:{
     searchAvailableAdventures(){
-      AdventureReservationService.getAllAvailableAdventureTerms(this.inputData.firstDay, this.inputData.lastDay, this.inputData.persons)
+      AdventureReservationService.getAllAvailableAdventureTerms(this.inputData.firstDay, this.inputData.lastDay, this.inputData.persons, this.inputData.city, this.inputData.country)
           .then((res) => {
             this.adventures = res.data;
             console.log(res.data)

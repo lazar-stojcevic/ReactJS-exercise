@@ -97,10 +97,9 @@ export default {
       else if (this.sort === 'markASC')
         this.filtered.sort((a,b) => (a.rating < b.rating) ? 1 : ((b.rating < a.rating) ? -1 : 0))
       else if (this.sort === 'cityDESC')
-        this.filtered.sort((a,b) => (a.address.city > b.city) ? 1 : ((b.address.city > a.address.city) ? -1 : 0))
+        this.filtered.sort((a,b) => (a.address.city > b.address.city) ? 1 : ((b.address.city > a.address.city) ? -1 : 0))
       else if (this.sort === 'cityASC')
         this.filtered.sort((a,b) => (a.address.city < b.address.city) ? 1 : ((b.address.city < a.address.city) ? -1 : 0))
-      //this.filtered.concat(pom);
     }
   }
 }

@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class AdventureReservationService {
@@ -172,12 +173,13 @@ public class AdventureReservationService {
         for (AdventureReservation ar: adventureReservationRepository.findByreservationStartBetween(search.getDateFrom(), search.getDateTo())){
             if (!ar.isReserved() && ar.getAdventure().getMaxPersons() >= search.getPersons() &&
                     ar.getLastDateToReserve().isAfter(LocalDateTime.now().plusDays(3)) &&
-                    !IsForbiddenToCustomer(ar, search.getId())){
+                    !IsForbiddenToCustomer(ar, search.getId()) && IsInLocation(ar, search.getCity()) && IsInCountry(ar, search.getCountry())){
                 reservations.add(ar);
             }
         }
         return reservations;
     }
+
 
     public AdventureReservation createFreeFastReservation(MakeFastReservationDto dto){
         AdventureReservation adventureReservation = makeAdventureReservation(dto);
@@ -245,6 +247,18 @@ public class AdventureReservationService {
         AdventureReservation reservation = findAdventureReservationById(id);
         reservation.setReported(true);
         return save(reservation);
+    }
+
+    private boolean IsInLocation(AdventureReservation ar, String city) {
+        if (city == null)
+            return true;
+        return ar.getAdventure().getAddress().getCity().toUpperCase(Locale.ROOT).contains(city.toUpperCase(Locale.ROOT));
+    }
+
+    private boolean IsInCountry(AdventureReservation ar, String country) {
+        if (country == null)
+            return true;
+        return ar.getAdventure().getAddress().getCountry().toUpperCase(Locale.ROOT).contains(country.toUpperCase(Locale.ROOT));
     }
 
     private AdventureReservation prepareCustomReservationForSaving(ReserveAdventureDto dto){

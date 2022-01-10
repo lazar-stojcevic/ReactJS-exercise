@@ -32,7 +32,7 @@ class AdventureReservationService {
         return axios.get(URL + '/current/' + instructorId, {headers})
     }
 
-    getAllAvailableAdventureTerms(dateFromPar, dateToPar, persons){
+    getAllAvailableAdventureTerms(dateFromPar, dateToPar, persons, city, country){
 
             let headers = {
                 'Accept': 'application/json',
@@ -43,7 +43,9 @@ class AdventureReservationService {
                 dateFrom: dateFromPar.replaceAll('T', ' '),
                 dateTo: dateToPar.replaceAll('T', ' '),
                 persons: persons,
-                id: LogInService.userId
+                id: LogInService.userId,
+                city: city,
+                country: country
             }
         return axios.post(URL + '/availableAdventures/', JSON.stringify(body), {headers});
     }

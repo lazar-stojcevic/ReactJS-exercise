@@ -73,7 +73,9 @@ public class CottageReservationService {
         List<Cottage> cottages = new ArrayList<>();
         for (Cottage cottage : cottageRepository.findAll()){
             if (isSearchInCottageAvailablePeriod(search.getDateFrom(), search.getDateTo(), cottage) &&
-                    isCottageHaveEnoughBeds(search.getPersons(), cottage) && isUserNotForbidden(search, cottage)){
+                    isCottageHaveEnoughBeds(search.getPersons(), cottage) && isUserNotForbidden(search, cottage)
+                    && IsInLocation(cottage, search.getCity())
+                    && IsInCountry(cottage, search.getCountry())){
                 boolean valid = true;
                 for (CottageReservation cr: cottage.getReservations()){
                      if(isReservationsOverlapForSearch(cr, search.getDateFrom(), search.getDateTo())) {
@@ -200,6 +202,18 @@ public class CottageReservationService {
 
     private CottageReservation save(CottageReservation cottageReservation){
         return this.cottageReservationRepository.save(cottageReservation);
+    }
+
+    private boolean IsInLocation(Cottage cottage, String city) {
+        if (city == null)
+            return true;
+        return cottage.getAddress().getCity().toUpperCase(Locale.ROOT).contains(city.toUpperCase(Locale.ROOT));
+    }
+
+    private boolean IsInCountry(Cottage cottage, String country) {
+        if (country == null)
+            return true;
+        return cottage.getAddress().getCountry().toUpperCase(Locale.ROOT).contains(country.toUpperCase(Locale.ROOT));
     }
 
     private boolean isReservationsOverlapForSearch(CottageReservation existingReservation, LocalDateTime start, LocalDateTime end){

@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class BoatReservationService {
@@ -70,7 +67,9 @@ public class BoatReservationService {
         List<Boat> boats = new ArrayList<>();
         for (Boat boat : boatService.findAllBoats()){
             if (isSearchInBoatAvailablePeriod(search.getDateFrom(), search.getDateTo(), boat) &&
-                    search.getPersons()<boat.getCapacity() && isUserNotForbidden(search, boat)){
+                    search.getPersons()<boat.getCapacity() && isUserNotForbidden(search, boat)
+                    && IsInCountry(boat, search.getCountry())
+                    && IsInLocation(boat, search.getCity())){
                 boolean valid = true;
                 for (BoatReservation br: boat.getReservations()){
                     if(isReservationsOverlapForSearch(br, search.getDateFrom(), search.getDateTo())) {
@@ -194,6 +193,18 @@ public class BoatReservationService {
         boatReservation.setCustomer(customer);
         emailService.sendBoatReservationConfirm(customer, boatReservation);
         return save(boatReservation);
+    }
+
+    private boolean IsInLocation(Boat boat, String city) {
+        if (city == null)
+            return true;
+        return boat.getAddress().getCity().toUpperCase(Locale.ROOT).contains(city.toUpperCase(Locale.ROOT));
+    }
+
+    private boolean IsInCountry(Boat boat, String country) {
+        if (country == null)
+            return true;
+        return boat.getAddress().getCountry().toUpperCase(Locale.ROOT).contains(country.toUpperCase(Locale.ROOT));
     }
 
     private BoatReservation save(BoatReservation boatReservation){

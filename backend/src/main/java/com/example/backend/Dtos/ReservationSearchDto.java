@@ -16,4 +16,6 @@ public class ReservationSearchDto {
     private LocalDateTime dateTo;
     private int persons;
     private long id;
+    private String city;
+    private String country;
 }

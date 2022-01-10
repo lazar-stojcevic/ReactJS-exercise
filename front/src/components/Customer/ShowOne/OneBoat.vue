@@ -5,15 +5,15 @@
     <br>
     <h3 style="color: aqua">Name: {{boat.name}}</h3>
     <br>
-    <h4 style="color:cornflowerblue">Type: {{boat.type}}</h4>
+    <h4 style="color:cornflowerblue">Type: {{boat.type}} </h4>
     <br>
     <h5 style="color:cornflowerblue">Number of engines: {{boat.numberOfEngines}} </h5>
     <br>
-    <h5 style="color:cornflowerblue">Top speed: {{boat.topSpeed}} </h5>
+    <h5 style="color:cornflowerblue">Top speed: {{boat.topSpeed}} km/h </h5>
     <br>
-    <h5 style="color:cornflowerblue">Description: {{boat.promo}} </h5>
+    <h5 style="color:cornflowerblue">Description: {{boat.promo}}. </h5>
     <br>
-    <h5 style="color:cornflowerblue">Rules: {{boat.conductRules}} </h5>
+    <h5 style="color:cornflowerblue">Rules: {{boat.conductRules}}. </h5>
     <br>
     <h5 style="color:cornflowerblue">Max capacity: {{boat.capacity}} </h5>
     <br>

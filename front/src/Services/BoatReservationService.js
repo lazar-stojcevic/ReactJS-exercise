@@ -4,7 +4,7 @@ import LogInService from "@/Services/LogInService";
 const URL = 'http://localhost:8080/boatReservation';
 
 class BoatReservationService {
-    getAllAvailableBoatTerms(dateFromPar, dateToPar, persons){
+    getAllAvailableBoatTerms(dateFromPar, dateToPar, persons, city, country){
         let headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -14,6 +14,8 @@ class BoatReservationService {
             dateFrom: dateFromPar.replaceAll('T', ' '),
             dateTo: dateToPar.replaceAll('T', ' '),
             persons: persons,
+            city: city,
+            country: country,
             id: LogInService.userId
         }
         return axios.post(URL + '/availableBoats/', JSON.stringify(body), {headers});

@@ -93,11 +93,11 @@ export default {
   },
   methods:{
     search(){
-      if (this.sort === 'dateASC')
+      if (this.sort === 'dateDESC')
         this.reservations.sort((a,b) =>
             (moment(a.reservationStart).format("dd-mm-yyyy") > moment(b.reservationStart).format("dd-mm-yyyy"))
                 ? 1 : ((moment(b.reservationStart).format("dd-mm-yyyy") > moment(a.reservationStart).format("dd-mm-yyyy")) ? -1 : 0))
-      else if (this.sort === 'dateDESC')
+      else if (this.sort === 'dateASC')
         this.reservations.sort((a,b) =>
             (moment(a.reservationStart).format("dd-mm-yyyy") < moment(b.reservationStart).format("dd-mm-yyyy"))
                 ? 1 : ((moment(b.reservationStart).format("dd-mm-yyyy") < moment(a.reservationStart).format("dd-mm-yyyy")) ? -1 : 0))

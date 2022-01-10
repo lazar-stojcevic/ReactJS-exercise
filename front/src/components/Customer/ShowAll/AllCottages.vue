@@ -86,17 +86,17 @@ export default {
           this.filtered.push(cottage)
         }
       }
-      if (this.sort === 'nameDESC')
+      if (this.sort === 'nameASC')
         this.filtered.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
-      else if (this.sort === 'nameASC')
+      else if (this.sort === 'nameDESC')
         this.filtered.sort((a,b) => (a.name < b.name) ? 1 : ((b.name < a.name) ? -1 : 0))
       else if (this.sort === 'markDESC')
         this.filtered.sort((a,b) => (a.rating > b.rating) ? 1 : ((b.rating > a.rating) ? -1 : 0))
       else if (this.sort === 'markASC')
         this.filtered.sort((a,b) => (a.rating < b.rating) ? 1 : ((b.rating < a.rating) ? -1 : 0))
-      else if (this.sort === 'cityDESC')
-        this.filtered.sort((a,b) => (a.address.city < b.address.city) ? 1 : ((b.address.city < a.address.city) ? -1 : 0))
       else if (this.sort === 'cityASC')
+        this.filtered.sort((a,b) => (a.address.city < b.address.city) ? 1 : ((b.address.city < a.address.city) ? -1 : 0))
+      else if (this.sort === 'cityDESC')
         this.filtered.sort((a,b) => (a.address.city > b.address.city) ? 1 : ((b.address.city > a.address.city) ? -1 : 0))
       //this.filtered.concat(pom);
     }

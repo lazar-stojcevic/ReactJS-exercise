@@ -3,16 +3,24 @@
     <b-form inline style="display: flex" @submit.prevent="searchAvailableBoats">
       <span class="input-group mb-lg-2">
         <span class="input-group-text">DATE FROM</span>
-        <input type="datetime-local" class="form-control" v-model="inputData.firstDay" required/>
+        <input type="datetime-local" class="form-control" v-model="inputData.firstDay" :max="inputData.lastDay" required/>
       </span>
       <span class="input-group mb-lg-2">
         <span class="input-group-text">DATE TO</span>
-        <input type="datetime-local" class="form-control" v-model="inputData.lastDay" required/>
+        <input type="datetime-local" class="form-control" v-model="inputData.lastDay" :min="inputData.firstDay" required/>
       </span>
       <span class="input-group mb-lg-2">
         <span class="input-group-text">PERSONS</span>
         <input type="number" class="form-control" v-model="inputData.persons" required/>
       </span>
+      <span class="input-group mb-lg-2">
+      <span class="input-group-text">COUNTRY</span>
+      <input type="text" class="form-control" v-model="inputData.country"/>
+    </span>
+      <span class="input-group mb-lg-2">
+      <span class="input-group-text">CITY</span>
+      <input type="text" class="form-control" v-model="inputData.city"/>
+    </span>
       <button type="submit" class="btn-info">Search</button>
     </b-form>
     <br>
@@ -67,6 +75,8 @@ export default {
       inputData: {
         firstDay: '',
         lastDay: '',
+        city: '',
+        country: '',
         persons: 1
       },
       boats: [],
@@ -76,7 +86,7 @@ export default {
   },
   methods:{
     searchAvailableBoats(){
-      BoatReservationService.getAllAvailableBoatTerms(this.inputData.firstDay, this.inputData.lastDay, this.inputData.persons)
+      BoatReservationService.getAllAvailableBoatTerms(this.inputData.firstDay, this.inputData.lastDay, this.inputData.persons, this.inputData.city, this.inputData.country)
           .then((res) => {
             this.boats = res.data;
           }).then(() => {
