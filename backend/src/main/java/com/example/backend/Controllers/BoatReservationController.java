@@ -56,6 +56,20 @@ public class BoatReservationController {
                 HttpStatus.OK);
     }
 
+    @GetMapping(path = "/ownerReservation/{ownerId}")
+    public ResponseEntity<Collection<BoatReservation>> getAllTermsByOwnerId(
+            @PathVariable long ownerId){
+        return new ResponseEntity<>(boatReservationService.getAllTermsByOwnerId(ownerId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/ownerFastReservation/{ownerId}")
+    public ResponseEntity<Collection<BoatReservation>> getAllFastTermsByOwnerId(
+            @PathVariable long ownerId){
+        return new ResponseEntity<>(boatReservationService.getAllFastTermsByOwnerId(ownerId),
+                HttpStatus.OK);
+    }
+
     @PutMapping(path = "/reserveTerm/")
     public ResponseEntity<BoatReservation> ReserveTerm(@RequestBody CustomerReserveCottageDto reservation) throws InterruptedException {
         BoatReservation boatReservation = boatReservationService.makeNewAppointment(reservation);

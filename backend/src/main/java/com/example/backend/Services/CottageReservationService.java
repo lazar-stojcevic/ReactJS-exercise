@@ -119,6 +119,14 @@ public class CottageReservationService {
                 LocalDateTime.now());
     }
 
+    public Collection<CottageReservation> getAllTermsByOwnerId(long id){
+        return cottageReservationRepository.getAllReservationOfOwner(id);
+    }
+
+    public Collection<CottageReservation> getAllFastTermsByOwnerId(long id){
+        return cottageReservationRepository.getAllFastReservationOfOwner(id);
+    }
+
     public Collection<CottageReservation> getAllPastTermsByCustomerId(long id){
         return cottageReservationRepository.getAllReservationOfCustomerInPast(id, LocalDateTime.now());
     }

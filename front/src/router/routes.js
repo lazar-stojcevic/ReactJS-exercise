@@ -48,6 +48,8 @@ import BoatProfile from "../components/BoatOwner/BoatProfile";
 import AvailablePeriods from "../components/CottageOwner/AvailablePeriods";
 import AvailablePeriodsBoat from "../components/BoatOwner/AvailablePeriodsBoat";
 import AvailablePeriodsWithBenefitsBoat from "../components/BoatOwner/AvailablePeriodsWithBenefitsBoat";
+import MyBoatReservation from "../components/BoatOwner/MyBoatReservation";
+import CreateReservationBoat from "../components/BoatOwner/CreateReservationBoat";
 
 const routes = [
     {path: '/', component: Home},
@@ -81,15 +83,17 @@ const routes = [
     {path: '/cottageProfile/:id', component: CottageProfile},
     {path: '/boatProfile/:id', component: BoatProfile},
     {path: '/cottageAvailablePeriod/:id', component: AvailablePeriods},
+    {path: '/customerReservation/:id', component: UserReservationProfile},
     {path: '/boatAvailablePeriod/:id', component: AvailablePeriodsBoat},
     {path: '/myCottageReservation', component: MyCottageReservation},
+    {path: '/myBoatReservation', component: MyBoatReservation},
     {path: '/cottageOwnerProfile', component: CottageOwnerProfile},
     {path: '/boatOwnerProfile', component: BoatOwnerProfile},
-    {path: '/userReservationProfile', component: UserReservationProfile},
     {path: '/availablePeriodsWithBenefits', component: AvailablePeriodsWithBenefits},
     {path: '/availablePeriodsWithBenefitsBoats', component: AvailablePeriodsWithBenefitsBoat},
     {path: '/reservationReport', component: ReservationReport},
-    {path: '/createReservationForCustomer', component: CreateReservation},
+    {path: '/createReservationForCustomer/:id', component: CreateReservation},
+    {path: '/createReservationBoatForCustomer/:id', component: CreateReservationBoat},
     {path: '/reserveAdventure', component: ReserveAdventure},
     {path: '/newAdventureReservation/:id', component: NewAdventureReservation},
     {path: '/instructorActions/:id', component: InstructorActions},

@@ -37,6 +37,22 @@ class BoatReservationService {
         return axios.put(URL + '/reserveTerm/', JSON.stringify(data), {headers});
     }
 
+    reserveBoatForCustomer(boatId, selectedServices, from, to, customerId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.cottageId = boatId;
+        data.userId = customerId;
+        data.from = from;
+        data.to = to;
+        data.services = selectedServices;
+
+        return axios.put(URL + '/reserveTerm/', JSON.stringify(data), {headers});
+    }
+
     getAllFutureTermsByCustomerId(customerId){
         const headers = {
             'Accept': 'application/json',
@@ -44,6 +60,15 @@ class BoatReservationService {
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
         return axios.get(URL + '/futureCustomerReservation/' + customerId, {headers});
+    }
+
+    getAllReservationsOfOwner(id){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/ownerReservation/'+id, {headers});
     }
 
     AddPeriodForFastReservation(period) {

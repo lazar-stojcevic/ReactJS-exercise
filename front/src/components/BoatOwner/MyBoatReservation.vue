@@ -17,12 +17,12 @@
       </thead>
       <tbody>
       <tr v-for="reservation in reservations" :key="reservation.id">
-        <td>{{reservation.cottage.name}}</td>
+        <td>{{reservation.boat.name}}</td>
         <td>{{reservation.reservationStart}}</td>
         <td>{{reservation.reservationEnd}}</td>
         <td>{{reservation.price}}</td>
         <td><router-link :to="'customerReservation/'+reservation.customer.id.toString()">{{reservation.customer.firstname}} {{reservation.customer.lastName}}</router-link></td>
-        <td><router-link :hidden="canReserve(reservation.reservationStart, reservation.reservationEnd)" :to="'createReservationForCustomer/'+reservation.customer.id.toString()">Add reservation for customer</router-link></td>
+        <td><router-link :hidden="canReserve(reservation.reservationStart, reservation.reservationEnd)" :to="'createReservationBoatForCustomer/'+reservation.customer.id.toString()">Add reservation for customer</router-link></td>
       </tr>
       </tbody>
     </table>
@@ -31,12 +31,12 @@
 </template>
 
 <script>
-import moment from "moment";
 import LogInService from "../../Services/LogInService";
-import CottageReservationService from "../../Services/CottageReservationService";
+import moment from "moment";
+import BoatReservationService from "../../Services/BoatReservationService";
 
 export default {
-  name: "MyCottageReservation",
+  name: "MyBoatReservation",
   data() {
     return {
       reservations : [],
@@ -51,7 +51,7 @@ export default {
     }
   },
   mounted() {
-    CottageReservationService.getAllReservationsOfOwner(LogInService.userId).then(res => {
+    BoatReservationService.getAllReservationsOfOwner(LogInService.userId).then(res => {
       this.reservations = res.data;
       this.filtered = res.data;
     });

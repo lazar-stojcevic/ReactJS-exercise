@@ -46,6 +46,27 @@ public class CottageReservationController {
                 HttpStatus.OK);
     }
 
+    @GetMapping(path = "/ownerReservation/{ownerId}")
+    public ResponseEntity<Collection<CottageReservation>> getAllTermsByOwnerId(
+            @PathVariable long ownerId){
+        return new ResponseEntity<>(cottageReservationService.getAllTermsByOwnerId(ownerId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/ownerFastReservation/{ownerId}")
+    public ResponseEntity<Collection<CottageReservation>> getAllFastTermsByOwnerId(
+            @PathVariable long ownerId){
+        return new ResponseEntity<>(cottageReservationService.getAllFastTermsByOwnerId(ownerId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/reservation/{reservationId}")
+    public ResponseEntity<CottageReservation> getReservationById(
+            @PathVariable long reservationId){
+        return new ResponseEntity<>(cottageReservationService.findCottageReservationById(reservationId),
+                HttpStatus.OK);
+    }
+
     @GetMapping(path = "/pastCustomerReservationWithOutComplaint/{customerId}")
     public ResponseEntity<Collection<CottageReservation>> getAllPastTermsByCustomerIdWithoutComplaint(
             @PathVariable long customerId){

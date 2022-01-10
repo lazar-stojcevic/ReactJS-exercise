@@ -117,6 +117,14 @@ public class BoatReservationService {
         return boatReservationRepository.getAllReservationOfCustomerInPast(id, LocalDateTime.now());
     }
 
+    public Collection<BoatReservation> getAllTermsByOwnerId(long id){
+        return boatReservationRepository.getAllReservationOfOwner(id);
+    }
+
+    public Collection<BoatReservation> getAllFastTermsByOwnerId(long id){
+        return boatReservationRepository.getAllFastReservationOfOwner(id);
+    }
+
     public Collection<BoatReservation> getAllPastTermsWithoutComplaintByCustomerId(long id){
         return boatReservationRepository.getAllReservationOfCustomerInPastWithoutComplaint(id,
                 LocalDateTime.now());

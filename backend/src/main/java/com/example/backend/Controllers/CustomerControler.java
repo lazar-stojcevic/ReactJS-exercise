@@ -34,7 +34,7 @@ public class CustomerControler {
     }
 
     @GetMapping (path = "/{id}")
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('CUSTOMER') || hasRole('ROLE_COTTAGE_OWNER')")
     public ResponseEntity<Customer> getCustomerById(@PathVariable long id){
         return new ResponseEntity<>(customerService.findCustomerById(id), HttpStatus.OK);
     }

@@ -38,6 +38,22 @@ class CottageReservationService {
         return axios.put(URL + '/reserveTerm/', JSON.stringify(data), {headers});
     }
 
+    reserveCottageForCustomer(cottageId, selectedServices, from, to, customerId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        let data = {};
+        data.cottageId = cottageId;
+        data.userId = customerId;
+        data.from = from;
+        data.to = to;
+        data.services = selectedServices;
+
+        return axios.put(URL + '/reserveTerm/', JSON.stringify(data), {headers});
+    }
+
     getAllFutureTermsByCustomerId(customerId){
         const headers = {
             'Accept': 'application/json',
@@ -55,6 +71,24 @@ class CottageReservationService {
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
         return axios.get(URL + '/fastReservations/', {headers});
+    }
+
+    getAllFastReservationsOfOwner(id){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/ownerFastReservation/'+id, {headers});
+    }
+
+    getAllReservationsOfOwner(id){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/ownerReservation/'+id, {headers});
     }
 
     cancelReservation(reservation){
