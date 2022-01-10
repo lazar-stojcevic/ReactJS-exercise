@@ -35,4 +35,7 @@ public interface AdventureReservationRepository extends JpaRepository<AdventureR
 
     @Query("select ar from AdventureReservation ar where ar.complaint is not null and ar.complaint.reviewed = false")
     Iterable<? extends AdventureReservation> getAllNotReviewedAdventureComplaint();
+
+    @Query("select ar from AdventureReservation ar where ar.customer is not null and ar.reservationStart between ?1 and ?2")
+    Collection<AdventureReservation> getAllReservationsForCalculatingIncome(LocalDateTime startTime, LocalDateTime endTime);
 }

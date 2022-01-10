@@ -42,6 +42,8 @@ public class BackendApplication implements CommandLineRunner {
     private CottagePriceListRepository cottagePriceListRepository;
     @Autowired
     private CottageReservationRepository cottageReservationRepository;
+    @Autowired
+    private TaxRepository taxRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
@@ -548,6 +550,7 @@ public class BackendApplication implements CommandLineRunner {
         AdventureReservation reservationForEvaluating = new AdventureReservation();
         reservationForEvaluating.setAdventure(adventure);
         reservationForEvaluating.setLength(4);
+        reservationForEvaluating.setPrice(3500);
         reservationForEvaluating.setReservationStart(LocalDateTime.of(2021, 10,15,10,0));
         reservationForEvaluating.setLastDateToReserve(LocalDateTime.of(2021, 10, 15, 15, 0));
         reservationForEvaluating.setCustomer(customer1);
@@ -557,6 +560,7 @@ public class BackendApplication implements CommandLineRunner {
         AdventureReservation currentReservation = new AdventureReservation();
         currentReservation.setAdventure(adventure);
         currentReservation.setLength(10);
+        currentReservation.setPrice(2200);
         currentReservation.setReservationStart(LocalDateTime.of(2021, 12,23,10,0));
         currentReservation.setLastDateToReserve(LocalDateTime.of(2021, 10, 15, 15, 0));
         currentReservation.setCustomer(customer1);
@@ -584,6 +588,7 @@ public class BackendApplication implements CommandLineRunner {
         AdventureReservation reservation23 = new AdventureReservation();
         reservation23.setCustomer(customer1);
         reservation23.setAdventure(adventure);
+        reservation23.setPrice(3100);
         reservation23.setLength(4);
         reservation23.setReservationStart(LocalDateTime.of(2021, 9,10,10,20));
         reservation23.setLastDateToReserve(LocalDateTime.of(2021, 10, 10, 15, 0));
@@ -663,6 +668,29 @@ public class BackendApplication implements CommandLineRunner {
         cottageReservation3.setFast(true);
 
         cottageReservationRepository.save(cottageReservation3);
+
+        //TESTIRANJE TAKSE
+        Tax tax = new Tax();
+        tax.setTaxRate(6);
+        tax.setStartTime(LocalDateTime.of(2021, 1,1,10,20));
+        tax.setEndTime(LocalDateTime.of(2021, 12,25,10,20));
+        tax.setCurrent(false);
+
+        Tax tax1 = new Tax();
+        tax1.setTaxRate(5);
+        tax1.setStartTime(LocalDateTime.of(2021, 12,25,10,21));
+
+        taxRepository.save(tax);
+        taxRepository.save(tax1);
+
+        AdventureReservation reservation35 = new AdventureReservation();
+        reservation35.setAdventure(adventure);
+        reservation35.setLength(4);
+        reservation35.setPrice(100000);
+        reservation35.setCustomer(customer1);
+        reservation35.setReservationStart(LocalDateTime.of(2022, 1,3,10,20));
+        reservation35.setLastDateToReserve(LocalDateTime.of(2022, 1, 2, 15, 0));
+        adventureReservationRepository.save(reservation35);
     }
 
 }

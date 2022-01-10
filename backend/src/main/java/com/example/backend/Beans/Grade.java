@@ -1,6 +1,7 @@
 package com.example.backend.Beans;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 @Table(name = "Grades")
 public class Grade {
     @Id
