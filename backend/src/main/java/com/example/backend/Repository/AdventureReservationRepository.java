@@ -1,11 +1,16 @@
 package com.example.backend.Repository;
 
 import com.example.backend.Beans.AdventureReservation;
+import com.example.backend.Beans.BoatReservation;
 import com.example.backend.Beans.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -35,4 +40,9 @@ public interface AdventureReservationRepository extends JpaRepository<AdventureR
 
     @Query("select ar from AdventureReservation ar where ar.complaint is not null and ar.complaint.reviewed = false")
     Iterable<? extends AdventureReservation> getAllNotReviewedAdventureComplaint();
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select ar from AdventureReservation ar where ar.id = ?1")
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "0")})
+    AdventureReservation getAdventureReservationByReservationId(long id);
 }

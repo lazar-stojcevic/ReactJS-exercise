@@ -3,8 +3,12 @@ package com.example.backend.Repository;
 import com.example.backend.Beans.BoatReservation;
 import com.example.backend.Beans.CottageReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -50,4 +54,10 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
     @Query("select cr from BoatReservation cr where" +
             " cr.boat.id = ?1 order by cr.reservationStart asc ")
     Collection<BoatReservation> getAllReservationsOfBoatForCalendar(long boatId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select br from BoatReservation br where br.boat.id = ?1 and br.reservationStart > ?2")
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "0")})
+    Collection<BoatReservation> getAllFutureBoatReservationOfBoat(long id, LocalDateTime now);
+
 }

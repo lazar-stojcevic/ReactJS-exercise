@@ -114,9 +114,12 @@ export default {
     },
     reserve(boatToReserve){
       alert("Please wait for a while...");
-      BoatReservationService.reserveBoat(boatToReserve.id, boatToReserve.selected, this.inputData.firstDay, this.inputData.lastDay, this.inputData.captain).then(() => {
-        alert("Reservation creted. Details will be sent to your email.")
-        this.$router.push('/');
+      BoatReservationService.reserveBoat(boatToReserve.id, boatToReserve.selected, this.inputData.firstDay, this.inputData.lastDay, this.inputData.captain).then((res) => {
+        if (res.data !== '') {
+          alert("Reservation creted. Details will be sent to your email.")
+          this.$router.push('/');
+        }else
+          alert("Please try again in few seconds.")
       }).catch(() => {alert("Some of your term overlaps!")})
     }
   }

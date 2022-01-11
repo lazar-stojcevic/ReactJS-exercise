@@ -51,7 +51,7 @@ public class BoatReservationController {
     }
 
     @PostMapping(path = "/availableBoats/")
-    public ResponseEntity<Collection<Boat>> getAllAvailableCottages(@RequestBody ReservationSearchDto search){
+    public ResponseEntity<Collection<Boat>> getAllAvailableBoats(@RequestBody ReservationSearchDto search){
         return new ResponseEntity<>(boatReservationService.getAllAvailableBoatsForSearch(search),
                 HttpStatus.OK);
     }
@@ -90,6 +90,8 @@ public class BoatReservationController {
         BoatReservation boatReservation = boatReservationService.makeNewAppointment(reservation);
         if (boatReservation == null)
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        else if (boatReservation.getCustomer() == null)
+            return new ResponseEntity<>(null, HttpStatus.OK);
         return new ResponseEntity<>(boatReservation, HttpStatus.OK);
     }
 

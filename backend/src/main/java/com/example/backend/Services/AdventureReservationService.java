@@ -11,8 +11,12 @@ import com.example.backend.Dtos.MakeFastReservationDto;
 import com.example.backend.Dtos.ReservationSearchDto;
 import com.example.backend.Dtos.ReserveAdventureDto;
 import com.example.backend.Repository.AdventureReservationRepository;
+import com.example.backend.Repository.CottageReservationRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,6 +49,11 @@ public class AdventureReservationService {
         this.adventureReservationRepository = repository;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public AdventureReservation save(AdventureReservation adventureReservation){
+        return this.adventureReservationRepository.save(adventureReservation);
+    }
+
     public Collection<CalendarReservationsDto> getAllReservationsOfInstructorForCalendar(long instructorId){
         List<CalendarReservationsDto> reservations = new ArrayList<>();
         for(AdventureReservation ar :
@@ -73,43 +82,66 @@ public class AdventureReservationService {
         return adventureReservationRepository.findAll();
     }
 
-    public AdventureReservation makeNewAppointment(CustomerReserveTermDto reservation) throws InterruptedException {
-       Customer customer = customerService.findCustomerById(reservation.getUserId());
-       AdventureReservation adventureReservation = getAdventureReservationById(reservation.getReservationId());
-        for (AdventureReservation ar : customer.getAdventureReservations()){
-            if (isReservationsOverlapForAdventures(ar, adventureReservation))
-                return null;
+    @Transactional
+    public AdventureReservation makeNewAppointment(CustomerReserveTermDto reservation) {
+        try{
+           Customer customer = customerService.findCustomerById(reservation.getUserId());
+           AdventureReservation adventureReservation = findAdventureReservationById(reservation.getReservationId());
+           if(adventureReservation.getCustomer() != null)
+               return null;
+            for (AdventureReservation ar : customer.getAdventureReservations()){
+                if (isReservationsOverlapForAdventures(ar, adventureReservation))
+                    return null;
+            }
+            for (CottageReservation cr : customer.getCottageReservations()){
+                if(isReservationsOverlapForCottages(cr, adventureReservation))
+                    return null;
+            }
+            for(BoatReservation br: customer.getBoatReservations()){
+                if(isReservationsOverlapForBoats(br, adventureReservation))
+                    return null;
+            }
+            List<AdditionalService> services = findAllSelectedAdditionalServices(reservation.getServices());
+            adventureReservation.setCustomer(customer);
+            calculateFullPriceOfReservation(adventureReservation, services);
+            AdventureReservation retVal = save(adventureReservation);
+            emailService.sendAdventureReservationConfirm(customer);
+            return retVal;
+        }catch (Exception e){
+            return null;
         }
-        for (CottageReservation cr : customer.getCottageReservations()){
-            if(isReservationsOverlapForCottages(cr, adventureReservation))
-                return null;
-        }
-
-        for(BoatReservation br: customer.getBoatReservations()){
-            if(isReservationsOverlapForBoats(br, adventureReservation))
-                return null;
-        }
-        List<AdditionalService> services = findAllSelectedAdditionalServices(reservation.getServices());
-        adventureReservation.setCustomer(customer);
-        calculateFullPriceOfReservation(adventureReservation, services);
-        emailService.sendAdventureReservationConfirm(customer);
-        return save(adventureReservation);
     }
 
     //Isto kao obicna samo bez racunanje cene, jer je ona u napred zadata
-    public AdventureReservation makeNewAppointmentOnAction(CustomerReserveTermDto reservation) throws InterruptedException {
-        Customer customer = customerService.findCustomerById(reservation.getUserId());
-        AdventureReservation adventureReservation = getAdventureReservationById(reservation.getReservationId());
-        for (AdventureReservation ar : customer.getAdventureReservations()){
-            if (isReservationsOverlapForAdventures(ar, adventureReservation))
+    @Transactional
+    public AdventureReservation makeNewAppointmentOnAction(CustomerReserveTermDto reservation) {
+        try {
+            Customer customer = customerService.findCustomerById(reservation.getUserId());
+            AdventureReservation adventureReservation = getAdventureReservationById(reservation.getReservationId());
+            if (adventureReservation.getCustomer() != null)
                 return null;
-        }
-        if (IsForbiddenToCustomer(adventureReservation, customer.getId()))
+            for (AdventureReservation ar : customer.getAdventureReservations()) {
+                if (isReservationsOverlapForAdventures(ar, adventureReservation))
+                    return null;
+            }
+            for (CottageReservation cr : customer.getCottageReservations()){
+                if(isReservationsOverlapForCottages(cr, adventureReservation))
+                    return null;
+            }
+            for(BoatReservation br: customer.getBoatReservations()){
+                if(isReservationsOverlapForBoats(br, adventureReservation))
+                    return null;
+            }
+            if (IsForbiddenToCustomer(adventureReservation, customer.getId()))
+                return null;
+
+            adventureReservation.setCustomer(customer);
+            AdventureReservation retVal = save(adventureReservation);
+            emailService.sendAdventureReservationConfirm(customer);
+            return retVal;
+        }catch (Exception e){
             return null;
-
-
-        emailService.sendAdventureReservationConfirm(customer);
-        return save(adventureReservation);
+        }
     }
 
     public Collection<AdventureReservation> getAllNextReservedTermsOfAdventure(long adventureId){
@@ -166,6 +198,11 @@ public class AdventureReservationService {
 
     public AdventureReservation findAdventureReservationById(long id){
         return adventureReservationRepository.findById(id).orElse(null);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public AdventureReservation findAdventureReservation(long id){
+        return adventureReservationRepository.getAdventureReservationByReservationId(id);
     }
 
     public Collection<AdventureReservation> getAllAvailableReservationsForSearch(ReservationSearchDto search){
@@ -236,17 +273,28 @@ public class AdventureReservationService {
                 LocalDateTime.now());
     }
 
+    @Transactional
     public AdventureReservation cancelTerm(CancelTermDto data){
-        Customer customer = this.customerService.findCustomerById(data.getUserId());
-        AdventureReservation reservation = adventureReservationRepository.getById(data.getReservationId());
-        reservation.getForbidenCustomers().add(customer);
-        reservation.setCustomer(null);
-        return adventureReservationRepository.save(reservation);
+        try {
+            Customer customer = this.customerService.findCustomerById(data.getUserId());
+            AdventureReservation reservation = adventureReservationRepository.getById(data.getReservationId());
+            if(customer.getId() != reservation.getCustomer().getId())
+                return null;
+            reservation.getForbidenCustomers().add(customer);
+            reservation.setCustomer(null);
+            return save(reservation);
+        }catch (Exception e){
+            return null;
+        }
     }
     public AdventureReservation markReservationAsReported(long id){
-        AdventureReservation reservation = findAdventureReservationById(id);
-        reservation.setReported(true);
-        return save(reservation);
+        try {
+            AdventureReservation reservation = findAdventureReservationById(id);
+            reservation.setReported(true);
+            return save(reservation);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     private boolean IsInLocation(AdventureReservation ar, String city) {
@@ -394,10 +442,6 @@ public class AdventureReservationService {
         try {
             emailService.sendNotificationMailForCreatingCustomReservationToCustomer(customer);
         }catch (Exception e){System.out.println(e.toString());}
-    }
-
-    private AdventureReservation save(AdventureReservation adventureReservation){
-        return this.adventureReservationRepository.save(adventureReservation);
     }
 
     //PROVERA DA LI JE ZABRANJENO KORISNIKU DA ZAKAZUJE PONOVO OVAJ TERMIN

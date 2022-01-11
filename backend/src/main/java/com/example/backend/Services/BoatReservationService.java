@@ -5,6 +5,8 @@ import com.example.backend.Dtos.*;
 import com.example.backend.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -96,29 +98,43 @@ public class BoatReservationService {
         return boats;
     }
 
+    @Transactional
     public BoatReservation makeNewAppointment(CustomerReserveCottageDto reservation) throws InterruptedException {
-        Customer customer = customerService.findCustomerById(reservation.getUserId());
+        try {
+            Customer customer = customerService.findCustomerById(reservation.getUserId());
 
-        BoatReservation boatReservation = new BoatReservation();
-        boatReservation.setReservationStart(reservation.getFrom());
-        boatReservation.setReservationEnd(reservation.getTo());
-        boatReservation.setCustomer(customer);
-        boatReservation.setBoat(boatService.findById(reservation.getCottageId()));
-        boatReservation.setFast(false);
-        boatReservation.setCaptain(reservation.isCaptain());
-        if (IsCustomersReservationsOverlapsWithNew(customer, boatReservation)){
+            BoatReservation boatReservation = new BoatReservation();
+            boatReservation.setReservationStart(reservation.getFrom());
+            boatReservation.setReservationEnd(reservation.getTo());
+            boatReservation.setCustomer(customer);
+            boatReservation.setBoat(boatService.findById(reservation.getCottageId()));
+            boatReservation.setFast(false);
+            try {
+                if (IsCustomersReservationsOverlapsWithNew(customer, boatReservation)) {
+                    return null;
+                }
+            }catch (Exception e){
+                return new BoatReservation();
+            }
+
+            boatReservation.setDiscount(0);
+            boatReservation.setBoatPriceList(boatReservation.getBoat().getPriceList()); //DA LI MENI OVO TREBA??
+            List<AdditionalBoatService> services = findAllSelectedAdditionalServices(reservation.getServices());
+
+            calculateFullPriceOfReservation(boatReservation, services);
+            boatReservation.setLength((int) ChronoUnit.DAYS.between(reservation.getFrom(), reservation.getTo()));
+
+            BoatReservation retVal = save(boatReservation);
+            emailService.sendBoatReservationConfirm(customer, boatReservation);
+            return retVal;
+        }catch (Exception e){
             return null;
         }
+    }
 
-        boatReservation.setDiscount(0);
-        boatReservation.setBoatPriceList(boatReservation.getBoat().getPriceList()); //DA LI MENI OVO TREBA??
-        List<AdditionalBoatService> services = findAllSelectedAdditionalServices(reservation.getServices());
-
-        calculateFullPriceOfReservation(boatReservation, services);
-        boatReservation.setLength((int) ChronoUnit.DAYS.between(reservation.getFrom(), reservation.getTo()));
-
-        emailService.sendBoatReservationConfirm(customer, boatReservation);
-        return save(boatReservation);
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Collection<BoatReservation> getAllFutureCottageReservationForBoat(long id){
+        return this.boatReservationRepository.getAllFutureBoatReservationOfBoat(id, LocalDateTime.now());
     }
 
     public Collection<BoatReservation> getAllFutureTermsByCustomerId(long id){
@@ -147,22 +163,28 @@ public class BoatReservationService {
                 LocalDateTime.now());
     }
 
+    @Transactional
     public BoatReservation cancelTerm(CancelTermDto data){
-        Customer customer = this.customerService.findCustomerById(data.getUserId());
-        BoatReservation reservation = findBoatReservationById(data.getReservationId());
+        try {
+            Customer customer = this.customerService.findCustomerById(data.getUserId());
+            BoatReservation reservation = findBoatReservationById(data.getReservationId());
+            if(customer.getId() != reservation.getCustomer().getId())
+                return null;
 
-        ForbiddenCustomerToBoat forbidden = new ForbiddenCustomerToBoat();
-        forbidden.setBoat(reservation.getBoat());
-        forbidden.setCustomer(customer);
-        forbidden.setReservationStart(reservation.getReservationStart());
-        forbidden.setReservationEnd(reservation.getReservationEnd());
+            ForbiddenCustomerToBoat forbidden = new ForbiddenCustomerToBoat();
+            forbidden.setBoat(reservation.getBoat());
+            forbidden.setCustomer(customer);
+            forbidden.setReservationStart(reservation.getReservationStart());
+            forbidden.setReservationEnd(reservation.getReservationEnd());
 
-        forbiddenCustomerToBoatRepository.save(forbidden);
-        if (!reservation.isFast())
-            reservation.setBoat(null);
-        reservation.setCustomer(null);
-        save(reservation);
-        return reservation;
+            forbiddenCustomerToBoatRepository.save(forbidden);
+            if (!reservation.isFast())
+                reservation.setBoat(null);
+            reservation.setCustomer(null);
+            return save(reservation);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public BoatReservation markReservationAsReported(long id){
@@ -224,24 +246,31 @@ public class BoatReservationService {
         return fastReservations;
     }
 
-    //TODO URADI SUTRA
-    public BoatReservation reserveFastReservation(long usedId, long reservationId) throws InterruptedException {
-        BoatReservation boatReservation = findBoatReservationById(reservationId);
-        Customer customer = customerService.findCustomerById(usedId);
-        if (IsCustomersReservationsOverlapsWithNew(customer, boatReservation)){
-            return null;
-        }
-        ReservationSearchDto pom = new ReservationSearchDto();
-        pom.setDateFrom(boatReservation.getReservationStart());
-        pom.setDateTo(boatReservation.getReservationEnd());
-        pom.setId(customer.getId());
-        if(!isUserNotForbidden(pom, boatReservation.getBoat())) {
-            return null;
-        }
+    @Transactional
+    public BoatReservation reserveFastReservation(long usedId, long reservationId) {
+        try {
+            BoatReservation boatReservation = findBoatReservationById(reservationId);
+            if(boatReservation.getCustomer() != null)
+                return null;
+            Customer customer = customerService.findCustomerById(usedId);
+            if (IsCustomersReservationsOverlapsWithNew(customer, boatReservation)) {
+                return null;
+            }
+            ReservationSearchDto pom = new ReservationSearchDto();
+            pom.setDateFrom(boatReservation.getReservationStart());
+            pom.setDateTo(boatReservation.getReservationEnd());
+            pom.setId(customer.getId());
+            if (!isUserNotForbidden(pom, boatReservation.getBoat())) {
+                return null;
+            }
 
-        boatReservation.setCustomer(customer);
-        emailService.sendBoatReservationConfirm(customer, boatReservation);
-        return save(boatReservation);
+            boatReservation.setCustomer(customer);
+            BoatReservation retVal = save(boatReservation);
+            emailService.sendBoatReservationConfirm(customer, boatReservation);
+            return retVal;
+        }catch (Exception e){
+            return null;
+        }
     }
 
     private boolean IsInLocation(Boat boat, String city) {
@@ -256,7 +285,8 @@ public class BoatReservationService {
         return boat.getAddress().getCountry().toUpperCase(Locale.ROOT).contains(country.toUpperCase(Locale.ROOT));
     }
 
-    private BoatReservation save(BoatReservation boatReservation){
+    @Transactional
+    public BoatReservation save(BoatReservation boatReservation){
         return this.boatReservationRepository.save(boatReservation);
     }
 
@@ -302,6 +332,15 @@ public class BoatReservationService {
                 return true;
             }
         }
+        if(newReservation.isFast())
+            return false;
+
+        for (BoatReservation br: getAllFutureCottageReservationForBoat(newReservation.getBoat().getId())){
+            if (isReservationsOverlapWithBoatReservations(br, newReservation)){
+                return true;
+            }
+        }
+
         return false;
     }
 

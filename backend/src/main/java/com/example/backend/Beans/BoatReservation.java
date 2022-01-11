@@ -65,6 +65,9 @@ public class BoatReservation {
     @Column()
     private boolean reported = false;
 
+    @Version
+    private Integer version;
+
     private double mark = 0;
 
     @OneToOne(cascade = CascadeType.ALL)

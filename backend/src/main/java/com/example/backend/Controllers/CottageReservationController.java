@@ -110,6 +110,8 @@ public class CottageReservationController {
         CottageReservation cottageReservation = cottageReservationService.makeNewAppointment(reservation);
         if (cottageReservation == null)
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        else if (cottageReservation.getCustomer() == null)
+            return new ResponseEntity<>(null, HttpStatus.OK);
         return new ResponseEntity<>(cottageReservation, HttpStatus.OK);
     }
 

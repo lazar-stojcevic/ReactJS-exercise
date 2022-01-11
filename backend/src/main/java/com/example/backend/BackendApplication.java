@@ -137,6 +137,7 @@ public class BackendApplication implements CommandLineRunner {
         fishingInstructor.setPassword("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra");
         fishingInstructor.setEnabled(true);
         fishingInstructor.setPhone("566-566");
+        fishingInstructor.setRating(4);
         fishingInstructor.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         fishingInstructor.setRole(roleRepository.findByName("ROLE_INSTRUCTOR").get(0));
         fishingInstructor.getPrepaidCustomers().add(prepaidCustomer);

@@ -4,8 +4,12 @@ import com.example.backend.Beans.AdventureReservation;
 import com.example.backend.Beans.Cottage;
 import com.example.backend.Beans.CottageReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -46,4 +50,9 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
     @Query("select cr from CottageReservation cr where" +
             " cr.cottage.cottageOwner.id = ?1 order by cr.reservationStart asc ")
     Collection<CottageReservation> getAllReservationsOfOwnerForCalendar(long ownerId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select cr from CottageReservation cr where cr.cottage.id = ?1 and cr.reservationStart > ?2")
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "0")})
+    Collection<CottageReservation> getAllFutureCottageReservationOfCottage(long id, LocalDateTime now);
 }

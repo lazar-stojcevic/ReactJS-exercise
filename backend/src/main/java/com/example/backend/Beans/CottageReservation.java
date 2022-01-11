@@ -69,6 +69,9 @@ public class CottageReservation {
     @OneToOne(cascade = CascadeType.ALL)
     private CottagePriceList CottagePriceList;
 
+    @Version
+    private Integer version;
+
     public boolean isReserved(){
         return this.customer != null;
     }

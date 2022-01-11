@@ -74,6 +74,9 @@ public class AdventureReservation {
     @Column()
     private double discount = 0;
 
+    @Version
+    private Integer version;
+
     private double mark = 0;
 
     public boolean isReserved(){

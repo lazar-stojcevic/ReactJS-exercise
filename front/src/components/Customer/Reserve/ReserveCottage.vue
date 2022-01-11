@@ -121,9 +121,12 @@ export default {
     },
     reserve(cottageToReserve){
       alert("Please wait for a while...")
-      CottageReservationService.reserveCottage(cottageToReserve.id, cottageToReserve.selected, this.inputData.firstDay, this.inputData.lastDay).then(() =>{
-        alert("Reservation creted. Details will be sent to your email.")
-        this.$router.push('/');
+      CottageReservationService.reserveCottage(cottageToReserve.id, cottageToReserve.selected, this.inputData.firstDay, this.inputData.lastDay).then((res) =>{
+        if (res.data !== '') {
+          alert("Reservation creted. Details will be sent to your email.")
+          this.$router.push('/');
+        }else
+          alert("Please try again in few seconds.")
       }).catch(() => {alert("Some of your term overlaps!")})
     }
   }

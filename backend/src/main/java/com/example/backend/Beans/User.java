@@ -53,6 +53,9 @@ public abstract class User implements UserDetails {
     @JoinColumn(name = "address", referencedColumnName = "address_id")
     private Address address;
 
+    @Version
+    private Integer version;
+
     private double mark;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

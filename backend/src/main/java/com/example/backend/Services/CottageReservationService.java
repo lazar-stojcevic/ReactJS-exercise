@@ -7,6 +7,8 @@ import com.example.backend.Repository.CottageReservationRepository;
 import com.example.backend.Repository.ForbiddenCustomerToCottageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -39,10 +41,25 @@ public class CottageReservationService {
     @Autowired
     private AdditionalCottageServiceService additionalCottageServiceService;
 
+
     public CottageReservationService(CottageReservationRepository repository, CottageRepository cottageRepository, ForbiddenCustomerToCottageRepository forbiddenCustomerToCottageRepository){
         this.cottageReservationRepository = repository;
         this.cottageRepository = cottageRepository;
         this.forbiddenCustomerToCottageRepository = forbiddenCustomerToCottageRepository;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public CottageReservation save(CottageReservation cottageReservation){
+        return this.cottageReservationRepository.save(cottageReservation);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Collection<CottageReservation> getAllFutureCottageReservationForCottage(long id){
+        return this.cottageReservationRepository.getAllFutureCottageReservationOfCottage(id, LocalDateTime.now());
+    }
+
+    public Collection<CottageReservation> getAll(){
+        return cottageReservationRepository.findAll();
     }
 
     public CottageReservation getCurrentReservationOfInstructor(long cottageId){
@@ -68,7 +85,7 @@ public class CottageReservationService {
 
     public Collection<Cottage> getAllAvailableCottagesForSearch(ReservationSearchDto search){
         List<Cottage> cottages = new ArrayList<>();
-        for (Cottage cottage : cottageRepository.findAll()){
+        for (Cottage cottage : cottageService.findAllCottages()){
             if (isSearchInCottageAvailablePeriod(search.getDateFrom(), search.getDateTo(), cottage) &&
                     isCottageHaveEnoughBeds(search.getPersons(), cottage) && isUserNotForbidden(search, cottage)
                     && IsInLocation(cottage, search.getCity())
@@ -87,28 +104,38 @@ public class CottageReservationService {
         return cottages;
     }
 
-    public CottageReservation makeNewAppointment(CustomerReserveCottageDto reservation) throws InterruptedException {
-        Customer customer = customerService.findCustomerById(reservation.getUserId());
+    @Transactional
+    public CottageReservation makeNewAppointment(CustomerReserveCottageDto reservation) {
+        try {
+            Customer customer = customerService.findCustomerById(reservation.getUserId());
 
-        CottageReservation cottageReservation = new CottageReservation();
-        cottageReservation.setReservationStart(reservation.getFrom());
-        cottageReservation.setReservationEnd(reservation.getTo());
-        cottageReservation.setCustomer(customer);
-        cottageReservation.setCottage(cottageService.findById(reservation.getCottageId()));
-        cottageReservation.setFast(false);
-        if (IsCustomersReservationsOverlapsWithNew(customer, cottageReservation)){
+            CottageReservation cottageReservation = new CottageReservation();
+            cottageReservation.setReservationStart(reservation.getFrom());
+            cottageReservation.setReservationEnd(reservation.getTo());
+            cottageReservation.setCustomer(customer);
+            cottageReservation.setCottage(cottageService.findById(reservation.getCottageId()));
+            cottageReservation.setFast(false);
+            try {
+                if (IsCustomersReservationsOverlapsWithNew(customer, cottageReservation)) {
+                    return null;
+                }
+            }catch (Exception e){
+                return new CottageReservation();
+            }
+
+            cottageReservation.setDiscount(0);
+            cottageReservation.setCottagePriceList(cottageReservation.getCottage().getCottagePriceList()); //DA LI MENI OVO TREBA??
+            List<AdditionalCottageService> services = findAllSelectedAdditionalServices(reservation.getServices());
+
+            calculateFullPriceOfReservation(cottageReservation, services);
+            cottageReservation.setLength((int) ChronoUnit.DAYS.between(reservation.getFrom(), reservation.getTo()));
+
+            CottageReservation retVal = save(cottageReservation);
+            emailService.sendCottageReservationConfirm(customer, cottageReservation);
+            return retVal;
+        }catch (Exception e){
             return null;
         }
-
-        cottageReservation.setDiscount(0);
-        cottageReservation.setCottagePriceList(cottageReservation.getCottage().getCottagePriceList()); //DA LI MENI OVO TREBA??
-        List<AdditionalCottageService> services = findAllSelectedAdditionalServices(reservation.getServices());
-
-        calculateFullPriceOfReservation(cottageReservation, services);
-        cottageReservation.setLength((int) ChronoUnit.DAYS.between(reservation.getFrom(), reservation.getTo()));
-
-        emailService.sendCottageReservationConfirm(customer, cottageReservation);
-        return save(cottageReservation);
     }
 
     public Collection<CottageReservation> getAllFutureTermsByCustomerId(long id){
@@ -151,26 +178,31 @@ public class CottageReservationService {
         return reservations;
     }
 
+    @Transactional
     public CottageReservation cancelTerm(CancelTermDto data){
-        Customer customer = this.customerService.findCustomerById(data.getUserId());
-        CottageReservation reservation = findCottageReservationById(data.getReservationId());
+        try {
+            Customer customer = this.customerService.findCustomerById(data.getUserId());
+            CottageReservation reservation = findCottageReservationById(data.getReservationId());
+            if(customer.getId() != reservation.getCustomer().getId())
+                return null;
 
-        ForbiddenCustomerToCottage forbidden = new ForbiddenCustomerToCottage();
-        forbidden.setCottage(reservation.getCottage());
-        forbidden.setCustomer(customer);
-        forbidden.setReservationStart(reservation.getReservationStart());
-        forbidden.setReservationEnd(reservation.getReservationEnd());
+            ForbiddenCustomerToCottage forbidden = new ForbiddenCustomerToCottage();
+            forbidden.setCottage(reservation.getCottage());
+            forbidden.setCustomer(customer);
+            forbidden.setReservationStart(reservation.getReservationStart());
+            forbidden.setReservationEnd(reservation.getReservationEnd());
 
-        forbiddenCustomerToCottageRepository.save(forbidden);
-        if (!reservation.isFast())
-            reservation.setCottage(null);
-        reservation.setCustomer(null);
-        save(reservation);
-        return reservation;
+            forbiddenCustomerToCottageRepository.save(forbidden);
+            if (!reservation.isFast())
+                reservation.setCottage(null);
+            reservation.setCustomer(null);
+            return save(reservation);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public CottageReservation makeFastReservationSlot(FastReservationDto reservation) throws InterruptedException {
-
         CottageReservation cottageReservation = new CottageReservation();
         cottageReservation.setReservationStart(reservation.getDate1());
         cottageReservation.setReservationEnd(reservation.getDate2());
@@ -204,27 +236,31 @@ public class CottageReservationService {
         return fastReservations;
     }
 
-    public CottageReservation reserveFastReservation(long usedId, long reservationId) throws InterruptedException {
-        CottageReservation cottageReservation = findCottageReservationById(reservationId);
-        Customer customer = customerService.findCustomerById(usedId);
-        if (IsCustomersReservationsOverlapsWithNew(customer, cottageReservation)){
+    @Transactional
+    public CottageReservation reserveFastReservation(long usedId, long reservationId) {
+        try {
+            CottageReservation cottageReservation = findCottageReservationById(reservationId);
+            if(cottageReservation.getCustomer() != null)
+                return null;
+            Customer customer = customerService.findCustomerById(usedId);
+            if (IsCustomersReservationsOverlapsWithNew(customer, cottageReservation)) {
+                return null;
+            }
+            ReservationSearchDto pom = new ReservationSearchDto();
+            pom.setDateFrom(cottageReservation.getReservationStart());
+            pom.setDateTo(cottageReservation.getReservationEnd());
+            pom.setId(customer.getId());
+            if (!isUserNotForbidden(pom, cottageReservation.getCottage())) {
+                return null;
+            }
+
+            cottageReservation.setCustomer(customer);
+            CottageReservation retVal = save(cottageReservation);
+            emailService.sendCottageReservationConfirm(customer, cottageReservation);
+            return retVal;
+        }catch (Exception e){
             return null;
         }
-        ReservationSearchDto pom = new ReservationSearchDto();
-        pom.setDateFrom(cottageReservation.getReservationStart());
-        pom.setDateTo(cottageReservation.getReservationEnd());
-        pom.setId(customer.getId());
-        if(!isUserNotForbidden(pom, cottageReservation.getCottage())) {
-            return null;
-        }
-
-        cottageReservation.setCustomer(customer);
-        emailService.sendCottageReservationConfirm(customer, cottageReservation);
-        return save(cottageReservation);
-    }
-
-    private CottageReservation save(CottageReservation cottageReservation){
-        return this.cottageReservationRepository.save(cottageReservation);
     }
 
     private boolean IsInLocation(Cottage cottage, String city) {
@@ -289,7 +325,8 @@ public class CottageReservationService {
 
         if (newReservation.isFast()) //Ova provera je napravljena kod pravljenja brze rezervacije
             return false;
-        for (CottageReservation cr: newReservation.getCottage().getReservations()){
+        //OVDE SE DOGADJA ZAKLJUCAVANJE
+        for (CottageReservation cr: getAllFutureCottageReservationForCottage(newReservation.getCottage().getId())){
             if (isReservationsOverlapWithCottageReservations(cr, newReservation)){
                 return true;
             }

@@ -131,17 +131,26 @@ export default {
       AdventureReservationService.cancelReservation(adventure).then(() => {
         alert("Reservation canceled");
         this.$router.push('/');
+      }).catch(() =>{
+        alert("Something went wrong!");
+        this.$router.push('/');
       })
     },
     cancelCottageReservation(cottageReservation){
       CottageReservationService.cancelReservation(cottageReservation).then(() => {
         alert("Reservation canceled");
         this.$router.push('/');
+      }).catch(() =>{
+        alert("Something went wrong!");
+        this.$router.push('/');
       })
     },
     cancelBoatReservation(boatReservation){
       BoatReservationService.cancelReservation(boatReservation).then(() => {
         alert("Reservation canceled");
+        this.$router.push('/');
+      }).catch(() =>{
+        alert("Something went wrong!");
         this.$router.push('/');
       })
     },
