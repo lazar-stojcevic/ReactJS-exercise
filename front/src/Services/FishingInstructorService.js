@@ -57,8 +57,8 @@ class FishingInstructorService{
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
         let data = {};
-        data.fromDate = fromDate;
-        data.toDate = toDate;
+        data.fromDate = fromDate + ' 00:00';
+        data.toDate = toDate + ' 00:00';
         return axios.put(FISHING_INSTRUCTOR_URL + '/holiday/' + userId, JSON.stringify(data),
             {headers} );
     }
