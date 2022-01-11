@@ -39,6 +39,9 @@ public class BoatReservation {
     @Column()
     private boolean fast;
 
+    @Column()
+    private boolean captain;
+
     private int price;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -1,10 +1,7 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.*;
-import com.example.backend.Dtos.CancelTermDto;
-import com.example.backend.Dtos.CustomerReserveCottageDto;
-import com.example.backend.Dtos.FastReservationDto;
-import com.example.backend.Dtos.ReservationSearchDto;
+import com.example.backend.Dtos.*;
 import com.example.backend.Repository.CottageRepository;
 import com.example.backend.Repository.CottageReservationRepository;
 import com.example.backend.Repository.ForbiddenCustomerToCottageRepository;
@@ -134,6 +131,24 @@ public class CottageReservationService {
     public Collection<CottageReservation> getAllPastTermsWithoutComplaintByCustomerId(long id){
         return cottageReservationRepository.getAllReservationOfCustomerInPastWithoutComplaint(id,
                 LocalDateTime.now());
+    }
+
+    public Collection<CalendarReservationsDto> getAllReservationsOfOwnerForCalendar(long ownerId){
+        List<CalendarReservationsDto> reservations = new ArrayList<>();
+        for(CottageReservation cr :
+                cottageReservationRepository.getAllReservationsOfOwnerForCalendar(ownerId)){
+            reservations.add(new CalendarReservationsDto(cr));
+        }
+        return reservations;
+    }
+
+    public Collection<CalendarReservationsDto> getAllReservationsOfCottageForCalendar(long cottageId){
+        List<CalendarReservationsDto> reservations = new ArrayList<>();
+        for(CottageReservation cr :
+                cottageReservationRepository.getAllReservationOfCottage(cottageId)){
+            reservations.add(new CalendarReservationsDto(cr));
+        }
+        return reservations;
     }
 
     public CottageReservation cancelTerm(CancelTermDto data){
@@ -374,6 +389,12 @@ public class CottageReservationService {
             }
         }
         return true;
+    }
+
+    public CottageReservation markReservationAsReported(long id){
+        CottageReservation reservation = findCottageReservationById(id);
+        reservation.setReported(true);
+        return save(reservation);
     }
 
     public CottageReservation markReservationAsEvaluated(long reservationId){

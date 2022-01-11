@@ -6,11 +6,19 @@ import BootstrapVue from 'bootstrap-vue';
 import routes from "@/router/routes";
 import Navbar from "@/components/Navbar";
 import moment from "moment";
+import * as VueGoogleMaps from 'vue2-google-maps'
 
 Vue.component('my-navbar', Navbar)
 
 Vue.use(VueRouter);
 const router = new VueRouter({routes})
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyByi8SUcjil0KIF7vWpbf_uNq154gPB9fw',
+    libraries: 'places',
+  }
+});
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)

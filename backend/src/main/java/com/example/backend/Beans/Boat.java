@@ -47,14 +47,24 @@ public class Boat {
     @Column()
     private String promo;
 
-    @Column
+    @Column()
     private String conductRules;
 
     @Column()
     private int capacity;
 
-    @Column
+    @Column()
     private double rating;
+
+    @Column()
+    private String fishingEquipment;
+
+    @Column
+    private boolean freeCancel;
+
+    @Column
+    private boolean captain;
+
 
     @OneToMany(mappedBy = "boat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude

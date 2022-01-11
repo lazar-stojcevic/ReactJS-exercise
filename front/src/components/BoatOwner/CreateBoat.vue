@@ -101,6 +101,20 @@
       ></b-form-input>
     </b-form-group>
 
+    <b-form-group id="input-price" label="Fishing equipment:" label-for="fishingEquipment">
+      <b-form-input
+          id="fishingEquipment"
+          v-model="form.fishingEquipment"
+          required
+      ></b-form-input>
+    </b-form-group>
+
+    <b-form-group id="input-user" label="Additional options:" label-for="freeCancel">
+      <b-form-checkbox v-model="form.freeCancel"  id="freeCancel">Free canceling</b-form-checkbox>
+      <b-form-checkbox v-model="form.captain"  id="freeCancel">I'm captain</b-form-checkbox>
+    </b-form-group>
+
+
     <b-button type="submit" variant="primary">Submit</b-button>
   </b-form>
 </template>
@@ -126,7 +140,10 @@ export default {
         numberOfEngines: '',
         enginePower: '',
         topSpeed: '',
-        capacity: ''
+        capacity: '',
+        freeCancel:false,
+        captain: false,
+        fishingEquipment: ''
       },
     }
   },
@@ -148,7 +165,10 @@ export default {
         "numberOfEngines": this.form.numberOfEngines,
         "enginePower": this.form.enginePower,
         "topSpeed": this.form.topSpeed,
-        "capacity": this.form.capacity
+        "capacity": this.form.capacity,
+        "fishingEquipment": this.form.fishingEquipment,
+        "freeCancel": this.form.freeCancel,
+        "captain":this.form.captain,
       }).then(res => {this.user = res.data}).catch(() => {
         alert("SERVER ERROR");
       });

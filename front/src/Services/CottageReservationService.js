@@ -5,6 +5,24 @@ const URL = 'http://localhost:8080/cottageReservation';
 
 class CottageReservationService {
 
+    getAllReservationsOfOwnerForCalendar(ownerId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/calendar/' + ownerId, {headers});
+    }
+
+    getAllReservationsOfCottageForCalendar(cottageId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/calendarCottage/' + cottageId, {headers});
+    }
+
     getAllAvailableCottagesTerms(dateFromPar, dateToPar, persons, city, country){
         let headers = {
             'Accept': 'application/json',

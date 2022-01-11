@@ -13,6 +13,10 @@
         <span class="input-group-text">PERSONS</span>
         <input type="number" class="form-control" v-model="inputData.persons" required/>
       </span>
+      <span class="input-group mb-lg-2">
+        <b-form-checkbox v-model="inputData.captain"  id="freeCancel">I need captain</b-form-checkbox>
+      </span>
+
       <button type="submit" class="btn-info">Search</button>
     </b-form>
     <br>
@@ -69,7 +73,8 @@ export default {
       inputData: {
         firstDay: '',
         lastDay: '',
-        persons: 1
+        persons: 1,
+        captain: ''
       },
       boats: [],
       sort : 'markDESC'
@@ -81,7 +86,7 @@ export default {
   },
   methods: {
     searchAvailableBoats() {
-      BoatReservationService.getAllAvailableBoatTerms(this.inputData.firstDay, this.inputData.lastDay, this.inputData.persons)
+      BoatReservationService.getAllAvailableBoatTerms(this.inputData.firstDay, this.inputData.lastDay, this.inputData.persons, this.inputData.captain)
           .then((res) => {
             this.boats = res.data;
           }).then(() => {
@@ -105,7 +110,7 @@ export default {
     },
     reserve(boatToReserve) {
       alert("Please wait for a while...");
-      BoatReservationService.reserveBoatForCustomer(boatToReserve.id, boatToReserve.selected, this.inputData.firstDay, this.inputData.lastDay, this.id).then(() => {
+      BoatReservationService.reserveBoatForCustomer(boatToReserve.id, boatToReserve.selected, this.inputData.firstDay, this.inputData.lastDay, this.id, this.inputData.captain).then(() => {
         alert("Reservation creted. Details will be sent to your email.")
         this.$router.push('/');
       }).catch(() => {

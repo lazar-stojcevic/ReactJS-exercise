@@ -18,6 +18,9 @@ public class BoatDto {
     private double enginePower;
     private double topSpeed;
     private int capacity;
+    private String fishingEquipment;
+    private boolean freeCancel;
+    private boolean captain;
     private String conductRules;
     private String street;
     private String city;

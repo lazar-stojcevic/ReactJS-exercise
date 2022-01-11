@@ -27,17 +27,39 @@
       <h4 style="margin-left: 15px; color: chartreuse" v-for="service in this.services " :key="service.id"> {{ service.name }} - {{service.addPrice}}</h4>
     </div>
     <router-link class="btn btn-success" :to='"/boatActions/" + this.id'>ACTIONS</router-link>
+    <div style="margin-top: 20px; background-color: beige">
+      <FullCalendar :options="calendarOptions"/>
+    </div>
   </div>
 </template>
 
 <script>
 import LogInService from "@/Services/LogInService";
 import BoatService from "@/Services/BoatService";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import BoatReservationService from "../../../Services/BoatReservationService";
+import FullCalendar from "@fullcalendar/vue";
 export default {
   name: "OneBoat",
+  components: {
+    FullCalendar // make the <FullCalendar> tag available
+  },
   data(){
     return {
       LogInService,
+      calendarOptions: {
+        plugins: [ dayGridPlugin, interactionPlugin, timeGridPlugin ],
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: [],
+        eventClick: this.handleEventClick
+      },
       id: '',
       subcribed: false,
       boat: '',
@@ -53,6 +75,9 @@ export default {
     BoatService.getAdditionalServicesOfBoat(this.id).then((res) => {
       this.services = res.data;
     });
+    BoatReservationService.getAllReservationsOfBoatForCalendar(this.id).then(res => {
+      this.calendarOptions.events = res.data;
+    })
   },
   methods:{
     subscribe(){
@@ -62,6 +87,8 @@ export default {
     unsubscribe(){
       BoatService.unsubscribeBoat(LogInService.userId, this.id);
       this.subcribed = false;
+    },
+    handleEventClick(){
     }
   }
 }

@@ -21,6 +21,9 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
             " and cr.fast = false")
     Collection<CottageReservation> getAllReservationOfOwner(long customerId);
 
+    @Query("select cr from CottageReservation cr where cr.cottage.id = ?1 order by cr.reservationStart asc")
+    Collection<CottageReservation> getAllReservationOfCottage(long cottageId);
+
     @Query("select cr from CottageReservation cr where cr.cottage.cottageOwner.id = ?1"+
             " and cr.fast = true")
     Collection<CottageReservation> getAllFastReservationOfOwner(long customerId);
@@ -39,4 +42,8 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
     @Query("select cr from CottageReservation cr where cr.cottage.id = ?1 and cr.customer is null" +
             " and cr.reservationStart > ?2 and cr.fast = true ")
     Collection<CottageReservation> getAllFreeFutureActionsOfCottage(long id, LocalDateTime now);
+
+    @Query("select cr from CottageReservation cr where" +
+            " cr.cottage.cottageOwner.id = ?1 order by cr.reservationStart asc ")
+    Collection<CottageReservation> getAllReservationsOfOwnerForCalendar(long ownerId);
 }

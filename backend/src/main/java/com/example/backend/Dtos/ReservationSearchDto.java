@@ -18,4 +18,5 @@ public class ReservationSearchDto {
     private long id;
     private String city;
     private String country;
+    private boolean captain;
 }

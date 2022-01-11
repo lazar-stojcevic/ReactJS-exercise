@@ -70,6 +70,21 @@ public class BoatReservationController {
                 HttpStatus.OK);
     }
 
+    @GetMapping(path = "/calendar/{ownerId}")
+    public ResponseEntity<Collection<CalendarReservationsDto>>
+    getAllReservationForCalendarOfOwner(@PathVariable long ownerId){
+        return new ResponseEntity<>(boatReservationService.getAllReservationsOfOwnerForCalendar(ownerId),
+                HttpStatus.OK);
+    }
+
+
+    @GetMapping(path = "/calendarBoat/{boatId}")
+    public ResponseEntity<Collection<CalendarReservationsDto>>
+    getAllReservationForCalendarOfBoat(@PathVariable long boatId){
+        return new ResponseEntity<>(boatReservationService.getAllReservationsOfBoatForCalendar(boatId),
+                HttpStatus.OK);
+    }
+
     @PutMapping(path = "/reserveTerm/")
     public ResponseEntity<BoatReservation> ReserveTerm(@RequestBody CustomerReserveCottageDto reservation) throws InterruptedException {
         BoatReservation boatReservation = boatReservationService.makeNewAppointment(reservation);

@@ -1,10 +1,7 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.*;
-import com.example.backend.Dtos.CancelTermDto;
-import com.example.backend.Dtos.CustomerReserveCottageDto;
-import com.example.backend.Dtos.FastReservationDto;
-import com.example.backend.Dtos.ReservationSearchDto;
+import com.example.backend.Dtos.*;
 import com.example.backend.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,20 +63,35 @@ public class BoatReservationService {
     public Collection<Boat> getAllAvailableBoatsForSearch(ReservationSearchDto search){
         List<Boat> boats = new ArrayList<>();
         for (Boat boat : boatService.findAllBoats()){
-            if (isSearchInBoatAvailablePeriod(search.getDateFrom(), search.getDateTo(), boat) &&
-                    search.getPersons()<boat.getCapacity() && isUserNotForbidden(search, boat)
-                    && IsInCountry(boat, search.getCountry())
-                    && IsInLocation(boat, search.getCity())){
-                boolean valid = true;
-                for (BoatReservation br: boat.getReservations()){
-                    if(isReservationsOverlapForSearch(br, search.getDateFrom(), search.getDateTo())) {
-                        valid = false;
-                        break;
-                    }
-                }
-                if (valid)
-                    boats.add(boat);
+            if(!boat.isCaptain() && search.isCaptain()) {
+                continue;
             }
+
+                if (isSearchInBoatAvailablePeriod(search.getDateFrom(), search.getDateTo(), boat) &&
+                        search.getPersons() < boat.getCapacity() && isUserNotForbidden(search, boat)
+                        && IsInCountry(boat, search.getCountry())
+                        && IsInLocation(boat, search.getCity())) {
+                    boolean valid = true;
+                    for (BoatReservation br : boat.getReservations()) {
+                        if (isReservationsOverlapForSearch(br, search.getDateFrom(), search.getDateTo())) {
+                            valid = false;
+                            break;
+                        }
+                    }
+
+                    if(search.isCaptain()){
+                        for (BoatReservation br : getAllTermsByCaptainId(boat.getBoatOwner().getId())) {
+                            if (isReservationsOverlapForSearch(br, search.getDateFrom(), search.getDateTo())) {
+                                valid = false;
+                                break;
+                            }
+                        }
+
+                    }
+                    if (valid)
+                        boats.add(boat);
+                }
+
         }
         return boats;
     }
@@ -93,6 +105,7 @@ public class BoatReservationService {
         boatReservation.setCustomer(customer);
         boatReservation.setBoat(boatService.findById(reservation.getCottageId()));
         boatReservation.setFast(false);
+        boatReservation.setCaptain(reservation.isCaptain());
         if (IsCustomersReservationsOverlapsWithNew(customer, boatReservation)){
             return null;
         }
@@ -121,6 +134,10 @@ public class BoatReservationService {
         return boatReservationRepository.getAllReservationOfOwner(id);
     }
 
+    public Collection<BoatReservation> getAllTermsByCaptainId(long id){
+        return boatReservationRepository.getAllReservationOfCaptain(id);
+    }
+
     public Collection<BoatReservation> getAllFastTermsByOwnerId(long id){
         return boatReservationRepository.getAllFastReservationOfOwner(id);
     }
@@ -146,6 +163,30 @@ public class BoatReservationService {
         reservation.setCustomer(null);
         save(reservation);
         return reservation;
+    }
+
+    public BoatReservation markReservationAsReported(long id){
+        BoatReservation reservation = findBoatReservationById(id);
+        reservation.setReported(true);
+        return save(reservation);
+    }
+
+    public Collection<CalendarReservationsDto> getAllReservationsOfOwnerForCalendar(long ownerId){
+        List<CalendarReservationsDto> reservations = new ArrayList<>();
+        for(BoatReservation br :
+                boatReservationRepository.getAllReservationsOfOwnerForCalendar(ownerId)){
+            reservations.add(new CalendarReservationsDto(br));
+        }
+        return reservations;
+    }
+
+    public Collection<CalendarReservationsDto> getAllReservationsOfBoatForCalendar(long boatId){
+        List<CalendarReservationsDto> reservations = new ArrayList<>();
+        for(BoatReservation br :
+                boatReservationRepository.getAllReservationsOfBoatForCalendar(boatId)){
+            reservations.add(new CalendarReservationsDto(br));
+        }
+        return reservations;
     }
 
     public BoatReservation makeFastReservationSlot(FastReservationDto reservation) throws InterruptedException {
@@ -231,6 +272,8 @@ public class BoatReservationService {
         else return start.isBefore(existingReservation.getReservationStart()) &&
                     end.isAfter(existingReservation.getReservationEnd());
     }
+
+
 
     private boolean isSearchInBoatAvailablePeriod(LocalDateTime start, LocalDateTime end, Boat boat){
         for(AvailablePeriodBoat periodBoat: boat.getPeriods()){

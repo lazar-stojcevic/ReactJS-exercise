@@ -688,6 +688,9 @@ public class BackendApplication implements CommandLineRunner {
         BoatPriceList priceList22 = new BoatPriceList();
         priceList22.setPrice(10000);
         boat.setPriceList(priceList22);
+        boat.setFishingEquipment("Stapovi i crvi");
+        boat.setFreeCancel(true);
+        boat.setCaptain(true);
 
         AdditionalBoatService additionalService44 = new AdditionalBoatService();
         additionalService44.setName("Trening golfa");
@@ -730,6 +733,9 @@ public class BackendApplication implements CommandLineRunner {
         BoatPriceList priceList23 = new BoatPriceList();
         priceList23.setPrice(50000);
         boat1.setPriceList(priceList23);
+        boat1.setFishingEquipment("Stapovi");
+        boat1.setFreeCancel(true);
+        boat1.setCaptain(false);
         AvailablePeriodBoat availablePeriodBoat2 = new AvailablePeriodBoat();
         availablePeriodBoat2.setBoat(boat1);
         availablePeriodBoat2.setFromDate(LocalDateTime.of(2020, 2, 5, 5, 5));

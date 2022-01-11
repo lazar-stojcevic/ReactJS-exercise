@@ -37,6 +37,9 @@ public class AdditionalBoatServiceService implements IAdditionalBoatService {
 
     @Override
     public void delete(long id) {
+        AdditionalBoatService service = findAdditionalServiceById(id);
+        service.setPriceList(null);
+        additionalServiceRepository.save(service);
         additionalServiceRepository.deleteById(id);
     }
 

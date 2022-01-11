@@ -15,5 +15,6 @@ public class CustomerReserveCottageDto {
     private long userId;
     private LocalDateTime from;
     private LocalDateTime to;
+    private boolean captain;
     private List<Long> services;
 }

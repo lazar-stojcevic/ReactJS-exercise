@@ -5,53 +5,82 @@
       <div class="row" style="margin-top: 20px">
         <div class="col">
           <div class="btn-group-sm" style="margin: 5px">
-            <button @click="changeModeToInfo" v-if="mode === 'neutral'" class="btn-info">CHANGE YOUR INFO</button>
-            <button @click="changeModeToAddPhoto" v-if="mode === 'neutral'" class="btn-info">ADD PHOTO</button>
-            <button @click="changeModeToAddRoom" v-if="mode === 'neutral'" class="btn-info">ADD ROOM</button>
-            <button @click="changeModeToAddService" v-if="mode === 'neutral'" class="btn-info">ADD SERVICE</button>
-            <button @click="deleteCottage(cottage.id)" v-if="mode === 'neutral'" class="btn-danger">DELETE</button>
+            <button @click="changeModeToInfo" v-if="mode === 'neutral'" class="btn btn-success">CHANGE YOUR INFO</button>
+            <button @click="changeModeToAddPhoto" v-if="mode === 'neutral'" class="btn btn-success">ADD PHOTO</button>
+            <button @click="changeModeToAddRoom" v-if="mode === 'neutral'" class="btn btn-success">ADD ROOM</button>
+            <button @click="changeModeToAddService" v-if="mode === 'neutral'" class="btn btn-success">ADD SERVICE</button>
+            <button @click="deleteCottage(cottage.id)" v-if="mode === 'neutral'" class="btn btn-danger">DELETE</button>
           </div>
 
           <div v-if="mode === 'neutral'">
-            <b-card v-for="image in photos" :key="image">
-              <img :src="image" width="200" height="200">
-            </b-card>
-
             <b-card>
-            <h1>Name: {{cottage.name}}</h1>
-            <br>
-            <h2>Rules: {{cottage.conductRules}} </h2>
-            <br>
-            <h3>Address: {{cottage.address.street}},{{cottage.address.city}},{{cottage.address.country}} </h3>
-            <br>
-            <p>Description: {{cottage.promo}} </p>
-            <br>
-            <h3>Price: {{cottage.cottagePriceList.price}} </h3>
-            <br>
-            <h3>Rating: {{cottage.rating}} </h3>
-          </b-card>
+              <td v-for="image in photos" :key="image">
+              <img :src="image" width="200" height="200">
+              </td>
+            </b-card>
+            <table class="table table-striped">
+              <tbody>
+              <tr>
+                <td>Name</td>
+                <td>{{cottage.name}}</td>
+              </tr>
+              <tr>
+                <td>Adress</td>
+                <td v-if="cottage.address !== null">{{cottage.address.street}}, {{cottage.address.city}}, {{cottage.address.country}}</td>
+                <td v-else>ADDRESS IS NOT SET</td>
+              </tr>
+              <tr>
+                <td>Description</td>
+                <td>{{cottage.promo}}</td>
+              </tr>
+              <tr>
+                <td>Price</td>
+                <td>{{cottage.cottagePriceList.price}}</td>
+              </tr>
+              <tr>
+                <td>Rating</td>
+                <td>{{cottage.rating}}</td>
+              </tr>
+              </tbody>
+            </table>
 
             <h3>Rooms: </h3>
-            <div class="container" v-for="room in rooms" :key="room.id">
-              <b-card>
-              <p>Description: {{room.roomDescription}} </p>
-              <br>
-              <p>Rating: {{room.numberOfBeds}} </p>
-              <br>
-              <button @click="deleteRoom(room.id)" class="btn-info">DELETE</button>
-              </b-card>
-            </div>
+            <br>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+              <th>Room description</th>
+              <th>Number of beds</th>
+              <th></th>
+              </tr>
+              </thead>
+              <tbody>
+            <tr v-for="room in rooms" :key="room.id">
+              <td><p>{{room.roomDescription}} </p></td>
+              <td><p>{{room.numberOfBeds}} </p></td>
+              <td><button @click="deleteRoom(room.id)" class="btn btn-close"></button></td>
+            </tr>
+              </tbody>
+            </table>
 
             <h3>Additional services: </h3>
-            <div class="container" v-for="service in additionalServices" :key="service.id">
-              <b-card>
-                <p>Description: {{service.name}} </p>
-                <br>
-                <p>Rating: {{service.addPrice}} </p>
-                <br>
-                <button @click="deleteService(service.id)" class="btn-info">DELETE</button>
-              </b-card>
-            </div>
+            <br>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+              <th>Description</th>
+              <th>Price</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="service in additionalServices" :key="service.id">
+                <td><p>{{service.name}} </p></td>
+                <td><p>{{service.addPrice}}</p></td>
+                <td><button @click="deleteService(service.id)" class="btn-close"></button></td>
+              </tr>
+              </tbody>
+            </table>
           </div>
 
 
@@ -67,8 +96,8 @@
               </div>
               <div class="input-group mb-3">
                 <div class="btn-group-sm">
-                  <button type="submit" class="btn-info">CONFIRM</button>
-                  <button @click="changeModeToNeutral()" type="reset" class="btn-danger">CLOSE</button>
+                  <button type="submit" class="btn btn-success">CONFIRM</button>
+                  <button @click="changeModeToNeutral()" type="reset" class="btn btn-danger">CLOSE</button>
                 </div>
               </div>
             </form>
@@ -86,8 +115,8 @@
               </div>
               <div class="input-group mb-3">
                 <div class="btn-group-sm">
-                  <button type="submit" class="btn-info">CONFIRM</button>
-                  <button @click="changeModeToNeutral()" type="reset" class="btn-danger">CLOSE</button>
+                  <button type="submit" class="btn btn-success">CONFIRM</button>
+                  <button @click="changeModeToNeutral()" type="reset" class="btn btn-danger">CLOSE</button>
                 </div>
               </div>
             </form>
@@ -102,8 +131,8 @@
                 </div>
                 <div class="input-group mb-3">
                   <div class="btn-group-sm">
-                    <button type="submit" class="btn-info">CONFIRM</button>
-                    <button @click="changeModeToNeutral()" type="reset" class="btn-danger">CLOSE</button>
+                    <button type="submit" class="btn btn-success">CONFIRM</button>
+                    <button @click="changeModeToNeutral()" type="reset" class="btn btn-danger">CLOSE</button>
                   </div>
                 </div>
               </form>
@@ -167,8 +196,8 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-button type="submit" variant="primary">SUBMIT CHANGES</b-button>
-            <button @click="changeModeToNeutral()" type="reset" class="btn-danger">CLOSE</button>
+            <b-button type="submit" variant="primary" class="btn btn-success">SUBMIT CHANGES</b-button>
+            <button @click="changeModeToNeutral()" type="reset" class="btn btn-danger">CLOSE</button>
           </b-form>
 
         </div>

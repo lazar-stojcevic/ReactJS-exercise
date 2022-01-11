@@ -21,6 +21,9 @@
       <span class="input-group-text">CITY</span>
       <input type="text" class="form-control" v-model="inputData.city"/>
     </span>
+      <span class="input-group mb-lg-2">
+        <b-form-checkbox v-model="inputData.captain"  id="freeCancel">I need captain</b-form-checkbox>
+      </span>
       <button type="submit" class="btn-info">Search</button>
     </b-form>
     <br>
@@ -77,7 +80,8 @@ export default {
         lastDay: '',
         city: '',
         country: '',
-        persons: 1
+        persons: 1,
+        captain: ''
       },
       boats: [],
       sort : 'markDESC'
@@ -86,7 +90,7 @@ export default {
   },
   methods:{
     searchAvailableBoats(){
-      BoatReservationService.getAllAvailableBoatTerms(this.inputData.firstDay, this.inputData.lastDay, this.inputData.persons, this.inputData.city, this.inputData.country)
+      BoatReservationService.getAllAvailableBoatTerms(this.inputData.firstDay, this.inputData.lastDay, this.inputData.persons, this.inputData.city, this.inputData.country, this.inputData.captain)
           .then((res) => {
             this.boats = res.data;
           }).then(() => {
@@ -110,7 +114,7 @@ export default {
     },
     reserve(boatToReserve){
       alert("Please wait for a while...");
-      BoatReservationService.reserveBoat(boatToReserve.id, boatToReserve.selected, this.inputData.firstDay, this.inputData.lastDay).then(() => {
+      BoatReservationService.reserveBoat(boatToReserve.id, boatToReserve.selected, this.inputData.firstDay, this.inputData.lastDay, this.inputData.captain).then(() => {
         alert("Reservation creted. Details will be sent to your email.")
         this.$router.push('/');
       }).catch(() => {alert("Some of your term overlaps!")})

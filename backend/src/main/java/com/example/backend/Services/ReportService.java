@@ -1,6 +1,8 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.AdventureReservation;
+import com.example.backend.Beans.BoatReservation;
+import com.example.backend.Beans.CottageReservation;
 import com.example.backend.Beans.Report;
 import com.example.backend.Dtos.MakeReportDto;
 import com.example.backend.Repository.ReportRepository;
@@ -18,6 +20,10 @@ public class ReportService {
     private AdventureReservationService adventureReservationService;
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private CottageReservationService cottageReservationService;
+    @Autowired
+    private BoatReservationService boatReservationService;
 
     public ReportService(ReportRepository reportRepository){
         this.reportRepository = reportRepository;
@@ -54,11 +60,19 @@ public class ReportService {
     }
 
     private Report makeCottageReservationReport(MakeReportDto dto) {
-        return new Report();
+        CottageReservation reservation = cottageReservationService.markReservationAsReported(dto.getReservationId());
+        if(dto.isCustomerAppear())
+            return makeCottageReservationReportForCustomerAppeared(dto, reservation);
+        else
+            return makeCottageReservationReportForCustomerNotAppeared(dto, reservation);
     }
 
     private Report makeBoatReservationReport(MakeReportDto dto) {
-        return new Report();
+        BoatReservation reservation = boatReservationService.markReservationAsReported(dto.getReservationId());
+        if(dto.isCustomerAppear())
+            return makeBoatReservationReportForCustomerAppeared(dto, reservation);
+        else
+            return makeBoatReservationReportForCustomerNotAppeared(dto, reservation);
     }
 
     private Report makeAdventureReservationReport(MakeReportDto dto) {
@@ -82,7 +96,62 @@ public class ReportService {
         return save(report);
     }
 
+
     private Report makeAdventureReservationReportForCustomerAppeared(MakeReportDto dto, AdventureReservation reservation) {
+        Report report = new Report();
+        report.setCustomer(reservation.getCustomer());
+        report.setComment(dto.getComment());
+        if(dto.isBadReport()){
+            report.setBadReport(true);
+        }else {
+            report.setBadReport(false);
+            report.setProcessed(true);
+        }
+        return save(report);
+    }
+
+    private Report makeCottageReservationReportForCustomerNotAppeared(MakeReportDto dto, CottageReservation reservation) {
+        Report report = new Report();
+        report.setCustomer(reservation.getCustomer());
+        report.setBadReport(true);
+        report.setCustomerAppear(false);
+        report.setProcessed(true);
+        report.setComment(dto.getComment());
+        if(customerService.addPenaltyPointToCustomer(report.getCustomer().getId()) == null)
+            return null;
+
+        return save(report);
+    }
+
+
+    private Report makeCottageReservationReportForCustomerAppeared(MakeReportDto dto, CottageReservation reservation) {
+        Report report = new Report();
+        report.setCustomer(reservation.getCustomer());
+        report.setComment(dto.getComment());
+        if(dto.isBadReport()){
+            report.setBadReport(true);
+        }else {
+            report.setBadReport(false);
+            report.setProcessed(true);
+        }
+        return save(report);
+    }
+
+    private Report makeBoatReservationReportForCustomerNotAppeared(MakeReportDto dto, BoatReservation reservation) {
+        Report report = new Report();
+        report.setCustomer(reservation.getCustomer());
+        report.setBadReport(true);
+        report.setCustomerAppear(false);
+        report.setProcessed(true);
+        report.setComment(dto.getComment());
+        if(customerService.addPenaltyPointToCustomer(report.getCustomer().getId()) == null)
+            return null;
+
+        return save(report);
+    }
+
+
+    private Report makeBoatReservationReportForCustomerAppeared(MakeReportDto dto, BoatReservation reservation) {
         Report report = new Report();
         report.setCustomer(reservation.getCustomer());
         report.setComment(dto.getComment());

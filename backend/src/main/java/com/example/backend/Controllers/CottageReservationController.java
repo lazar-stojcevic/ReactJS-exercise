@@ -12,6 +12,7 @@ import com.example.backend.Services.CottageReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -57,6 +58,20 @@ public class CottageReservationController {
     public ResponseEntity<Collection<CottageReservation>> getAllFastTermsByOwnerId(
             @PathVariable long ownerId){
         return new ResponseEntity<>(cottageReservationService.getAllFastTermsByOwnerId(ownerId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/calendar/{ownerId}")
+    public ResponseEntity<Collection<CalendarReservationsDto>>
+    getAllReservationForCalendarOfOwner(@PathVariable long ownerId){
+        return new ResponseEntity<>(cottageReservationService.getAllReservationsOfOwnerForCalendar(ownerId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/calendarCottage/{cottageId}")
+    public ResponseEntity<Collection<CalendarReservationsDto>>
+    getAllReservationForCalendarOfCottage(@PathVariable long cottageId){
+        return new ResponseEntity<>(cottageReservationService.getAllReservationsOfCottageForCalendar(cottageId),
                 HttpStatus.OK);
     }
 

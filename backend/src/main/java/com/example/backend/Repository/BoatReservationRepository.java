@@ -36,6 +36,18 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
     Collection<BoatReservation> getAllReservationOfOwner(long customerId);
 
     @Query("select cr from BoatReservation cr where cr.boat.boatOwner.id = ?1"+
+            " and cr.captain = true")
+    Collection<BoatReservation> getAllReservationOfCaptain(long customerId);
+
+    @Query("select cr from BoatReservation cr where cr.boat.boatOwner.id = ?1"+
             " and cr.fast = true")
     Collection<BoatReservation> getAllFastReservationOfOwner(long customerId);
+
+    @Query("select cr from BoatReservation cr where" +
+            " cr.boat.boatOwner.id = ?1 order by cr.reservationStart asc ")
+    Collection<BoatReservation> getAllReservationsOfOwnerForCalendar(long ownerId);
+
+    @Query("select cr from BoatReservation cr where" +
+            " cr.boat.id = ?1 order by cr.reservationStart asc ")
+    Collection<BoatReservation> getAllReservationsOfBoatForCalendar(long boatId);
 }

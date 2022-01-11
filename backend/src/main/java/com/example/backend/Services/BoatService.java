@@ -66,6 +66,9 @@ public class BoatService implements IBoatService {
         BoatPriceList priceList = new BoatPriceList();
         priceList.setPrice(newBoat.getPrice());
         boat.setPriceList(priceList);
+        boat.setFishingEquipment(newBoat.getFishingEquipment());
+        boat.setFreeCancel(newBoat.isFreeCancel());
+        boat.setCaptain(newBoat.isCaptain());
         return boatRepository.save(boat);
     }
 
@@ -85,6 +88,9 @@ public class BoatService implements IBoatService {
         boat.setEnginePower(changeDto.getEnginePower());
         boat.setTopSpeed(changeDto.getTopSpeed());
         boat.getPriceList().setPrice(changeDto.getPrice());
+        boat.setFishingEquipment(changeDto.getFishingEquipment());
+        boat.setFreeCancel(changeDto.isFreeCancel());
+        boat.setCaptain(changeDto.isCaptain());
         return boatRepository.save(boat);
     }
 

@@ -16,18 +16,41 @@
     <h3>Rating: {{cottage.rating}} </h3>
     <br>
     <router-link class="btn btn-success" :to='"/cottageActions/" + this.id'>ACTIONS</router-link>
+
+    <div style="margin-top: 20px; background-color: beige">
+      <FullCalendar :options="calendarOptions"/>
+    </div>
   </div>
 </template>
 
 <script>
 import CottageService from "@/Services/CottageService";
 import LogInService from "@/Services/LogInService";
+import FullCalendar from "@fullcalendar/vue";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import CottageReservationService from "../../../Services/CottageReservationService";
 export default {
   name: "OneCottage",
+  components: {
+    FullCalendar // make the <FullCalendar> tag available
+  },
   data(){
     return{
       LogInService,
       subcribed : false,
+      calendarOptions: {
+        plugins: [ dayGridPlugin, interactionPlugin, timeGridPlugin ],
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: [],
+        eventClick: this.handleEventClick
+      },
       id: '',
       cottage: {
         name: '',
@@ -54,6 +77,9 @@ export default {
             }).catch(() => alert("Some error ocured!"))
           }
     });
+    CottageReservationService.getAllReservationsOfCottageForCalendar(this.id).then(res => {
+      this.calendarOptions.events = res.data;
+    })
   },
   methods:{
     subscribe(){
@@ -63,6 +89,8 @@ export default {
     unsubscribe(){
       CottageService.unsubscribeCottage(LogInService.userId, this.id);
       this.subcribed = false;
+    },
+    handleEventClick(){
     }
   }
 }

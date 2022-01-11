@@ -21,6 +21,7 @@
     "moment": "^2.29.1",
     "vue": "^2.6.14",
     "vue-router": "^3.5.3",
+    "vue2-google-maps": "^0.10.7",
     "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {

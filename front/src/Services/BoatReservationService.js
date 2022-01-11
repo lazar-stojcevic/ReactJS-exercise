@@ -4,7 +4,7 @@ import LogInService from "@/Services/LogInService";
 const URL = 'http://localhost:8080/boatReservation';
 
 class BoatReservationService {
-    getAllAvailableBoatTerms(dateFromPar, dateToPar, persons, city, country){
+    getAllAvailableBoatTerms(dateFromPar, dateToPar, persons, city, country, captain){
         let headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -16,12 +16,31 @@ class BoatReservationService {
             persons: persons,
             city: city,
             country: country,
-            id: LogInService.userId
+            id: LogInService.userId,
+            captain: captain
         }
         return axios.post(URL + '/availableBoats/', JSON.stringify(body), {headers});
     }
 
-    reserveBoat(boatId, selectedServices, from, to){
+    getAllReservationsOfOwnerForCalendar(ownerId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/calendar/' + ownerId, {headers});
+    }
+
+    getAllReservationsOfBoatForCalendar(boatId){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.get(URL + '/calendarBoat/' + boatId, {headers});
+    }
+
+    reserveBoat(boatId, selectedServices, from, to, captain){
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -33,11 +52,12 @@ class BoatReservationService {
         data.from = from;
         data.to = to;
         data.services = selectedServices;
+        data.captain = captain;
 
         return axios.put(URL + '/reserveTerm/', JSON.stringify(data), {headers});
     }
 
-    reserveBoatForCustomer(boatId, selectedServices, from, to, customerId){
+    reserveBoatForCustomer(boatId, selectedServices, from, to, customerId, captain){
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -49,6 +69,7 @@ class BoatReservationService {
         data.from = from;
         data.to = to;
         data.services = selectedServices;
+        data.captain = captain;
 
         return axios.put(URL + '/reserveTerm/', JSON.stringify(data), {headers});
     }
