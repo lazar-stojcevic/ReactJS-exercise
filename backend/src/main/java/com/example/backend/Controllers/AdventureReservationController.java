@@ -180,4 +180,10 @@ public class AdventureReservationController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
+
+    @PostMapping(path = "/graph")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    public ResponseEntity<Collection<GraphDataDto>> graphReservations(@RequestBody GraphRequestDto dto){
+        return new ResponseEntity<>(adventureReservationService.getAllReservationsForGraph(dto), HttpStatus.OK);
+    }
 }

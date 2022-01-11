@@ -38,4 +38,9 @@ public interface AdventureReservationRepository extends JpaRepository<AdventureR
 
     @Query("select ar from AdventureReservation ar where ar.customer is not null and ar.reservationStart between ?1 and ?2")
     Collection<AdventureReservation> getAllReservationsForCalculatingIncome(LocalDateTime startTime, LocalDateTime endTime);
+
+    @Query("select ar from AdventureReservation ar where ar.customer is not null and ar.adventure.instructor.id = ?3 and ar.reservationStart between ?1 and ?2" +
+            " order by ar.reservationStart asc ")
+    Collection<AdventureReservation> getAllReservationsForGraph(LocalDateTime startTime, LocalDateTime endTime, long id);
+
 }

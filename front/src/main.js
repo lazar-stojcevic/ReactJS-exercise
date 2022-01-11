@@ -7,6 +7,11 @@ import routes from "@/router/routes";
 import Navbar from "@/components/Navbar";
 import moment from "moment";
 
+import Chartkick from 'vue-chartkick'
+import Chart from 'chart.js'
+
+Vue.use(Chartkick.use(Chart))
+
 Vue.component('my-navbar', Navbar)
 
 Vue.use(VueRouter);

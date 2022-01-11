@@ -40,6 +40,7 @@
                 <td><button @click="showIncomeForm" v-if="mode === 'neutral'" class="btn-info">MY INCOME</button></td>
                 <td><button @click="showGraph" v-if="mode === 'neutral'" class="btn-info">RESERVATION GRAPH</button></td>
                 <td><button @click="changeModeForDeleting" v-if="mode === 'neutral'" class="btn-danger">SEND REQUEST FOR DELETING</button></td>
+                <td><button @click="changeModeToNeutral" v-if="mode === 'graph'" class="btn-danger">CANCEL GRAPH</button></td>
               </tr>
             </table>
           </div>
