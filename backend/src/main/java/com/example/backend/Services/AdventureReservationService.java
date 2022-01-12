@@ -464,4 +464,38 @@ public class AdventureReservationService {
     private void deleteReservation(long id){
         adventureReservationRepository.deleteById(id);
     }
+
+
+    public Collection<GraphDataDto> getAllReservationsForGraph(GraphRequestDto dto){
+        List<GraphDataDto> retVal = new ArrayList<>();
+        List<GraphDataDto> list = (List<GraphDataDto>) prepareReservationForGraphCounting(dto);
+        for(GraphDataDto mainG : list){
+            if(!isGraphDataDtoExistsInList(retVal, mainG))
+                for(GraphDataDto minorG : list)
+                    if(minorG.getDate().equals(mainG.getDate()))
+                        mainG.incrementNumber();
+            if(mainG.getNumber() != 0)
+                retVal.add(mainG);
+        }
+        return retVal;
+    }
+
+    private boolean isGraphDataDtoExistsInList(List<GraphDataDto> list, GraphDataDto graphDataDto){
+        for (GraphDataDto g : list)
+            if(g.getDate().equals(graphDataDto.getDate()))
+                return true;
+        return false;
+    }
+    private Collection<GraphDataDto> prepareReservationForGraphCounting(GraphRequestDto dto){
+        List<GraphDataDto> retVal = new ArrayList<>();
+        List<AdventureReservation> reservations =
+                (List<AdventureReservation>) adventureReservationRepository.getAllReservationsForGraph(
+                        dto.getStartTime(), dto.getEndTime(), dto.getInstructorId());
+        for (AdventureReservation ar : reservations){
+            GraphDataDto dataDto = new GraphDataDto();
+            dataDto.setDate(ar.getReservationStart().toLocalDate());
+            retVal.add(dataDto);
+        }
+        return retVal;
+    }
 }

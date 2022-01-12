@@ -19,6 +19,10 @@
         <td>PHONE</td>
         <td>{{user.phone}}</td>
       </tr>
+      <tr v-if="currentTax !== ''">
+        <td>TAX</td>
+        <td>{{currentTax.taxRate}}</td>
+      </tr>
       </tbody>
     </table>
     <hr style="margin-top: 10px"/>
@@ -44,8 +48,49 @@
           <td>
             <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showCustomers">CUSTOMERS</button>
           </td>
+          <td>
+            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showIncome">SEE INCOME</button>
+          </td>
         </tr>
       </table>
+    </div>
+    <div v-if="mode === 'systemIncome'">
+      <table class="table table-primary" style="margin-top: 20px">
+        <thead>
+        <th>ADVENTURE RESERVATIONS</th>
+        <th>COTTAGE RESERVATIONS</th>
+        <th>BOAT RESERVATIONS</th>
+        <th>INCOME SUM</th>
+        </thead>
+        <tbody>
+        <tr>
+          <td>{{income.numberOfAdventureReservations}}</td>
+          <td>{{income.numberOfCottageReservations}}</td>
+          <td>{{income.numberOfBoatReservations}}</td>
+          <td>{{income.income}}</td>
+          <td><button class="btn btn-warning" @click="changeModeToNeutral">CLOSE</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--INCOME REQUEST-->
+    <div v-if="mode === 'income'">
+      <form @submit.prevent="calculateIncome">
+        <div class="input-group mb-lg-2">
+          <span class="input-group-text">FROM DATE</span>
+          <input type="datetime-local" class="form-control" v-model="incomeRequest.startTime" required/>
+        </div>
+        <div class="input-group mb-lg-2">
+          <span class="input-group-text">TO DATE</span>
+          <input type="datetime-local" class="form-control" v-model="incomeRequest.endTime" required/>
+        </div>
+        <div class="input-group mb-3">
+          <div class="btn-group-sm">
+            <button type="submit" class="btn-info">CONFIRM</button>
+            <button @click="changeModeToNeutral()" type="reset" class="btn-danger">CLOSE</button>
+          </div>
+        </div>
+      </form>
     </div>
     <!--CHANGE INFO-->
     <div v-if="mode === 'info'">
@@ -105,7 +150,7 @@
     <div v-if="mode === 'tax'" class="container">
       <form @submit.prevent="changeTax">
         <div class="input-group mb-3">
-          <span class="input-group-text">NEW TAX %</span>
+          <span class="input-group-text">NEW TAX (%)</span>
           <input type="number" class="form-control" v-model="newTax" required>
         </div>
         <div class="btn-group-sm">
@@ -133,6 +178,7 @@ import LogInService from "@/Services/LogInService";
 
 import AllCottages from "@/components/Admin/InnerAdminComponents/AllCottages";
 import AllCustomers from "@/components/Admin/InnerAdminComponents/AllCustomers";
+import TaxService from "@/Services/TaxService";
 export default {
   components:{
     'cottages': AllCottages,
@@ -150,7 +196,10 @@ export default {
       newPassword: '',
       confirmPassword: '',
       newUserInfo: '',
-      newTax: ''
+      newTax: '',
+      currentTax: '',
+      incomeRequest: {startTime: '', endTime: ''},
+      income: ''
     }
   },
   mounted() {
@@ -160,9 +209,37 @@ export default {
     }
     AdminService.getAdminById(LogInService.userId).then(res => {this.user = res.data}).catch(() => {
       alert("THERE IS SOME PROBLEM WITH LOADING ADMIN");
-    })
+    });
+
+    this.loadCurrentTax();
   },
   methods:{
+    calculateIncome(){
+      if(this.incomeRequest.startTime > this.incomeRequest.endTime){
+        alert("START DATE MUST BE IN PAST OF END DATE");
+        return;
+      }
+      this.incomeRequest.startTime = this.incomeRequest.startTime.replaceAll('T', ' ');
+      this.incomeRequest.endTime = this.incomeRequest.endTime.replaceAll('T', ' ');
+
+      TaxService.getIncome(this.incomeRequest).then(res => {
+        this.income = res.data;
+        this.mode = 'systemIncome';
+      }).catch(() => {alert("THERE IS SOME ERROR WITH CALCULATING INCOME")});
+    },
+
+    showIncome(){
+      this.mode = 'income';
+      this.incomeRequest = {startTime: '', endTime: ''}
+    },
+
+    loadCurrentTax(){
+      TaxService.getCurrentTax().then(res => {this.currentTax = res.data;}).catch(() => {
+        alert("THERE IS SOME ERROR WITH LOADING CURRENT TAX");
+        this.currentTax = '';
+      });
+    },
+
     changeModeToNeutral(){
       this.mode = 'neutral';
     },
@@ -178,6 +255,7 @@ export default {
 
     showTaxChange(){
       this.mode = 'tax';
+      this.newTax = '';
     },
 
     showBoats(){
@@ -215,7 +293,14 @@ export default {
     },
 
     changeTax(){
-
+      if(this.newTax < 0 || this.newTax > 100){
+        alert("TAX IS NOT IN RANGE LIMIT (0 - 100)");
+        return;
+      }
+      TaxService.changeTax(this.newTax).then(() => this.loadCurrentTax()).catch(() => {
+        alert("THERE IS SOME ERROR WITH CHANGING TAX");
+      });
+      this.mode = 'neutral';
     }
   }
 }

@@ -60,8 +60,8 @@ public class FishingInstructorService implements IFishingInstructorService {
 
     public FishingInstructor addHolidayToFishingInstructor(long id, AvailableTimespanDto holidayDto){
         FishingInstructor instructor = findFishingInstructorById(id);
-        instructor.getAvailable().setFromDate(LocalDateTime.parse(holidayDto.getFromDate()));
-        instructor.getAvailable().setToDate(LocalDateTime.parse(holidayDto.getToDate()));
+        instructor.getAvailable().setFromDate(holidayDto.getFromDate());
+        instructor.getAvailable().setToDate(holidayDto.getToDate());
         return fishingInstructorRepository.save(instructor);
     }
 

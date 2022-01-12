@@ -38,9 +38,15 @@
                 <td><button @click="changeModeToHoliday" v-if="mode === 'neutral'" class="btn-info">ADD AVAILABLE TIMESPAN</button></td>
                 <td><button @click="myAdventures" v-if="mode === 'neutral'" class="btn-info">MY ADVENTURES</button></td>
                 <td><button @click="showIncomeForm" v-if="mode === 'neutral'" class="btn-info">MY INCOME</button></td>
+                <td><button @click="showGraph" v-if="mode === 'neutral'" class="btn-info">RESERVATION GRAPH</button></td>
                 <td><button @click="changeModeForDeleting" v-if="mode === 'neutral'" class="btn-danger">SEND REQUEST FOR DELETING</button></td>
+                <td><button @click="changeModeToNeutral" v-if="mode === 'graph'" class="btn-danger">CANCEL GRAPH</button></td>
               </tr>
             </table>
+          </div>
+          <!--GRAPH-->
+          <div v-if="mode === 'graph'">
+            <graph/>
           </div>
           <!--INCOME-->
           <div v-if="mode === 'income'" class="container">
@@ -174,7 +180,6 @@
       <div style="margin-top: 30px">
         <calendar></calendar>
       </div>
-
       <!--ODOBRENI KOMENTARI ZA PRIKAZ-->
       <div>
         <hr style="margin-top: 15px">
@@ -200,9 +205,10 @@ import GradeService from "@/Services/GradeService";
 import DeleteProfileRequestService from "@/Services/DeleteProfileRequestService";
 import IncomeService from "@/Services/IncomeService";
 import Calendar from "@/components/FishingInstructor/Calendar";
+import Graph from "@/components/FishingInstructor/Graph";
 
 export default {
-  components: {'calendar' : Calendar},
+  components: {'calendar' : Calendar, 'graph': Graph},
   data(){
     return{
       user: {
@@ -235,6 +241,10 @@ export default {
     }).catch(() => {alert("THERE IS SOME PROBLEM WITH LOADING GRADES")});
   },
   methods: {
+    showGraph(){
+      this.mode = 'graph'
+    },
+    
     changeModeToHoliday(){
       this.mode = 'addHoliday';
     },

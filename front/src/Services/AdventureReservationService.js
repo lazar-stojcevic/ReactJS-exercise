@@ -190,5 +190,14 @@ class AdventureReservationService {
         };
         return axios.get(URL + '/nextActions/' + id, {headers});
     }
+
+    getAllReservationForGraph(data){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LogInService.accessToken
+        };
+        return axios.post(URL + '/graph',JSON.stringify(data), {headers});
+    }
 }
 export default new AdventureReservationService()

@@ -1,7 +1,5 @@
 package com.example.backend.Repository;
 
-import com.example.backend.Beans.AdventureReservation;
-import com.example.backend.Beans.Cottage;
 import com.example.backend.Beans.CottageReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -55,4 +53,7 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
     @Query("select cr from CottageReservation cr where cr.cottage.id = ?1 and cr.reservationStart > ?2")
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "0")})
     Collection<CottageReservation> getAllFutureCottageReservationOfCottage(long id, LocalDateTime now);
+    
+    @Query("select cr from CottageReservation cr where cr.customer is not null and cr.reservationStart between ?1 and ?2")
+    Collection<CottageReservation> getAllReservationsForCalculatingIncome(LocalDateTime startTime, LocalDateTime endTime);
 }
