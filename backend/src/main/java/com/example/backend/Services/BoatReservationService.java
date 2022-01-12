@@ -99,7 +99,7 @@ public class BoatReservationService {
     }
 
     @Transactional
-    public BoatReservation makeNewAppointment(CustomerReserveCottageDto reservation) throws InterruptedException {
+    public BoatReservation makeNewAppointment(CustomerReserveCottageDto reservation) {
         try {
             Customer customer = customerService.findCustomerById(reservation.getUserId());
 

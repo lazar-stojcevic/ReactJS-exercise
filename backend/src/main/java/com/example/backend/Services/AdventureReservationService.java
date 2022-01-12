@@ -86,7 +86,7 @@ public class AdventureReservationService {
     public AdventureReservation makeNewAppointment(CustomerReserveTermDto reservation) {
         try{
            Customer customer = customerService.findCustomerById(reservation.getUserId());
-           AdventureReservation adventureReservation = findAdventureReservationById(reservation.getReservationId());
+           AdventureReservation adventureReservation = findAdventureReservation(reservation.getReservationId());
            if(adventureReservation.getCustomer() != null)
                return null;
             for (AdventureReservation ar : customer.getAdventureReservations()){
@@ -277,7 +277,7 @@ public class AdventureReservationService {
     public AdventureReservation cancelTerm(CancelTermDto data){
         try {
             Customer customer = this.customerService.findCustomerById(data.getUserId());
-            AdventureReservation reservation = adventureReservationRepository.getById(data.getReservationId());
+            AdventureReservation reservation = findAdventureReservation(data.getReservationId());
             if(customer.getId() != reservation.getCustomer().getId())
                 return null;
             reservation.getForbidenCustomers().add(customer);
