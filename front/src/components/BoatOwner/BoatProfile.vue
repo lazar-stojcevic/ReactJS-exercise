@@ -78,6 +78,18 @@
               </tbody>
             </table>
 
+            <GmapMap
+                :center='center'
+                :zoom='12'
+                style='width:100%;  height: 400px;'
+            >
+              <GmapMarker
+                  :key="index"
+                  v-for="(m, index) in markers"
+                  :position="m.position"
+              />
+            </GmapMap>
+
 
             <h3>Additional services: </h3>
             <br>
@@ -178,6 +190,22 @@
               ></b-form-input>
             </b-form-group>
 
+            <b-form-group id="input-country" label="Your longitude:" label-for="country">
+              <b-form-input
+                  id="country"
+                  v-model="boat.address.longitude"
+                  required
+              ></b-form-input>
+            </b-form-group>
+
+            <b-form-group id="input-country" label="Your latitude:" label-for="country">
+              <b-form-input
+                  id="country"
+                  v-model="boat.address.latitude"
+                  required
+              ></b-form-input>
+            </b-form-group>
+
             <b-form-group id="input-promo" label="Your promo:" label-for="promo">
               <b-form-input
                   id="promo"
@@ -272,10 +300,14 @@ export default {
       boat: {address: {
           street: '',
           city: '',
-          country: ''
+          country: '',
+          longitude:'',
+          latitude: ''
         },
         priceList:{ price:0}
       },
+      center: { lat: 44.81003164358128, lng: 20.400593632559573 },
+      markers:[],
       photos:[],
       additionalServices:[],
       mode: 'neutral',
@@ -294,6 +326,9 @@ export default {
     BoatService.getOneBoat(this.id).then(res => {
       this.boat = res.data;
       this.newBoatInfo = res.data;
+      this.center.lat = this.boat.address.latitude;
+      this.center.lng = this.boat.address.longitude;
+      this.markers.push({ position: this.center });
     });
     BoatImageService.getImageById(this.id).then(res=>{
       for(let img of res.data){
@@ -368,6 +403,8 @@ export default {
         "fishingEquipment": this.boat.fishingEquipment,
         "freeCancel": this.boat.freeCancel,
         "captain":this.boat.captain,
+        "latitude": this.boat.address.latitude,
+        "longitude": this.boat.address.longitude
       }).then(res => {this.user = res.data;
         this.changeModeToNeutral()}).catch(() => {
         alert("SERVER ERROR");

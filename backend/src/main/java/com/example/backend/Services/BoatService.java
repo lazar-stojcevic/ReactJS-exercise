@@ -58,6 +58,8 @@ public class BoatService implements IBoatService {
         boat.getAddress().setCity(newBoat.getCity());
         boat.getAddress().setStreet(newBoat.getStreet());
         boat.getAddress().setCountry(newBoat.getCountry());
+        boat.getAddress().setLatitude(newBoat.getLatitude());
+        boat.getAddress().setLongitude(newBoat.getLongitude());
         boat.setType(newBoat.getType());
         boat.setNumberOfEngines(newBoat.getNumberOfEngines());
         boat.setEnginePower(newBoat.getEnginePower());
@@ -82,6 +84,8 @@ public class BoatService implements IBoatService {
         boat.getAddress().setCity(changeDto.getCity());
         boat.getAddress().setStreet(changeDto.getStreet());
         boat.getAddress().setCountry(changeDto.getCountry());
+        boat.getAddress().setLatitude(changeDto.getLatitude());
+        boat.getAddress().setLongitude(changeDto.getLongitude());
         boat.setType(changeDto.getType());
         boat.setNumberOfEngines(changeDto.getNumberOfEngines());
         boat.setCapacity(changeDto.getCapacity());

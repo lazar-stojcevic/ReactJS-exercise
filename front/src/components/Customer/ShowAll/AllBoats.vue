@@ -51,6 +51,15 @@
         <b-card-text>
           Average mark: {{boat.rating}}
         </b-card-text>
+        <GmapMap
+            :center = '{ lat: boat.address.latitude, lng: boat.address.longitude }'
+            :zoom='12'
+            style='width:100%;  height: 400px;'
+        >
+          <GmapMarker
+              :position='{ lat: boat.address.latitude, lng: boat.address.longitude }'
+          />
+        </GmapMap>
         <router-link class="btn btn-secondary" :to="'boat/'+boat.id.toString()" style="margin: 5px">See more</router-link>
 
       </b-card>

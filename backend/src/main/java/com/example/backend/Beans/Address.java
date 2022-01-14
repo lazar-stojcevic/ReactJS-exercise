@@ -20,6 +20,10 @@ public class Address {
     private String city;
     @Column(length = 100)
     private String country;
+    @Column()
+    private double longitude;
+    @Column()
+    private double latitude;
 
     @Override
     public String toString(){

@@ -27,4 +27,6 @@ public class BoatDto {
     private String country;
     private String promo;
     private int price;
+    private double longitude;
+    private double latitude;
 }
