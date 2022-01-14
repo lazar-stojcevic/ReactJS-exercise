@@ -79,6 +79,8 @@ public class AdventureReservation {
 
     private double mark = 0;
 
+    private int lengthMin = 0;
+
     public boolean isReserved(){
         return this.customer != null;
     }

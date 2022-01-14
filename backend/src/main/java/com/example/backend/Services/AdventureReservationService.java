@@ -67,7 +67,7 @@ public class AdventureReservationService {
         FishingInstructor instructor = this.fishingInstructorService.findFishingInstructorById(instructorId);
         for(Adventure adventure : instructor.getAdventures())
             for(AdventureReservation ar : adventure.getReservations()){
-                LocalDateTime endTime = ar.getReservationStart().plusHours(ar.getLength());
+                LocalDateTime endTime = ar.getReservationStart().plusHours(ar.getLength()).plusMinutes(ar.getLengthMin());
                 if(ar.getReservationStart().isBefore(LocalDateTime.now()) && endTime.isAfter(LocalDateTime.now()))
                     return ar;
             }
@@ -165,7 +165,7 @@ public class AdventureReservationService {
     public Collection<AdventureReservation> getAllPastReservationOfInstructor(long instructorId){
         List<AdventureReservation> pastAdventure = new ArrayList<>();
         for (AdventureReservation ar: adventureReservationRepository.findAll()) {
-            LocalDateTime reservationEnd = ar.getReservationStart().plusHours(ar.getLength());
+            LocalDateTime reservationEnd = ar.getReservationStart().plusHours(ar.getLength()).plusMinutes(ar.getLengthMin());
             if(reservationEnd.isBefore(LocalDateTime.now()) && ar.isReserved() &&
                     ar.getAdventure().getInstructor().getId() == instructorId){
                 pastAdventure.add(ar);
@@ -328,6 +328,7 @@ public class AdventureReservationService {
         reservation.setLength(dto.getLength());
         reservation.setLastDateToReserve(LocalDateTime.now());
         reservation.setDiscount(dto.getDiscount());
+        reservation.setLengthMin(dto.getLengthMin());
         if(!addCustomerToReservation(reservation, dto))
             return null;
         else return reservation;
@@ -374,9 +375,11 @@ public class AdventureReservationService {
     private boolean isReservationsOverlapForAdventures(
             AdventureReservation existingReservation, AdventureReservation newReservation){
         LocalDateTime existingStart = existingReservation.getReservationStart();
-        LocalDateTime existingEnd = existingReservation.getReservationStart().plusHours(existingReservation.getLength());
+        LocalDateTime existingEnd = existingReservation.getReservationStart().plusHours(existingReservation.getLength())
+                .plusMinutes(existingReservation.getLengthMin());
         LocalDateTime newStart = newReservation.getReservationStart();
-        LocalDateTime newEnd = newReservation.getReservationStart().plusHours(newReservation.getLength());
+        LocalDateTime newEnd = newReservation.getReservationStart().plusHours(newReservation.getLength())
+                .plusMinutes(newReservation.getLengthMin());
         return isToRangesOverlaps(existingStart, existingEnd, newStart, newEnd);
     }
 
@@ -385,7 +388,8 @@ public class AdventureReservationService {
         LocalDateTime existingStart = existingReservation.getReservationStart();
         LocalDateTime existingEnd = existingReservation.getReservationEnd();
         LocalDateTime newStart = newReservation.getReservationStart();
-        LocalDateTime newEnd = newReservation.getReservationStart().plusHours(newReservation.getLength());
+        LocalDateTime newEnd = newReservation.getReservationStart().plusHours(newReservation.getLength())
+                .plusMinutes(newReservation.getLengthMin());
         return isToRangesOverlaps(existingStart, existingEnd, newStart, newEnd);
     }
 
@@ -394,7 +398,8 @@ public class AdventureReservationService {
         LocalDateTime existingStart = existingReservation.getReservationStart();
         LocalDateTime existingEnd = existingReservation.getReservationEnd();
         LocalDateTime newStart = newReservation.getReservationStart();
-        LocalDateTime newEnd = newReservation.getReservationStart().plusHours(newReservation.getLength());
+        LocalDateTime newEnd = newReservation.getReservationStart().plusHours(newReservation.getLength())
+                .plusMinutes(newReservation.getLengthMin());
         return isToRangesOverlaps(existingStart, existingEnd, newStart, newEnd);
     }
 
@@ -414,7 +419,7 @@ public class AdventureReservationService {
     private boolean isReservationInAvailableTimespanOfInstructor(
             AdventureReservation adventureReservation, long instructorId) {
         LocalDateTime reservationEnd = adventureReservation.getReservationStart()
-                .plusHours(adventureReservation.getLength());
+                .plusHours(adventureReservation.getLength()).plusMinutes(adventureReservation.getLengthMin());
         FishingInstructor instructor = fishingInstructorService.findFishingInstructorById(instructorId);
 
         return adventureReservation.getReservationStart().isAfter(instructor.getAvailable().getFromDate()) &&
@@ -427,6 +432,7 @@ public class AdventureReservationService {
         adventureReservation.setLastDateToReserve(dto.getLastDateToReserve());
         adventureReservation.setLength(dto.getLength());
         adventureReservation.setDiscount(dto.getDiscount());
+        adventureReservation.setLengthMin(dto.getLengthMin());
         return adventureReservation;
     }
 

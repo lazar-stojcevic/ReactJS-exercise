@@ -24,7 +24,7 @@ public class CalendarReservationsDto {
     public CalendarReservationsDto(AdventureReservation ar){
         this.id = ar.getId();
         this.start = ar.getReservationStart();
-        this.end = ar.getReservationStart().plusHours(ar.getLength());
+        this.end = ar.getReservationStart().plusHours(ar.getLength()).plusMinutes(ar.getLengthMin());
         if(ar.getCustomer() != null)
             this.title ="CUSTOMER: " + ar.getCustomer().getEmail() + "\n" + "PRICE: " + ar.getPrice() + " RSD\n"
                     + "REPORTED: " + ar.isReported();
