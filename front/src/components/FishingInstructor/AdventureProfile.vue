@@ -41,6 +41,8 @@
         <div class="input-group mb-lg-2">
           <span class="input-group-text">LENGTH (IN HOURS)</span>
           <input type="number" class="form-control" v-model="newCustomReservation.length" required/>
+          <span class="input-group-text">LENGTH (IN MINUTES)</span>
+          <input type="number" class="form-control" v-model="newCustomReservation.lengthMin"/>
         </div>
         <div class="input-group mb-lg-2">
           <span class="input-group-text">DISCOUNT (0 IS DEFAULT)</span>
@@ -76,6 +78,8 @@
         <div class="input-group mb-lg-2">
           <span class="input-group-text">LENGTH (IN HOURS)</span>
           <input type="number" class="form-control" v-model="newReservation.length" required/>
+          <span class="input-group-text">LENGTH (IN MINUTES)</span>
+          <input type="number" class="form-control" v-model="newReservation.lengthMin"/>
         </div>
         <div class="input-group mb-lg-2">
           <span class="input-group-text">DISCOUNT (0 IS DEFAULT)</span>
@@ -333,7 +337,7 @@ export default {
       newAdventure: {name: '', address:{street: ''}, priceList: {price: ''}},
       newImage: '',
       imagesToShow: [],
-      newReservation: {reservationStart: '', lastDateToReserve: '', discount: '', addServices:[]},
+      newReservation: {reservationStart: '', lastDateToReserve: '', discount: '', addServices:[], lengthMin: ''},
       currentReservationOwner: '',
       newCustomReservation: {},
       selectedAddServices: []
@@ -376,7 +380,8 @@ export default {
 
     makeFastReservation(){
       this.mode = 'makeFastReservation';
-      this.newReservation = {reservationStart: '', lastDateToReserve: '', discount: '', addServices: []}
+      this.newReservation = {reservationStart: '', lastDateToReserve: '', discount: '', addServices: [], lengthMin: '',
+      length: ''};
     },
 
     changeAdventure(){
@@ -399,6 +404,7 @@ export default {
         this.mode = 'neutral';
       })
       this.selectedAddServices = []
+      this.newCustomReservation = {};
     },
 
     goToMyAdventures(){
@@ -466,6 +472,9 @@ export default {
     },
 
     saveFastReservation(){
+      if(this.newReservation.lengthMin > 59){
+        alert("LENGTH IN MINUTES MUST BE LOW THAN 60")
+      }
       if(this.newReservation.reservationStart < this.newReservation.lastDateToReserve){
         alert('START TIME MUST BE LATER THEN LAST DATE FOR RESERVATION')
         return;
