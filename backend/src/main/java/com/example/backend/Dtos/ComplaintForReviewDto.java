@@ -1,9 +1,6 @@
 package com.example.backend.Dtos;
 
-import com.example.backend.Beans.AdventureReservation;
-import com.example.backend.Beans.CottageReservation;
-import com.example.backend.Beans.Customer;
-import com.example.backend.Beans.User;
+import com.example.backend.Beans.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +26,13 @@ public class ComplaintForReviewDto {
         this.comment = cottageReservation.getComplaint().getText();
         this.ownerMail = cottageReservation.getCottage().getCottageOwner().getEmail();
         this.customerMail = cottageReservation.getCustomer().getEmail();
+    }
+
+    public ComplaintForReviewDto(BoatReservation boatReservation){
+        this.id = boatReservation.getComplaint().getId();
+        this.comment = boatReservation.getComplaint().getText();
+        this.ownerMail = boatReservation.getBoat().getBoatOwner().getEmail();
+        this.customerMail = boatReservation.getCustomer().getEmail();
     }
 }
 

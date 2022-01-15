@@ -90,14 +90,13 @@ public class ComplaintService {
         for(CottageReservation cr : cottageReservationRepository.getAllNotReviewedCottageComplaint())
             list.add(new ComplaintForReviewDto(cr));
 
+        for(BoatReservation br : boatReservationRepository.getAllNotReviewedBoatComplaint())
+            list.add(new ComplaintForReviewDto(br));
+
         return list;
     }
 
-    /*
-    public Complaint findAdventureComplaintById(long id){
-        return complaintRepository.findById(id).orElse(null);
-    }
-    */
+    //TODO: SAMO JEDAN ADMIN SME DA REVIDIRA OVU ZALBU
     public void reviewComplaint(ReviewComplaintDto dto){
         Complaint complaint = complaintRepository.getById(dto.getComplaintId());
         complaint.setReviewed(true);

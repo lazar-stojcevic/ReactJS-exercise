@@ -62,4 +62,7 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
 
     @Query("select br from BoatReservation  br where br.customer is not null and br.reservationStart between ?1 and ?2")
     Collection<BoatReservation> getAllReservationsForCalculatingIncome(LocalDateTime startTime, LocalDateTime endTime);
+
+    @Query("select br from BoatReservation br where br.complaint is not null and br.complaint.reviewed = false")
+    Collection<BoatReservation> getAllNotReviewedBoatComplaint();
 }
