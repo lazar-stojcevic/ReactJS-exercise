@@ -245,6 +245,8 @@ public class BackendApplication implements CommandLineRunner {
         adventureAddress.setStreet("Neka ulica 5");
         adventureAddress.setCity("Neki grad");
         adventureAddress.setCountry("Neka drzava");
+        adventureAddress.setLatitude(45.16);
+        adventureAddress.setLongitude(20.45);
         adventure.setAddress(adventureAddress);
         adventure.setName("Izlet na jezeru");
         adventure.setInstructor((FishingInstructor) repository.findByEmail("asd@gmail.com"));
@@ -281,6 +283,8 @@ public class BackendApplication implements CommandLineRunner {
         adventureAddress2.setStreet("Gagarinova");
         adventureAddress2.setCity("Paracin");
         adventureAddress2.setCountry("Srbija");
+        adventureAddress2.setLatitude(45.16);
+        adventureAddress2.setLongitude(20.45);
         adventure2.setAddress(adventureAddress2);
         adventure2.setName("Izlet na jezeru");
         adventure2.setInstructor((FishingInstructor) repository.findByEmail("asd@gmail.com"));

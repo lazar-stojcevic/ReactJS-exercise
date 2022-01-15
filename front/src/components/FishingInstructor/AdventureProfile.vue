@@ -246,7 +246,21 @@
      </div>
    </div>
    <hr/>
-
+   <!--GOOGLE MAP-->
+    <div>
+      <GmapMap
+          :center='center'
+          :zoom='12'
+          style='width:100%;  height: 400px;'
+      >
+        <GmapMarker
+            :key="index"
+            v-for="(m, index) in markers"
+            :position="m.position"
+        />
+      </GmapMap>
+    </div>
+   <hr/>
    <!--ADDITIONAL SERVICES-->
    <div v-if="additionalServices.length > 0">
      <h1><strong>ADDITIONAL SERVICES</strong></h1>
@@ -340,7 +354,9 @@ export default {
       newReservation: {reservationStart: '', lastDateToReserve: '', discount: '', addServices:[], lengthMin: ''},
       currentReservationOwner: '',
       newCustomReservation: {},
-      selectedAddServices: []
+      selectedAddServices: [],
+      center: { lat: 44.81003164358128, lng: 20.400593632559573 },
+      markers: []
     }
   },
   mounted() {
@@ -348,7 +364,14 @@ export default {
       this.$router.push('/fishingInstructorProfile');
       return;
     }
-    AdventureService.getAdventureById(AdventureService.getAdventureId()).then(res => {this.adventure = res.data})
+    AdventureService.getAdventureById(AdventureService.getAdventureId()).then(res => {
+      this.adventure = res.data;
+      if(res.data.address.latitude !== ''){
+        this.center.lat = this.cottage.address.latitude;
+        this.center.lng = this.cottage.address.longitude;
+      }
+      this.markers.push({ position: this.center });
+    })
         .catch(() => { alert("THERE IS SOME ERROR IN LOADING ADVENTURE")});
 
     AdventureReservationService.getAllFreeFastReservations(AdventureService.getAdventureId()).then(res => {

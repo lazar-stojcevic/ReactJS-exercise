@@ -18,6 +18,12 @@
         <span class="input-group-text">COUNTRY</span>
         <input type="text" class="form-control" v-model="country" required>
       </div>
+      <div class="col">
+        <span class="input-group-text">LONGITUDE</span>
+        <input type="number" step="any" class="form-control" v-model="longitude" required>
+        <span class="input-group-text">LATITUDE</span>
+        <input type="number" step="any" class="form-control" v-model="latitude" required>
+      </div>
     </div>
       <div class="input-group mb-lg-4">
         <span class="input-group-text">DESCRIPTION</span>
@@ -76,7 +82,9 @@ export default {
       equipment:'',
       cancelingTerms:'',
       conductRules: '',
-      basePrice: ''
+      basePrice: '',
+      latitude: '',
+      longitude: ''
     }
   },
   methods:{
@@ -94,7 +102,9 @@ export default {
         address: {
           street: this.street,
           city: this.city,
-          country: this.country
+          country: this.country,
+          latitude: this.latitude,
+          longitude: this.longitude
         },
         maxPersons: this.maxPersons,
         description: this.description,
