@@ -44,6 +44,18 @@
               </tbody>
             </table>
 
+            <GmapMap
+                :center='center'
+                :zoom='12'
+                style='width:100%;  height: 400px;'
+            >
+            <GmapMarker
+                :key="index"
+                v-for="(m, index) in markers"
+                :position="m.position"
+            />
+            </GmapMap>
+
             <h3>Rooms: </h3>
             <br>
             <table class="table table-striped">
@@ -181,6 +193,22 @@
               ></b-form-input>
             </b-form-group>
 
+
+              <b-form-group id="input-country" label="Your longitude:" label-for="country">
+                <b-form-input
+                    id="country"
+                    v-model="cottage.address.longitude"
+                    required
+                ></b-form-input>
+              </b-form-group>
+
+              <b-form-group id="input-country" label="Your latitude:" label-for="country">
+                <b-form-input
+                    id="country"
+                    v-model="cottage.address.latitude"
+                    required
+                ></b-form-input>
+              </b-form-group>
             <b-form-group id="input-promo" label="Your promo:" label-for="promo">
               <b-form-input
                   id="promo"
@@ -217,16 +245,21 @@ export default {
   data(){
     return{
       id:'',
-      cottage: {address: {
+      cottage: {
+        address: {
           street: '',
           city: '',
-          country: ''
+          country: '',
+          longitude:'',
+          latitude: ''
         },
-      cottagePriceList:{ price:0}
+        cottagePriceList: {price: 0},
       },
+      center: { lat: 44.81003164358128, lng: 20.400593632559573 },
       rooms:[],
       photos:[],
       additionalServices:[],
+      markers:[],
       newRoom:{
         description: '',
         number:''
@@ -247,6 +280,9 @@ export default {
     CottageService.getCottageById(this.id).then(res => {
       this.cottage = res.data;
       this.newCottageInfo = res.data;
+      this.center.lat = this.cottage.address.latitude;
+      this.center.lng = this.cottage.address.longitude;
+      this.markers.push({ position: this.center });
     });
     RoomService.getRoomById(this.id).then(res=>{
       this.rooms = res.data;
@@ -339,7 +375,9 @@ export default {
                               "country": this.cottage.address.country,
                               "promo": this.cottage.promo,
                               "cottageOwnerId": LogInService.userId,
-                              "price": this.cottage.cottagePriceList.price
+                              "price": this.cottage.cottagePriceList.price,
+                              "latitude": this.cottage.address.latitude,
+                              "longitude": this.cottage.address.longitude
                             }).then(res => {this.user = res.data;
                             this.changeModeToNeutral()}).catch(() => {
   alert("SERVER ERROR");

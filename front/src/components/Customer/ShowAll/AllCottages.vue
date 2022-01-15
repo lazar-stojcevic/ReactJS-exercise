@@ -45,6 +45,16 @@
       <b-card-text>
         Average mark: {{cottage.rating}}
       </b-card-text>
+
+      <GmapMap
+          :center = '{ lat: cottage.address.latitude, lng: cottage.address.longitude }'
+          :zoom='12'
+          style='width:100%;  height: 400px;'
+      >
+        <GmapMarker
+            :position='{ lat: cottage.address.latitude, lng: cottage.address.longitude }'
+        />
+      </GmapMap>
       <router-link class="btn btn-secondary" :to="'cottage/'+cottage.id.toString()" style="margin: 5px">See cottage</router-link>
 
     </b-card>

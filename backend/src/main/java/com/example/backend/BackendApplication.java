@@ -420,6 +420,8 @@ public class BackendApplication implements CommandLineRunner {
         address6.setCity("Zlatibor");
         address6.setCountry("Srbija");
         address6.setStreet("Ustanicka");
+        address6.setLongitude(20.400593632559573);
+        address6.setLatitude(44.81003164358128);
         cottage1.setAddress(address6);
         cottage1.setCottageOwner(cottageOwner1);
 
@@ -466,6 +468,8 @@ public class BackendApplication implements CommandLineRunner {
         address7.setCity("Tara");
         address7.setCountry("Srbija");
         address7.setStreet("Ustanicka");
+        address7.setLongitude(20.400593632559573);
+        address7.setLatitude(44.81003164358128);
         cottage2.setAddress(address7);
         cottage2.setCottageOwner(cottageOwner1);
         CottagePriceList priceList15 = new CottagePriceList();
@@ -686,6 +690,8 @@ public class BackendApplication implements CommandLineRunner {
         boat.getAddress().setCity("Bogojevo");
         boat.getAddress().setStreet("Vikend naselje 45");
         boat.getAddress().setCountry("Srbija");
+        boat.getAddress().setLongitude(19.701912);
+        boat.getAddress().setLatitude(44.766706);
         boat.setType("camac");
         boat.setNumberOfEngines(2);
         boat.setEnginePower(250);
@@ -731,6 +737,8 @@ public class BackendApplication implements CommandLineRunner {
         boat1.getAddress().setCity("Sabac");
         boat1.getAddress().setStreet("Na savi");
         boat1.getAddress().setCountry("Srbija");
+        boat1.getAddress().setLongitude(19.701912);
+        boat1.getAddress().setLatitude(44.766706);
         boat1.setType("ladja");
         boat1.setNumberOfEngines(8);
         boat1.setEnginePower(500);

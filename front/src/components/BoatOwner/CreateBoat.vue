@@ -42,6 +42,22 @@
       ></b-form-input>
     </b-form-group>
 
+    <b-form-group id="input-country" label="Your longitude:" label-for="country">
+      <b-form-input
+          id="country"
+          v-model="form.longitude"
+          required
+      ></b-form-input>
+    </b-form-group>
+
+    <b-form-group id="input-country" label="Your latitude:" label-for="country">
+      <b-form-input
+          id="country"
+          v-model="form.latitude"
+          required
+      ></b-form-input>
+    </b-form-group>
+
     <b-form-group id="input-promo" label="Your promo:" label-for="promo">
       <b-form-input
           id="promo"
@@ -143,7 +159,9 @@ export default {
         capacity: '',
         freeCancel:false,
         captain: false,
-        fishingEquipment: ''
+        fishingEquipment: '',
+        longitude:'',
+        latitude: ''
       },
     }
   },
@@ -169,6 +187,8 @@ export default {
         "fishingEquipment": this.form.fishingEquipment,
         "freeCancel": this.form.freeCancel,
         "captain":this.form.captain,
+        "latitude": this.form.latitude,
+        "longitude": this.form.longitude
       }).then(res => {this.user = res.data}).catch(() => {
         alert("SERVER ERROR");
       });

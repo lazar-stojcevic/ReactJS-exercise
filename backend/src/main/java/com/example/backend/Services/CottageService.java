@@ -50,6 +50,8 @@ public class CottageService implements ICottageService {
         cottage.getAddress().setCity(newCottage.getCity());
         cottage.getAddress().setStreet(newCottage.getStreet());
         cottage.getAddress().setCountry(newCottage.getCountry());
+        cottage.getAddress().setLatitude(newCottage.getLatitude());
+        cottage.getAddress().setLongitude(newCottage.getLongitude());
         cottage.setConductRules(newCottage.getConductRules());
         cottage.setPromo(newCottage.getPromo());
         CottageOwner owner = cottageOwnerService.findCottageOwner(newCottage.getCottageOwnerId());
@@ -67,6 +69,8 @@ public class CottageService implements ICottageService {
         cottage.getAddress().setCity(changeDto.getCity());
         cottage.getAddress().setStreet(changeDto.getStreet());
         cottage.getAddress().setCountry(changeDto.getCountry());
+        cottage.getAddress().setLatitude(changeDto.getLatitude());
+        cottage.getAddress().setLongitude(changeDto.getLongitude());
         cottage.setPromo(changeDto.getPromo());
         cottage.setConductRules(changeDto.getConductRules());
         cottage.getCottagePriceList().setPrice(changeDto.getPrice());
