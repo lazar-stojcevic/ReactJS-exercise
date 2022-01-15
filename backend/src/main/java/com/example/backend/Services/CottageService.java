@@ -6,10 +6,12 @@ import com.example.backend.Dtos.CottageDto;
 import com.example.backend.Dtos.NewSubcriptionDto;
 import com.example.backend.Repository.AddressRepository;
 import com.example.backend.Repository.CottageRepository;
+import com.example.backend.Repository.CottageReservationRepository;
 import com.example.backend.Services.Interfaces.ICottageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -21,6 +23,9 @@ public class CottageService implements ICottageService {
 
     @Autowired
     private CottageRepository cottageRepository;
+
+    @Autowired
+    private CottageReservationRepository cottageReservationRepository;
 
     @Autowired
     private AddressRepository addressRepository;
@@ -120,6 +125,13 @@ public class CottageService implements ICottageService {
 
     @Override
     public void deleteCottage(long id) {
+        Collection<CottageReservation> reservations = cottageReservationRepository.getAllCottageReservationInFuture(id, LocalDateTime.now());
+        if(reservations.isEmpty()){
+            deleteById(id);
+        }
+    }
+
+    public void deleteById(long id) {
         cottageRepository.deleteById(id);
     }
 }

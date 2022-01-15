@@ -5,10 +5,7 @@ import com.example.backend.Dtos.AdditionalServiceDto;
 import com.example.backend.Dtos.BoatDto;
 import com.example.backend.Dtos.NewSubcriptionDto;
 import com.example.backend.Dtos.PasswordChangeDto;
-import com.example.backend.Repository.AddressRepository;
-import com.example.backend.Repository.BoatRepository;
-import com.example.backend.Repository.CottageRepository;
-import com.example.backend.Repository.CustomerRepository;
+import com.example.backend.Repository.*;
 import com.example.backend.Services.Interfaces.IBoatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +23,9 @@ public class BoatService implements IBoatService {
 
     @Autowired
     private BoatRepository boatRepository;
+
+    @Autowired
+    private BoatReservationRepository boatReservationRepository;
 
     @Autowired
     private AddressRepository addressRepository;
@@ -100,8 +100,14 @@ public class BoatService implements IBoatService {
 
     @Override
     public void deleteBoat(long id) {
-        boatRepository.deleteById(id);
+        Collection<BoatReservation> reservations = boatReservationRepository.getAllBoatReservationInFuture(id, LocalDateTime.now());
+        if(reservations.isEmpty()){
+            deleteById(id);
+        }
     }
+
+
+    public void deleteById(long id) {boatRepository.deleteById(id);}
 
     public boolean isUserSubcribed(long boatId, long userId){
         Boat boat = findById(boatId);

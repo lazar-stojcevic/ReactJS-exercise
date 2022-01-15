@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 
 public interface BoatReservationRepository extends JpaRepository<BoatReservation, Long> {
-    @Query("select cr from BoatReservation cr where cr.customer.id is null and cr.reservationStart > ?2 ")
-    Collection<BoatReservation> getAllBoatReservationInFuture(long customerId , LocalDateTime now);
+    @Query("select cr from BoatReservation cr where cr.boat.id = ?1 and cr.reservationStart > ?2 ")
+    Collection<BoatReservation> getAllBoatReservationInFuture(long boatId , LocalDateTime now);
 
     @Query("select cr from BoatReservation cr where cr.customer.id = ?1" +
             " and cr.reservationStart > ?2")
