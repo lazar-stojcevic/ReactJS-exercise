@@ -41,7 +41,7 @@
           ADDRESS:  {{ cottage.address.street }} , {{ cottage.address.city }}, {{cottage.address.country}}
         </b-card-text>
         <br>
-        <b-card-text :hidden="cottages.rating !== 0">
+        <b-card-text :hidden="cottages.rating === 0">
           Average mark: {{cottage.rating}}
         </b-card-text>
         <router-link class="btn btn-secondary" :to="'cottageProfile/'+cottage.id.toString()" style="margin: 5px">See cottage</router-link>

@@ -41,7 +41,7 @@
           ADDRESS:  {{ boat.address.street }} , {{ boat.address.city }}, {{boat.address.country}}
         </b-card-text>
         <br>
-        <b-card-text :hidden="boat.rating !== 0">
+        <b-card-text :hidden="boat.rating === 0">
           Average mark: {{boat.rating}}
         </b-card-text>
         <router-link class="btn btn-secondary" :to="'boatProfile/'+boat.id.toString()" style="margin: 5px">See boat</router-link>

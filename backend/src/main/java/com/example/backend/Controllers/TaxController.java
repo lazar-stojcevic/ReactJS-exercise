@@ -1,8 +1,7 @@
 package com.example.backend.Controllers;
 
 import com.example.backend.Beans.Tax;
-import com.example.backend.Dtos.SystemIncomeDto;
-import com.example.backend.Dtos.SystemIncomeForMail;
+import com.example.backend.Dtos.*;
 import com.example.backend.Services.TaxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

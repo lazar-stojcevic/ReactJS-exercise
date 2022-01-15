@@ -60,4 +60,7 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "0")})
     Collection<BoatReservation> getAllFutureBoatReservationOfBoat(long id, LocalDateTime now);
 
+    @Query("select cr from BoatReservation cr where cr.customer is not null and cr.reservationStart between ?1 and ?2 and cr.boat.boatOwner.id = ?3")
+    Collection<BoatReservation> getAllReservationsForCalculatingOwnersIncome(LocalDateTime startTime, LocalDateTime endTime, long id);
+
 }

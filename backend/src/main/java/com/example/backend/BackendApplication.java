@@ -765,7 +765,7 @@ public class BackendApplication implements CommandLineRunner {
         boatReservationOld.setReservationEnd(LocalDateTime.of(2021, 3,20,10,20));
         boatReservationOld.setLength(5);
         boatReservationOld.setDiscount(0);
-        boatReservationOld.setPrice(7000);
+        boatReservationOld.setPrice(20000);
         boatReservationRepository.save(boatReservationOld);
 
         BoatReservation boatReservationOld1 = new BoatReservation();
@@ -775,7 +775,7 @@ public class BackendApplication implements CommandLineRunner {
         boatReservationOld1.setReservationEnd(LocalDateTime.of(2021, 5,20,10,20));
         boatReservationOld1.setLength(12);
         boatReservationOld1.setDiscount(0);
-        boatReservationOld1.setPrice(9500);
+        boatReservationOld1.setPrice(60000);
         boatReservationRepository.save(boatReservationOld1);
 
         BoatReservation boatReservation = new BoatReservation();

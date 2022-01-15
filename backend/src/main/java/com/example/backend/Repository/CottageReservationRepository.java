@@ -56,4 +56,7 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
     
     @Query("select cr from CottageReservation cr where cr.customer is not null and cr.reservationStart between ?1 and ?2")
     Collection<CottageReservation> getAllReservationsForCalculatingIncome(LocalDateTime startTime, LocalDateTime endTime);
+
+    @Query("select cr from CottageReservation cr where cr.customer is not null and cr.reservationStart between ?1 and ?2 and cr.cottage.cottageOwner.id = ?3")
+    Collection<CottageReservation> getAllReservationsForCalculatingOwnersIncome(LocalDateTime startTime, LocalDateTime endTime, long id);
 }

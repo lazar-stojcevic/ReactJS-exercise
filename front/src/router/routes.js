@@ -52,6 +52,8 @@ import MyBoatReservation from "../components/BoatOwner/MyBoatReservation";
 import CreateReservationBoat from "../components/BoatOwner/CreateReservationBoat";
 import CottageCalendar from "../components/CottageOwner/CottageCalendar";
 import BoatCalendar from "../components/BoatOwner/BoatCalendar";
+import EarningsReportCottage from "../components/CottageOwner/EarningsReportCottage";
+import EarningsReportBoat from "../components/BoatOwner/EarningsReportBoat";
 
 const routes = [
     {path: '/', component: Home},
@@ -107,6 +109,8 @@ const routes = [
     {path: '/reserveBoat', component: ReserveBoat},
     {path: '/cottageCalendar', component: CottageCalendar},
     {path: '/boatCalendar', component: BoatCalendar},
+    {path: '/incomeCottage', component: EarningsReportCottage},
+    {path: '/incomeBoat', component: EarningsReportBoat}
 ]
 
 export default routes;

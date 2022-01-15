@@ -32,6 +32,7 @@ class TaxService{
 
         return axios.post(URL + '/calculateIncome', JSON.stringify(data), {headers});
     }
+
 }
 
 export default new TaxService()

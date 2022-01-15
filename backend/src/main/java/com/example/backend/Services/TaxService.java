@@ -1,11 +1,12 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.AdventureReservation;
+import com.example.backend.Beans.BoatReservation;
 import com.example.backend.Beans.CottageReservation;
 import com.example.backend.Beans.Tax;
-import com.example.backend.Dtos.SystemIncomeDto;
-import com.example.backend.Dtos.SystemIncomeForMail;
+import com.example.backend.Dtos.*;
 import com.example.backend.Repository.AdventureReservationRepository;
+import com.example.backend.Repository.BoatReservationRepository;
 import com.example.backend.Repository.CottageReservationRepository;
 import com.example.backend.Repository.TaxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class TaxService {
     private AdventureReservationRepository adventureReservationRepository;
     @Autowired
     private CottageReservationRepository cottageReservationRepository;
+    @Autowired
+    private BoatReservationRepository boatReservationRepository;
 
     public TaxService(TaxRepository taxRepository){
         this.taxRepository = taxRepository;
@@ -69,6 +72,13 @@ public class TaxService {
     private void calculateSingleCottageReservation(Tax t, CottageReservation cr, SystemIncomeForMail val) {
         if(isBetween(t, cr.getReservationStart())){
             val.incrementCottage();
+            val.incrementIncome(cr.getPrice() * t.getTaxRate() / 100);
+        }
+    }
+
+    private void calculateSingleBoatReservation(Tax t, BoatReservation cr, SystemIncomeForMail val) {
+        if(isBetween(t, cr.getReservationStart())){
+            val.incrementBoat();
             val.incrementIncome(cr.getPrice() * t.getTaxRate() / 100);
         }
     }

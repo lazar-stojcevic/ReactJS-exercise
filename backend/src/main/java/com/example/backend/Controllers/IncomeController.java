@@ -1,6 +1,9 @@
 package com.example.backend.Controllers;
 
+import com.example.backend.Dtos.EarningsReportBoatDto;
+import com.example.backend.Dtos.EarningsReportDto;
 import com.example.backend.Dtos.IncomeDto;
+import com.example.backend.Dtos.TimespanForEarningsReportDto;
 import com.example.backend.Services.IncomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,5 +27,15 @@ public class IncomeController {
     public ResponseEntity<?> getIncomeOfInstructor(@RequestBody IncomeDto dto){
         incomeService.prepareForCalculatingInstructorIncome(dto);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/calculateCottageOwnerIncome")
+    public ResponseEntity<EarningsReportDto> calculateCottageOwnerIncome(@RequestBody TimespanForEarningsReportDto dto){
+        return new ResponseEntity<>(incomeService.calculateIncomeOfCottageOwner(dto), HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/calculateBoatOwnerIncome")
+    public ResponseEntity<EarningsReportBoatDto> calculateBoatOwnerIncome(@RequestBody TimespanForEarningsReportDto dto){
+        return new ResponseEntity<>(incomeService.calculateIncomeOfBoatOwner(dto), HttpStatus.OK);
     }
 }
