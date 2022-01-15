@@ -6,7 +6,10 @@ import com.example.backend.Dtos.NewComplaintDto;
 import com.example.backend.Dtos.ReviewComplaintDto;
 import com.example.backend.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -81,6 +84,7 @@ public class ComplaintService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Collection<ComplaintForReviewDto> getAllNotReviewedComplaint(){
         List<ComplaintForReviewDto> list = new ArrayList<>();
 
@@ -96,9 +100,11 @@ public class ComplaintService {
         return list;
     }
 
-    //TODO: SAMO JEDAN ADMIN SME DA REVIDIRA OVU ZALBU
+    @Transactional
     public void reviewComplaint(ReviewComplaintDto dto){
-        Complaint complaint = complaintRepository.getById(dto.getComplaintId());
+        Complaint complaint = complaintRepository.findOneById(dto.getComplaintId());
+        if(complaint.isReviewed())
+            return;
         complaint.setReviewed(true);
         save(complaint);
         sendMails(userRepository.findByEmail(dto.getCustomerMail()),
@@ -112,7 +118,8 @@ public class ComplaintService {
         }catch (Exception ignored){ }
     }
 
-    private Complaint save(Complaint complaint){
+    @Transactional
+    public Complaint save(Complaint complaint){
         return complaintRepository.save(complaint);
     }
 
