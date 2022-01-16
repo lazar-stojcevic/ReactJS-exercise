@@ -88,13 +88,6 @@ public class TaxService {
         }
     }
 
-    private void calculateSingleBoatReservation(Tax t, BoatReservation cr, SystemIncomeForMail val) {
-        if(isBetween(t, cr.getReservationStart())){
-            val.incrementBoat();
-            val.incrementIncome(cr.getPrice() * t.getTaxRate() / 100);
-        }
-    }
-
     private void calculateSingleAdventureReservation(Tax t, AdventureReservation ar, SystemIncomeForMail val) {
         if(isBetween(t, ar.getReservationStart())){
             val.incrementAdventure();
