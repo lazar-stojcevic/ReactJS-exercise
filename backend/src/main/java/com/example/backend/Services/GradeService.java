@@ -1,9 +1,6 @@
 package com.example.backend.Services;
 
-import com.example.backend.Beans.AdventureReservation;
-import com.example.backend.Beans.BoatReservation;
-import com.example.backend.Beans.CottageReservation;
-import com.example.backend.Beans.Grade;
+import com.example.backend.Beans.*;
 import com.example.backend.Dtos.GradeToSaveDto;
 import com.example.backend.Dtos.GradeToShowDto;
 import com.example.backend.Repository.BoatRepository;
@@ -14,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,9 +26,6 @@ public class GradeService {
 
     @Autowired
     private EmailService emailService;
-
-    @Autowired
-    private FishingInstructorService fishingInstructorService;
 
     @Autowired
     private AdventureReservationService reservationService;
@@ -59,6 +55,7 @@ public class GradeService {
         return gradeRepository.findAll();
     }
 
+    @Transactional
     public Grade saveGrade(Grade grade){
         return gradeRepository.save(grade);
     }
@@ -79,25 +76,31 @@ public class GradeService {
         return makeGradeToShow((List<Grade>) gradeRepository.findAllGradesOfInstructor(id));
     }
 
-    public void enableGrade(long gradeId) {
-        Grade grade = findGradeById(gradeId);
-        grade.setEnabled(true);
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void enableOrDisableGrade(long gradeId, boolean forEnabling) {
+        Grade grade = gradeRepository.findOneById(gradeId);
+
+        if(grade.isReviewed()) return;
+
+        if(forEnabling) grade.setEnabled(true);
+
+        grade.setReviewed(true);
         saveGrade(grade);
-        if(grade.getInstructor() != null) {
-            grade.getInstructor().setRating(CalculateNewAverageGradeForInstructor(gradeRepository.findAllGradesOfInstructor(grade.getInstructor().getId())));
-            fishingInstructorRepository.save(grade.getInstructor());
+
+        if(forEnabling) {
+            User user = null;
+            if (grade.getInstructor() != null) {
+                grade.getInstructor().setRating(CalculateNewAverageGradeForInstructor(gradeRepository.findAllGradesOfInstructor(grade.getInstructor().getId())));
+                user = fishingInstructorRepository.save(grade.getInstructor());
+            } else if (grade.getCottage() != null) {
+                grade.getCottage().setRating(CalculateNewAverageGradeForCottage(gradeRepository.findAllGradesOfCottage(grade.getCottage().getId())));
+                user = cottageRepository.save(grade.getCottage()).getCottageOwner();
+            } else if (grade.getBoat() != null) {
+                grade.getBoat().setRating(CalculateNewAverageGradeForBoat(gradeRepository.findAllGradesOfBoat(grade.getBoat().getId())));
+                user = boatRepository.save(grade.getBoat()).getBoatOwner();
+            }
+            sendMailForEnablingGrade(user);
         }
-        else if (grade.getCottage() != null) {
-            grade.getCottage().setRating(CalculateNewAverageGradeForCottage(gradeRepository.findAllGradesOfCottage(grade.getCottage().getId())));
-            cottageRepository.save(grade.getCottage());
-        }
-        else if (grade.getBoat() != null) {
-            grade.getBoat().setRating(CalculateNewAverageGradeForBoat(gradeRepository.findAllGradesOfBoat(grade.getBoat().getId())));
-            boatRepository.save(grade.getBoat());
-        }
-        else
-            return;
-        findUserToSandMail(grade);
     }
 
     private double CalculateNewAverageGradeForInstructor(Collection<Grade> allGradesOfInstructor) {
@@ -158,16 +161,11 @@ public class GradeService {
         return sum/grades.size();
     }
 
-    //TODO: DODATI ZA OSTALE ULOGE
-    private void findUserToSandMail(Grade grade){
-        if(grade.getInstructor() != null)
-            sendMailForEnablingGrade(grade.getInstructor().getEmail(), grade.getInstructor().getFirstname());
-    }
-
-    private void sendMailForEnablingGrade(String email, String firstname){
+    private void sendMailForEnablingGrade(User user){
         try{
             logger.info("< Sending mail");
-            emailService.sendNotificationForEnablingRevision(email, firstname);
+            emailService.sendNotificationForEnablingRevision(user);
+            logger.info("< Mail sent");
         }catch (Exception e) {
             logger.info(e.toString());
         }

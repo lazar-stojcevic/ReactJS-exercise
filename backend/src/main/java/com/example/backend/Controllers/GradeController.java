@@ -4,6 +4,8 @@ import com.example.backend.Beans.Grade;
 import com.example.backend.Dtos.GradeToSaveDto;
 import com.example.backend.Dtos.GradeToShowDto;
 import com.example.backend.Services.GradeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,8 @@ import java.util.Collection;
 public class GradeController {
     @Autowired
     private final GradeService gradeService;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public GradeController(GradeService gradeService){
         this.gradeService = gradeService;
@@ -42,15 +46,15 @@ public class GradeController {
         return new ResponseEntity<>(gradeService.makeGradeForSaving(dto), HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteGrade(@PathVariable long id){
-        gradeService.deleteGrade(id);
+    @GetMapping(path = "/disable/{id}")
+    public ResponseEntity<?> disableGrade(@PathVariable long id){
+        gradeService.enableOrDisableGrade(id, false);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(path = "/enable/{id}")
+    @GetMapping(path = "/enable/{id}")
     public ResponseEntity<?> enableGrade(@PathVariable long id){
-        gradeService.enableGrade(id);
+        gradeService.enableOrDisableGrade(id, true);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

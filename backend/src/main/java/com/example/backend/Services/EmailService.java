@@ -119,13 +119,13 @@ public class EmailService {
     }
 
     @Async
-    public void sendNotificationForEnablingRevision(String email, String firstname) throws MailException,
+    public void sendNotificationForEnablingRevision(User user) throws MailException,
             InterruptedException{
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(email);
+        mail.setTo(user.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Obaveštenje o odobravanju revizije.");
-        mail.setText("Pozdrav " + firstname + ", \n\nobaveštavamo vas da" +
+        mail.setText("Pozdrav " + user.getFirstname() + ", \n\nobaveštavamo vas da" +
                 " vam je upravo odobrena nova revizija" +
                 "\n\nS poštovanjem admin tim.");
         javaMailSender.send(mail);

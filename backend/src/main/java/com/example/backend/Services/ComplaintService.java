@@ -100,7 +100,7 @@ public class ComplaintService {
         return list;
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void reviewComplaint(ReviewComplaintDto dto){
         Complaint complaint = complaintRepository.findOneById(dto.getComplaintId());
         if(complaint.isReviewed())

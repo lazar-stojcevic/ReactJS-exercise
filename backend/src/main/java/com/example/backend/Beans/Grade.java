@@ -43,4 +43,6 @@ public class Grade {
     private Boat boat;
 
     private boolean enabled = false;
+
+    private boolean reviewed = false;
 }

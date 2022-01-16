@@ -14,25 +14,25 @@ class GradeService{
         return axios.get(URL + '/revision', {headers});
     }
 
-    async enableGrade(gradeId){
+    enableGrade(gradeId){
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
-        return axios.put(URL + '/enable/' + gradeId, {}, {headers});
+        return axios.get(URL + '/enable/' + gradeId, {headers});
     }
 
-    async deleteGrade(gradeId){
+    disableGrade(gradeId){
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + LogInService.accessToken
         };
-        return axios.delete(URL + '/' + gradeId, {headers});
+        return axios.get(URL + '/disable/' + gradeId, {headers});
     }
 
-    async getAllGradeOfInstructor(instructorId){
+    getAllGradeOfInstructor(instructorId){
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
