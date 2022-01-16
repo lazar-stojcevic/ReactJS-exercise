@@ -46,7 +46,7 @@
             <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showCottages">COTTAGES</button>
           </td>
           <td>
-            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showCustomers">CUSTOMERS</button>
+            <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showCustomers">USERS</button>
           </td>
           <td>
             <button class="btn-sm small btn-primary" v-if="!user.firstTimeCreated" @click="showIncome">SEE INCOME</button>
@@ -161,6 +161,10 @@
     </div>
     <!--PERCENT OF ALL TRANSACTIONS-->
     <!--ALL ENTITIES-->
+    <div v-if="mode === 'boats'">
+      <boats/>
+      <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
+    </div>
     <div v-if="mode === 'cottage'">
       <cottages></cottages>
       <button @click="changeModeToNeutral" class="btn btn-warning">CLOSE</button>
@@ -179,10 +183,12 @@ import LogInService from "@/Services/LogInService";
 import AllCottages from "@/components/Admin/InnerAdminComponents/AllCottages";
 import AllCustomers from "@/components/Admin/InnerAdminComponents/AllCustomers";
 import TaxService from "@/Services/TaxService";
+import AllBoats from "@/components/Admin/InnerAdminComponents/AllBoats";
 export default {
   components:{
     'cottages': AllCottages,
-    'customers': AllCustomers
+    'customers': AllCustomers,
+    'boats' : AllBoats
   },
   data(){
     return{

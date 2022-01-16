@@ -91,6 +91,7 @@ class AdventureReservationService {
         data.length = reservation.length;
         data.discount = reservation.discount;
         data.addServices = reservation.addServices;
+        data.lengthMin = reservation.lengthMin;
         return axios.post(URL + '/makeFastReservation', JSON.stringify(data), {headers});
     }
 

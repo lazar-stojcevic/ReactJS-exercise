@@ -10,7 +10,7 @@
       <td class="col-md-8">{{ grade.revision }}</td>
       <td class="col-md-1">{{ grade.rating }}</td>
       <td class="col-md-1"><button class="btn-sm btn-success" @click="enableGrade(grade.id)">ENABLE</button></td>
-      <td class="col-md-1"><button class="btn-sm btn-danger" @click="deleteGrade(grade.id)">DELETE</button></td>
+      <td class="col-md-1"><button class="btn-sm btn-danger" @click="deleteGrade(grade.id)">DISABLE</button></td>
     </tr>
     </tbody>
   </table>
@@ -36,14 +36,21 @@ export default {
     },
 
     enableGrade(gradeId){
-      GradeService.enableGrade(gradeId).then(() => {this.getAllGradesForRevision()}).catch(() => {
-        alert("THERE IS SOME ERROR WITH ENABLING GRADES");
+      alert("Please wait...")
+      GradeService.enableGrade(gradeId).then(() => {
+        alert("GRADE IS ENABLED");
+        this.getAllGradesForRevision();
+      }).catch(() => {
+        alert("THERE IS SOME ERROR WITH ENABLING GRADE");
       })
     },
 
     deleteGrade(gradeId){
-      GradeService.deleteGrade(gradeId).then(() => {this.getAllGradesForRevision()}).catch(() => {
-        alert("THERE IS SOME ERROR WITH DELETING GRADES");
+      GradeService.disableGrade(gradeId).then(() => {
+        alert("GRADE IS DISABLED");
+        this.getAllGradesForRevision();
+      }).catch(() => {
+        alert("THERE IS SOME ERROR WITH DISABLE GRADE");
       })
     }
   }

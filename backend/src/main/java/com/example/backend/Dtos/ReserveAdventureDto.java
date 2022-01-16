@@ -19,4 +19,5 @@ public class ReserveAdventureDto {
     private int length;
     private long adventureId;
     private double discount;
+    private int lengthMin = 0;
 }

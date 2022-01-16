@@ -65,8 +65,20 @@ public class TaxService {
                     .getAllReservationsForCalculatingIncome(dto.getStartTime(), dto.getEndTime()))
                 calculateSingleCottageReservation(t, cr, val);
 
+            //BOAT RESERVATION
+            for(BoatReservation br : boatReservationRepository
+                    .getAllReservationsForCalculatingIncome(dto.getStartTime(), dto.getEndTime()))
+                calculateSingleBoatReservation(t, br, val);
+
         }
         return val;
+    }
+
+    private void calculateSingleBoatReservation(Tax t, BoatReservation br, SystemIncomeForMail val) {
+        if(isBetween(t, br.getReservationStart())){
+            val.incrementBoat();
+            val.incrementIncome(br.getPrice() * t.getTaxRate() / 100);
+        }
     }
 
     private void calculateSingleCottageReservation(Tax t, CottageReservation cr, SystemIncomeForMail val) {

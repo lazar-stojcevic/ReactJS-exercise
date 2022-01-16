@@ -41,6 +41,8 @@
         <div class="input-group mb-lg-2">
           <span class="input-group-text">LENGTH (IN HOURS)</span>
           <input type="number" class="form-control" v-model="newCustomReservation.length" required/>
+          <span class="input-group-text">LENGTH (IN MINUTES)</span>
+          <input type="number" class="form-control" v-model="newCustomReservation.lengthMin"/>
         </div>
         <div class="input-group mb-lg-2">
           <span class="input-group-text">DISCOUNT (0 IS DEFAULT)</span>
@@ -76,6 +78,8 @@
         <div class="input-group mb-lg-2">
           <span class="input-group-text">LENGTH (IN HOURS)</span>
           <input type="number" class="form-control" v-model="newReservation.length" required/>
+          <span class="input-group-text">LENGTH (IN MINUTES)</span>
+          <input type="number" class="form-control" v-model="newReservation.lengthMin"/>
         </div>
         <div class="input-group mb-lg-2">
           <span class="input-group-text">DISCOUNT (0 IS DEFAULT)</span>
@@ -242,7 +246,21 @@
      </div>
    </div>
    <hr/>
-
+   <!--GOOGLE MAP-->
+    <div>
+      <GmapMap
+          :center='center'
+          :zoom='12'
+          style='width:100%;  height: 400px;'
+      >
+        <GmapMarker
+            :key="index"
+            v-for="(m, index) in markers"
+            :position="m.position"
+        />
+      </GmapMap>
+    </div>
+   <hr/>
    <!--ADDITIONAL SERVICES-->
    <div v-if="additionalServices.length > 0">
      <h1><strong>ADDITIONAL SERVICES</strong></h1>
@@ -333,10 +351,12 @@ export default {
       newAdventure: {name: '', address:{street: ''}, priceList: {price: ''}},
       newImage: '',
       imagesToShow: [],
-      newReservation: {reservationStart: '', lastDateToReserve: '', discount: '', addServices:[]},
+      newReservation: {reservationStart: '', lastDateToReserve: '', discount: '', addServices:[], lengthMin: ''},
       currentReservationOwner: '',
       newCustomReservation: {},
-      selectedAddServices: []
+      selectedAddServices: [],
+      center: { lat: 44.81003164358128, lng: 20.400593632559573 },
+      markers: []
     }
   },
   mounted() {
@@ -344,7 +364,14 @@ export default {
       this.$router.push('/fishingInstructorProfile');
       return;
     }
-    AdventureService.getAdventureById(AdventureService.getAdventureId()).then(res => {this.adventure = res.data})
+    AdventureService.getAdventureById(AdventureService.getAdventureId()).then(res => {
+      this.adventure = res.data;
+      if(res.data.address.latitude !== ''){
+        this.center.lat = this.cottage.address.latitude;
+        this.center.lng = this.cottage.address.longitude;
+      }
+      this.markers.push({ position: this.center });
+    })
         .catch(() => { alert("THERE IS SOME ERROR IN LOADING ADVENTURE")});
 
     AdventureReservationService.getAllFreeFastReservations(AdventureService.getAdventureId()).then(res => {
@@ -376,7 +403,8 @@ export default {
 
     makeFastReservation(){
       this.mode = 'makeFastReservation';
-      this.newReservation = {reservationStart: '', lastDateToReserve: '', discount: '', addServices: []}
+      this.newReservation = {reservationStart: '', lastDateToReserve: '', discount: '', addServices: [], lengthMin: '',
+      length: ''};
     },
 
     changeAdventure(){
@@ -399,6 +427,7 @@ export default {
         this.mode = 'neutral';
       })
       this.selectedAddServices = []
+      this.newCustomReservation = {};
     },
 
     goToMyAdventures(){
@@ -466,6 +495,9 @@ export default {
     },
 
     saveFastReservation(){
+      if(this.newReservation.lengthMin > 59){
+        alert("LENGTH IN MINUTES MUST BE LOW THAN 60")
+      }
       if(this.newReservation.reservationStart < this.newReservation.lastDateToReserve){
         alert('START TIME MUST BE LATER THEN LAST DATE FOR RESERVATION')
         return;

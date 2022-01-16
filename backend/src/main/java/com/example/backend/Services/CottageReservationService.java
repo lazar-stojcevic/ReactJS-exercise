@@ -349,7 +349,8 @@ public class CottageReservationService {
     private boolean isReservationsOverlapWithAdventureReservations(
             AdventureReservation existingReservation, CottageReservation newReservation){
         LocalDateTime existingStart = existingReservation.getReservationStart();
-        LocalDateTime existingEnd = existingReservation.getReservationStart().plusHours(existingReservation.getLength());
+        LocalDateTime existingEnd = existingReservation.getReservationStart().plusHours(existingReservation.getLength())
+                .plusMinutes(existingReservation.getLengthMin());
         LocalDateTime newStart = newReservation.getReservationStart();
         LocalDateTime newEnd = newReservation.getReservationEnd();
         return isToRangesOverlaps(existingStart, existingEnd, newStart, newEnd);
