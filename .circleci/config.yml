@@ -10,7 +10,7 @@ workflows:
     jobs:
       - path-filtering/filter:
           # Compare files on main
-          base-revision: develop
+          base-revision: development
           mapping: |
             backend/.* run-backend true
           config-path: ".circleci/dynamicConfig.yml"
