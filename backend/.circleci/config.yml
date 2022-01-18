@@ -28,7 +28,7 @@ jobs:
           command: mvn test
       - run:
           name: Analyze on SonarCloud
-          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+          command: mvn verify sonar:sonar -Dsonar.projectKey=blupulov_ISA-projekat
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
