@@ -28,7 +28,7 @@ jobs:
           command: mvn test
       - run:
           name: Analyze on SonarCloud
-          command: mvn verify sonar:sonar -Dsonar.projectKey=blupulov
+          command: mvn verify sonar:sonar -Dsonar.projectKey=blupulov_ISA-projekat
 
 workflows:
   backend-test:
