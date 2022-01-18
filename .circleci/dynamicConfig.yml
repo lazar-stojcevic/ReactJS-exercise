@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   python: circleci/maven@1.2.0
+  sonarcloud: sonarsource/sonarcloud@1.0.3
 
 parameters:
   run-backend: 
@@ -25,6 +26,9 @@ jobs:
       - run:
           name: Test
           command: mvn test
+      - run:
+          name: Analyze on SonarCloud
+          command: mvn verify sonar:sonar -Dsonar.projectKey=blupulov
 
 workflows:
   backend-test:
