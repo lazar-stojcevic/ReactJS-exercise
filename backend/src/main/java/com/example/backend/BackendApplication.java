@@ -167,8 +167,7 @@ public class BackendApplication implements CommandLineRunner {
         fishingInstructor1.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
         fishingInstructor1.setRole(roleRepository.findByName("ROLE_INSTRUCTOR").get(0));
         fishingInstructor1.setAddress(address);
-
-
+        
         CottageOwner cottageOwner1 = new CottageOwner();
         cottageOwner1.setRole(role5);
         cottageOwner1.setEmail("teddyjj25@gmail.com");
