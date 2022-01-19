@@ -100,6 +100,7 @@ public class BoatReservationService {
 
     @Transactional
     public BoatReservation makeNewAppointment(CustomerReserveCottageDto reservation) {
+        BoatReservation retVal = null;
         try {
             Customer customer = customerService.findCustomerById(reservation.getUserId());
 
@@ -124,11 +125,11 @@ public class BoatReservationService {
             calculateFullPriceOfReservation(boatReservation, services);
             boatReservation.setLength((int) ChronoUnit.DAYS.between(reservation.getFrom(), reservation.getTo()));
 
-            BoatReservation retVal = save(boatReservation);
+            retVal = save(boatReservation);
             emailService.sendBoatReservationConfirm(customer, boatReservation);
             return retVal;
         }catch (Exception e){
-            return null;
+            return retVal;
         }
     }
 
@@ -248,6 +249,7 @@ public class BoatReservationService {
 
     @Transactional
     public BoatReservation reserveFastReservation(long usedId, long reservationId) {
+        BoatReservation retVal = null;
         try {
             BoatReservation boatReservation = findBoatReservationById(reservationId);
             if(boatReservation.getCustomer() != null)
@@ -265,11 +267,11 @@ public class BoatReservationService {
             }
 
             boatReservation.setCustomer(customer);
-            BoatReservation retVal = save(boatReservation);
+            retVal = save(boatReservation);
             emailService.sendBoatReservationConfirm(customer, boatReservation);
             return retVal;
         }catch (Exception e){
-            return null;
+            return retVal;
         }
     }
 

@@ -84,6 +84,7 @@ public class AdventureReservationService {
 
     @Transactional
     public AdventureReservation makeNewAppointment(CustomerReserveTermDto reservation) {
+        AdventureReservation retVal = null;
         try{
            Customer customer = customerService.findCustomerById(reservation.getUserId());
            AdventureReservation adventureReservation = findAdventureReservation(reservation.getReservationId());
@@ -104,17 +105,18 @@ public class AdventureReservationService {
             List<AdditionalService> services = findAllSelectedAdditionalServices(reservation.getServices());
             adventureReservation.setCustomer(customer);
             calculateFullPriceOfReservation(adventureReservation, services);
-            AdventureReservation retVal = save(adventureReservation);
+            retVal = save(adventureReservation);
             emailService.sendAdventureReservationConfirm(customer);
             return retVal;
         }catch (Exception e){
-            return null;
+            return retVal;
         }
     }
 
     //Isto kao obicna samo bez racunanje cene, jer je ona u napred zadata
     @Transactional
     public AdventureReservation makeNewAppointmentOnAction(CustomerReserveTermDto reservation) {
+        AdventureReservation retVal = null;
         try {
             Customer customer = customerService.findCustomerById(reservation.getUserId());
             AdventureReservation adventureReservation = getAdventureReservationById(reservation.getReservationId());
@@ -136,11 +138,11 @@ public class AdventureReservationService {
                 return null;
 
             adventureReservation.setCustomer(customer);
-            AdventureReservation retVal = save(adventureReservation);
+            retVal = save(adventureReservation);
             emailService.sendAdventureReservationConfirm(customer);
             return retVal;
         }catch (Exception e){
-            return null;
+            return retVal;
         }
     }
 

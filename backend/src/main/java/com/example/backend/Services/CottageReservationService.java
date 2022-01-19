@@ -106,6 +106,7 @@ public class CottageReservationService {
 
     @Transactional
     public CottageReservation makeNewAppointment(CustomerReserveCottageDto reservation) {
+        CottageReservation retVal = null;
         try {
             Customer customer = customerService.findCustomerById(reservation.getUserId());
 
@@ -130,11 +131,11 @@ public class CottageReservationService {
             calculateFullPriceOfReservation(cottageReservation, services);
             cottageReservation.setLength((int) ChronoUnit.DAYS.between(reservation.getFrom(), reservation.getTo()));
 
-            CottageReservation retVal = save(cottageReservation);
+            retVal = save(cottageReservation);
             emailService.sendCottageReservationConfirm(customer, cottageReservation);
             return retVal;
         }catch (Exception e){
-            return null;
+            return retVal;
         }
     }
 
@@ -238,6 +239,7 @@ public class CottageReservationService {
 
     @Transactional
     public CottageReservation reserveFastReservation(long usedId, long reservationId) {
+        CottageReservation retVal = null;
         try {
             CottageReservation cottageReservation = findCottageReservationById(reservationId);
             if(cottageReservation.getCustomer() != null)
@@ -255,11 +257,11 @@ public class CottageReservationService {
             }
 
             cottageReservation.setCustomer(customer);
-            CottageReservation retVal = save(cottageReservation);
+            retVal = save(cottageReservation);
             emailService.sendCottageReservationConfirm(customer, cottageReservation);
             return retVal;
         }catch (Exception e){
-            return null;
+            return retVal;
         }
     }
 

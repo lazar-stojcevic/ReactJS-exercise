@@ -366,9 +366,9 @@ export default {
     }
     AdventureService.getAdventureById(AdventureService.getAdventureId()).then(res => {
       this.adventure = res.data;
-      if(res.data.address.latitude !== ''){
-        this.center.lat = this.cottage.address.latitude;
-        this.center.lng = this.cottage.address.longitude;
+      if(res.data.address.latitude !== null){
+        this.center.lat = this.adventure.address.latitude;
+        this.center.lng = this.adventure.address.longitude;
       }
       this.markers.push({ position: this.center });
     })
