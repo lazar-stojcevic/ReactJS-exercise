@@ -15,6 +15,9 @@ jobs:
       #- run:
       #    name: Test
       #    command: mvn test
+      - run:
+          name: Analyze on SonarCloud
+          command: mvn sonar:sonar -Dsonar.projectKey=$PROJECT_KEY  -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
 orbs:
   heroku: circleci/heroku@1.2.6
 workflows:
