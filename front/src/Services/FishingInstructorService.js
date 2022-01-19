@@ -1,7 +1,7 @@
 import axios from "axios";
 import LogInService from "@/Services/LogInService";
 
-const FISHING_INSTRUCTOR_URL = 'http://localhost:8080/fishingInstructor';
+const FISHING_INSTRUCTOR_URL = process.env.VUE_APP_BACKEND_URL + 'fishingInstructor';
 
 class FishingInstructorService{
 

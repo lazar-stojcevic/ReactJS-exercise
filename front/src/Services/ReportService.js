@@ -1,7 +1,7 @@
 import LogInService from "@/Services/LogInService";
 import axios from "axios";
 
-const URL = 'http://localhost:8080/report';
+const URL = process.env.VUE_APP_BACKEND_URL + 'report';
 
 class ReportService{
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import LogInService from "@/Services/LogInService";
 
-const CUSTOMER_URL = 'http://localhost:8080/customer';
+const CUSTOMER_URL = process.env.VUE_APP_BACKEND_URL + 'customer';
 
 class CustomerService{
 

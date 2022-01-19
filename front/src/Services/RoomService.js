@@ -1,7 +1,7 @@
 import axios from "axios";
 import LogInService from "@/Services/LogInService";
 
-const URL = 'http://localhost:8080/room';
+const URL = process.env.VUE_APP_BACKEND_URL + 'room';
 
 class RoomService{
 

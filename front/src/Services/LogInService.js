@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const LOGIN_URL = 'http://localhost:8080/auth/login';
+const LOGIN_URL = process.env.VUE_APP_BACKEND_URL + 'auth/login';
 
 //AKO NE PRORADI BRISANJE U LOCALSTORAGE ONDA CE SE CUVATI U POLJIMA DOLE
 class LogInService{

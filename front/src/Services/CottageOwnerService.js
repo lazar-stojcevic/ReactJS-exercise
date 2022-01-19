@@ -1,7 +1,7 @@
 import axios from "axios";
 import LogInService from "@/Services/LogInService";
 
-const COTTAGE_OWNER_URL = 'http://localhost:8080/cottageOwner';
+const COTTAGE_OWNER_URL = process.env.VUE_APP_BACKEND_URL + 'cottageOwner';
 
 class CottageOwnerService{
 

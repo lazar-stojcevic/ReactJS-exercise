@@ -1,8 +1,8 @@
 import axios from "axios";
 import LogInService from "@/Services/LogInService";
 
-const URL = 'http://localhost:8080/admin';
-const USER_URL = 'http://localhost:8080/user';
+const URL = process.env.VUE_APP_BACKEND_URL + 'admin'
+const USER_URL = process.env.VUE_APP_BACKEND_URL + 'user'
 
 class AdminService{
 

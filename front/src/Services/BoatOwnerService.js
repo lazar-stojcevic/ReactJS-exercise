@@ -1,7 +1,7 @@
 import axios from "axios";
 import LogInService from "@/Services/LogInService";
 
-const BOAT_OWNER_URL = 'http://localhost:8080/boatOwner';
+const BOAT_OWNER_URL = process.env.VUE_APP_BACKEND_URL + 'boatOwner';
 
 class BoatOwnerService{
 

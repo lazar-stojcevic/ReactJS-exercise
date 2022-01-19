@@ -1,8 +1,8 @@
 import LogInService from "@/Services/LogInService";
 import axios from "axios";
 
-const URL = 'http://localhost:8080/deleteRequest';
-const URL_USER = 'http://localhost:8080/user';
+const URL = process.env.VUE_APP_BACKEND_URL + 'deleteRequest';
+const URL_USER = process.env.VUE_APP_BACKEND_URL + 'user';
 
 class DeleteProfileRequestService{
 

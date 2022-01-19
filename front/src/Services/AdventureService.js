@@ -1,9 +1,9 @@
 import axios from "axios";
 import LogInService from "@/Services/LogInService";
 
-const URL = 'http://localhost:8080/adventure';
-const URL_AS = 'http://localhost:8080/additionalServices';
-const URL_IMG = 'http://localhost:8080/images';
+const URL = process.env.VUE_APP_BACKEND_URL + 'adventure';
+const URL_AS = process.env.VUE_APP_BACKEND_URL + 'additionalServices';
+const URL_IMG = process.env.VUE_APP_BACKEND_URL + 'images';
 
 class AdventureService{
     adventureId = ''
