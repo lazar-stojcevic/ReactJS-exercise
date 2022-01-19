@@ -12,11 +12,11 @@ jobs:
   backend-test:
     docker:
       - image: cimg/openjdk:11.0
-    #working_directory: ~/project/backend
+    working_directory: ~/project/backend
     steps:
       # Checkout the code as the first step.
-      - checkout
-          #path: ~/project 
+      - checkout:
+          path: ~/project 
       # Use mvn clean and package as the standard maven build phase
       - run:
           name: Build
