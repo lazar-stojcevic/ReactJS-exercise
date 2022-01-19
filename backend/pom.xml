@@ -14,6 +14,11 @@
     <name>backend</name>
     <description>backend</description>
 
+    <properties>
+        <sonar.organization>blupulov</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

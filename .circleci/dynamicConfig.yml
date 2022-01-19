@@ -24,7 +24,7 @@ jobs:
           command: mvn -B -DskipTests clean package
       - run:
           name: Analyze on SonarCloud
-          command: mvn sonar:sonar -Dsonar.projectKey=ISA-projekat -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=ac25a848347141105384bdf235e3854b36a01c56   
+          command: mvn verify sonar:sonar -Dsonar.projectKey=blupulov_ISA-projekat
       # Then run your tests!
       #- run:
       #    name: Test
