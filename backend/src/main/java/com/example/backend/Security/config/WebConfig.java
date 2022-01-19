@@ -11,6 +11,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("http://localhost:35000", "https://booking-isa-tim-13.herokuapp.com"); //Ovde URL frontenda
+        registry.addMapping("/**").allowedOrigins("http://localhost:35000", "https://booking-tim13-frontend.herokuapp.com"); //Ovde URL frontenda
     }
 }
