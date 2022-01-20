@@ -26,4 +26,4 @@ tako da odgovaraju lokalnoj bazi
 - Importovati front projekat
 - Dalje pratiti README.md koji se nalazi u direktorijumu front
 - Aplikacija je dostupna i na heroku platformi: 
-https://git.heroku.com/booking-tim13-frontend.git
+https://booking-tim13-frontend.herokuapp.com/#/
