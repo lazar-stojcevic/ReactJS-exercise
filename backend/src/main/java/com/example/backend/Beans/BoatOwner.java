@@ -29,6 +29,9 @@ public class BoatOwner extends User{
         return retVal;
     }
 
+    @Column()
+    private double rating;
+
     @Override
     public String getUsername() {
         return this.getEmail();

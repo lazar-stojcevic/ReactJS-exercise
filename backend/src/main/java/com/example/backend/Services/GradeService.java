@@ -3,10 +3,7 @@ package com.example.backend.Services;
 import com.example.backend.Beans.*;
 import com.example.backend.Dtos.GradeToSaveDto;
 import com.example.backend.Dtos.GradeToShowDto;
-import com.example.backend.Repository.BoatRepository;
-import com.example.backend.Repository.CottageRepository;
-import com.example.backend.Repository.FishingInstructorRepository;
-import com.example.backend.Repository.GradeRepository;
+import com.example.backend.Repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,12 @@ public class GradeService {
 
     @Autowired
     private FishingInstructorRepository fishingInstructorRepository;
+
+    @Autowired
+    private CottageOwnerRepository cottageOwnerRepository;
+
+    @Autowired
+    private BoatOwnerRepository boatOwnerRepository;
 
     @Autowired
     private CottageRepository cottageRepository;
@@ -94,10 +97,15 @@ public class GradeService {
                 user = fishingInstructorRepository.save(grade.getInstructor());
             } else if (grade.getCottage() != null) {
                 grade.getCottage().setRating(CalculateNewAverageGradeForCottage(gradeRepository.findAllGradesOfCottage(grade.getCottage().getId())));
+                grade.getCottage().getCottageOwner().setRating(CalculateNewAverageGradeForCottageOwner(gradeRepository.findAllGradesOfCottageOwner(grade.getCottage().getCottageOwner().getId())));
+                cottageOwnerRepository.save(grade.getCottage().getCottageOwner());
                 user = cottageRepository.save(grade.getCottage()).getCottageOwner();
             } else if (grade.getBoat() != null) {
                 grade.getBoat().setRating(CalculateNewAverageGradeForBoat(gradeRepository.findAllGradesOfBoat(grade.getBoat().getId())));
+                grade.getBoat().getBoatOwner().setRating(CalculateNewAverageGradeForBoatOwner(gradeRepository.findAllGradesOfBoatOwner(grade.getBoat().getBoatOwner().getId())));
+                boatOwnerRepository.save(grade.getBoat().getBoatOwner());
                 user = boatRepository.save(grade.getBoat()).getBoatOwner();
+
             }
             sendMailForEnablingGrade(user);
         }
@@ -127,10 +135,34 @@ public class GradeService {
         return 0;
     }
 
+    private double CalculateNewAverageGradeForCottageOwner(Collection<Grade> allGradesOfCottageOwner) {
+        double sum = 0;
+        int amount = 0;
+        for (Grade grade : allGradesOfCottageOwner){
+            sum += grade.getRating();
+            ++amount;
+        }
+        if (amount!=0)
+            return sum/amount;
+        return 0;
+    }
+
     private double CalculateNewAverageGradeForBoat(Collection<Grade> allGradesOfBoat) {
         double sum = 0;
         int amount = 0;
         for (Grade grade : allGradesOfBoat){
+            sum += grade.getRating();
+            ++amount;
+        }
+        if (amount!=0)
+            return sum/amount;
+        return 0;
+    }
+
+    private double CalculateNewAverageGradeForBoatOwner(Collection<Grade> allGradesOfBoatOwner) {
+        double sum = 0;
+        int amount = 0;
+        for (Grade grade : allGradesOfBoatOwner){
             sum += grade.getRating();
             ++amount;
         }
