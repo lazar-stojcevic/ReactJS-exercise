@@ -33,7 +33,7 @@ public class CottageControllerTests {
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).apply(springSecurity()).build();
     }
-
+    //Student 1
     @Test
     public void testGetAllCottages() throws Exception {
         mockMvc.perform(get(CONTROLLER_URL + "/getAll"))
@@ -41,7 +41,7 @@ public class CottageControllerTests {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(2)));
     }
-
+    //Student 1
     @Test
     public void testGetCottageById() throws Exception{
         mockMvc.perform(get(CONTROLLER_URL + "/1"))
