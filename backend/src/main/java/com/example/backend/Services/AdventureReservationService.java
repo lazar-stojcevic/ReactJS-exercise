@@ -45,8 +45,9 @@ public class AdventureReservationService {
     @Autowired
     private AdditionalServiceService additionalServiceService;
 
-    public AdventureReservationService(AdventureReservationRepository repository){
+    public AdventureReservationService(AdventureReservationRepository repository, CustomerService customerServiceMock){
         this.adventureReservationRepository = repository;
+        this.customerService = customerServiceMock;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
