@@ -385,12 +385,7 @@ export default {
     AdventureService.getAdditionalServices(AdventureService.adventureId).then(res => {this.additionalServices = res.data})
     .catch(() => {alert("THERE IS SOME ERROR WITH LOADING ADDITIONAL SERVICES")});
 
-    AdventureService.getAllImagesOfAdventure(AdventureService.adventureId).then(res => {
-      for(let img of res.data){
-        this.imagesToShow.push(img.image.replaceAll('"', ''));
-      }
-    })
-    .catch(() => {alert("THERE IS SOME ERROR WITH LOADING IMAGES")});
+    this.loadImages();
   },
 
   methods:{
@@ -454,7 +449,7 @@ export default {
     },
 
     restartAdditionalService(){
-      AdventureService.getAdditionalServicesOfReservation(AdventureService.getAdventureId()).then(res => {
+      AdventureService.getAdditionalServices(AdventureService.getAdventureId()).then(res => {
         this.additionalServices = res.data;
       }).catch(() => {alert("THERE IS SOME PROBLEM WITH LOADING ADDITIONAL SERVICES")});
       this.addService = {name: '', addPrice: ''};
@@ -486,12 +481,20 @@ export default {
     },
 
     loadImages(){
-      AdventureService.getAllImagesOfAdventure(this.adventure.id).then(res => {
-        this.imagesToShow = []
+      AdventureService.getAllImagesOfAdventure(AdventureService.adventureId).then(res => {
+        this.imagesToShow = [];
         for(let img of res.data){
-          this.imagesToShow.push(img.image.replaceAll('"', ''));
+          let imageString = img.image.replaceAll('"', '');
+          if(!this.isDuplicate(this.imagesToShow, imageString))
+            this.imagesToShow.push(imageString);
         }
       }).catch(() => {alert("THERE IS SOME ERROR WITH LOADING IMAGES")});
+    },
+
+    isDuplicate(images, image){
+      for(let img of images)
+        if(img === image)
+          return true;
     },
 
     saveFastReservation(){

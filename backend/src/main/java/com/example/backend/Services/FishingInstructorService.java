@@ -1,6 +1,7 @@
 package com.example.backend.Services;
 
 import com.example.backend.Beans.Address;
+import com.example.backend.Beans.AvailableTimespan;
 import com.example.backend.Beans.Customer;
 import com.example.backend.Beans.FishingInstructor;
 import com.example.backend.Dtos.*;
@@ -58,10 +59,12 @@ public class FishingInstructorService implements IFishingInstructorService {
         fishingInstructorRepository.deleteById(id);
     }
 
-    public FishingInstructor addHolidayToFishingInstructor(long id, AvailableTimespanDto holidayDto){
+    public FishingInstructor addHolidayToFishingInstructor(long id, AvailableTimespanDto dto){
         FishingInstructor instructor = findFishingInstructorById(id);
-        instructor.getAvailable().setFromDate(holidayDto.getFromDate());
-        instructor.getAvailable().setToDate(holidayDto.getToDate());
+        AvailableTimespan timespan = new AvailableTimespan();
+        timespan.setFromDate(dto.getFromDate());
+        timespan.setToDate(dto.getToDate());
+        instructor.setAvailable(timespan);
         return fishingInstructorRepository.save(instructor);
     }
 
