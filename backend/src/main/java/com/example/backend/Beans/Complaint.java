@@ -27,4 +27,10 @@ public class Complaint {
 
     @Column
     private boolean reviewed;
+
+    public Complaint(long id, String text, boolean reviewed){
+        this.id = id;
+        this.text = text;
+        this.reviewed = reviewed;
+    }
 }

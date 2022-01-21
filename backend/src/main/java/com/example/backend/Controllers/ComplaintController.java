@@ -1,5 +1,6 @@
 package com.example.backend.Controllers;
 
+import com.example.backend.Beans.Complaint;
 import com.example.backend.Dtos.ComplaintForReviewDto;
 import com.example.backend.Dtos.NewComplaintDto;
 import com.example.backend.Dtos.ReviewComplaintDto;
@@ -21,6 +22,11 @@ public class ComplaintController {
 
     public ComplaintController(ComplaintService complaintService) {
         this.complaintService = complaintService;
+    }
+
+    @GetMapping
+    public ResponseEntity<Collection<Complaint>> findAllComplaints(){
+        return new ResponseEntity<>(complaintService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping(path = "/adventure")

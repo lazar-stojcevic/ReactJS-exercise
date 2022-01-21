@@ -39,7 +39,7 @@ public interface AdventureReservationRepository extends JpaRepository<AdventureR
     Collection<AdventureReservation> getAllReservationsOfInstructorForCalendar(long instructorId);
 
     @Query("select ar from AdventureReservation ar where ar.complaint is not null and ar.complaint.reviewed = false")
-    Iterable<? extends AdventureReservation> getAllNotReviewedAdventureComplaint();
+    Collection<AdventureReservation> getAllNotReviewedAdventureComplaint();
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select ar from AdventureReservation ar where ar.id = ?1")

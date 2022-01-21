@@ -29,7 +29,7 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
     Collection<BoatReservation> getAllReservationOfCustomerInPastWithoutComplaint(long id, LocalDateTime now);
 
     @Query("select cr from BoatReservation cr where cr.complaint.reviewed = false")
-    Iterable<? extends BoatReservation> getAllNotReviewedBoatComplaint();
+    Collection<BoatReservation> getAllNotReviewedBoatComplaint();
 
     @Query("select cr from BoatReservation cr where cr.boat.id = ?1 and cr.customer is null" +
             " and cr.reservationStart > ?2 and cr.fast = true ")

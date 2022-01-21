@@ -37,6 +37,10 @@ public class ComplaintService {
         this.boatReservationRepository = boatReservationRepository;
     }
 
+    public Collection<Complaint> findAll(){
+        return complaintRepository.findAll();
+    }
+
     public boolean SaveAdventureComplaint(NewComplaintDto complaint){
         try {
             AdventureReservation ar = adventureReservationRepository.getById(complaint.getId());
