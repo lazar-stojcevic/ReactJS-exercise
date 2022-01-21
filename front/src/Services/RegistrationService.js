@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const REGISTER_URL = process.env.VUE_APP_BACKEND_URL + + 'auth/signup';
+const REGISTER_URL = process.env.VUE_APP_BACKEND_URL + 'auth/signup';
 
 class RegistrationService{
     register(newUser){

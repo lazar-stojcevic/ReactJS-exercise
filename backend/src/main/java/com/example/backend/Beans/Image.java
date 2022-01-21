@@ -1,5 +1,6 @@
 package com.example.backend.Beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,9 +22,10 @@ public class Image {
 
     @ManyToOne
     @JoinColumn(name = "adventure_id")
+    @JsonIgnore
     private Adventure adventure;
 
-    @Column(length = 300000)
+    @Column(length = 500000)
     private String image;
 
 }
