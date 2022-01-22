@@ -116,8 +116,11 @@ public class CottageController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> delete(@PathVariable long id){
-        cottageService.deleteCottage(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if(cottageService.deleteCottage(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping(path = "additionalService/{id}")

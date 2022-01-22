@@ -25,9 +25,8 @@
     <br>
     <p>Cottages</p>
     <br>
-    <div v-for="cottage in filtered" :key="cottage.id">
+    <div style="margin-right: 20px; margin-left: 20px" v-for="cottage in filtered" :key="cottage.id">
       <b-card
-          style="max-width: 20rem;"
           class="mb-2"
       >
         <b-card-title>

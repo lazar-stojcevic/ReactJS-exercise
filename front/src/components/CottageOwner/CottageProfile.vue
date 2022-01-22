@@ -197,6 +197,8 @@
               <b-form-group id="input-country" label="Your longitude:" label-for="country">
                 <b-form-input
                     id="country"
+                    type="number"
+                    step="0.00000001"
                     v-model="cottage.address.longitude"
                     required
                 ></b-form-input>
@@ -205,6 +207,8 @@
               <b-form-group id="input-country" label="Your latitude:" label-for="country">
                 <b-form-input
                     id="country"
+                    type="number"
+                    step="0.00000001"
                     v-model="cottage.address.latitude"
                     required
                 ></b-form-input>
@@ -219,6 +223,7 @@
             <b-form-group id="input-price" label="Price for day:" label-for="price">
               <b-form-input
                   id="price"
+                  type="number"
                   v-model="cottage.cottagePriceList.price"
                   required
               ></b-form-input>
@@ -366,29 +371,39 @@ export default {
     },
 
     update(){
-      CottageService.update({
-                              "id": this.id,
-                              "name": this.cottage.name,
-                              "conductRules": this.cottage.conductRules,
-                              "street": this.cottage.address.street,
-                              "city": this.cottage.address.city,
-                              "country": this.cottage.address.country,
-                              "promo": this.cottage.promo,
-                              "cottageOwnerId": LogInService.userId,
-                              "price": this.cottage.cottagePriceList.price,
-                              "latitude": this.cottage.address.latitude,
-                              "longitude": this.cottage.address.longitude
-                            }).then(res => {this.user = res.data;
-                            this.changeModeToNeutral()}).catch(() => {
-  alert("SERVER ERROR");
-});
+      if(this.cottage.latitude < -90 || this.cottage.latitude>90){
+        alert("Invalid latitude");
+      }else {
+        if (this.cottage.longitude < -180 || this.cottage.longitude > 180) {
+          alert("Invalid longitude");
+        } else {
+          CottageService.update({
+            "id": this.id,
+            "name": this.cottage.name,
+            "conductRules": this.cottage.conductRules,
+            "street": this.cottage.address.street,
+            "city": this.cottage.address.city,
+            "country": this.cottage.address.country,
+            "promo": this.cottage.promo,
+            "cottageOwnerId": LogInService.userId,
+            "price": this.cottage.cottagePriceList.price,
+            "latitude": this.cottage.address.latitude,
+            "longitude": this.cottage.address.longitude
+          }).then(res => {
+            this.user = res.data;
+            this.changeModeToNeutral()
+          }).catch(() => {
+            alert("SERVER ERROR");
+          });
+        }
+      }
     },
 
     deleteCottage(id){
       CottageService.delete(id).then(response=>{
         this.$router.push('/usersCottage');
         this.response=response;
-      })
+      }).catch(() => {alert("You have future reservation! Can't delete entity!")})
     },
 
     deleteService(id){

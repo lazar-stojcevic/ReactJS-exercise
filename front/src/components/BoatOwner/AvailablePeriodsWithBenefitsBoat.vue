@@ -59,7 +59,11 @@ export default {
       if(this.period.date1 > this.period.date2){
         alert("Lose uneti datumi");
       }else {
-        BoatReservationService.AddPeriodForFastReservation(this.period);
+        BoatReservationService.AddPeriodForFastReservation(this.period).then(() => {
+              alert("Fast reservation created")
+              this.$router.push('/');
+            }
+        ).catch(() => {alert("Period overlaps! Try other date.")});
       }
 
     }

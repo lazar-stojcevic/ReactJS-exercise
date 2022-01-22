@@ -101,8 +101,11 @@ public class BoatController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> delete(@PathVariable long id){
-        boatService.deleteBoat(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if(boatService.deleteBoat(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping(path = "additionalService/{id}")

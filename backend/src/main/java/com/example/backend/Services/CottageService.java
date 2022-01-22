@@ -10,6 +10,8 @@ import com.example.backend.Repository.CottageReservationRepository;
 import com.example.backend.Services.Interfaces.ICottageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -68,18 +70,24 @@ public class CottageService implements ICottageService {
     }
 
     @Override
+    @Transactional
     public Cottage updateCottage(CottageDto changeDto) {
-        Cottage cottage = findById(changeDto.getId());
-        cottage.setName(changeDto.getName());
-        cottage.getAddress().setCity(changeDto.getCity());
-        cottage.getAddress().setStreet(changeDto.getStreet());
-        cottage.getAddress().setCountry(changeDto.getCountry());
-        cottage.getAddress().setLatitude(changeDto.getLatitude());
-        cottage.getAddress().setLongitude(changeDto.getLongitude());
-        cottage.setPromo(changeDto.getPromo());
-        cottage.setConductRules(changeDto.getConductRules());
-        cottage.getCottagePriceList().setPrice(changeDto.getPrice());
-        return cottageRepository.save(cottage);
+        try {
+            Cottage cottage = getCottageById(changeDto.getId());
+            cottage.setName(changeDto.getName());
+            cottage.getAddress().setCity(changeDto.getCity());
+            cottage.getAddress().setStreet(changeDto.getStreet());
+            cottage.getAddress().setCountry(changeDto.getCountry());
+            cottage.getAddress().setLatitude(changeDto.getLatitude());
+            cottage.getAddress().setLongitude(changeDto.getLongitude());
+            cottage.setPromo(changeDto.getPromo());
+            cottage.setConductRules(changeDto.getConductRules());
+            cottage.getCottagePriceList().setPrice(changeDto.getPrice());
+            return save(cottage);
+        }catch (Exception e)
+        {
+            return null;
+        }
     }
 
     public Cottage addAdditionalService(AdditionalServiceDto serviceDto){
@@ -89,7 +97,7 @@ public class CottageService implements ICottageService {
         additionalService45.setAddPrice(serviceDto.getAddPrice());
         additionalService45.setPriceList(cottage.getCottagePriceList());
         cottage.getCottagePriceList().getAdditionalServices().add(additionalService45);
-        return cottageRepository.save(cottage);
+        return save(cottage);
     }
 
     public boolean isUserSubcribed(long instructorId, long userId){
@@ -123,14 +131,32 @@ public class CottageService implements ICottageService {
         cottageRepository.save(cottage);
     }
 
-    @Override
-    public void deleteCottage(long id) {
-        Collection<CottageReservation> reservations = cottageReservationRepository.getAllCottageReservationInFuture(id, LocalDateTime.now());
-        if(reservations.isEmpty()){
-            deleteById(id);
+    @Transactional
+    public Cottage save(Cottage cottage){ return cottageRepository.save(cottage);}
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Cottage getCottageById(long id){
+        return cottageRepository.findCottageById(id);
+    }
+
+    @Transactional
+    public boolean deleteCottage(long id) {
+        try {
+            if (getCottageById(id) != null) {
+                Collection<CottageReservation> reservations = cottageReservationRepository.getAllCottageReservationInFuture(id, LocalDateTime.now());
+                if (reservations.isEmpty()) {
+                    deleteById(id);
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }catch (Exception e){
+            return false;
         }
     }
 
+    @Transactional
     public void deleteById(long id) {
         cottageRepository.deleteById(id);
     }

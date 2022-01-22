@@ -119,6 +119,21 @@ public class EmailService {
     }
 
     @Async
+    public void sendNotificationForCreatingFastReservationBoat(Customer user, FastReservationDto reservation, String boatName)
+            throws MailException, InterruptedException{
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Obaveštenje o kreiranju nove brze rezervacije.");
+        mail.setText("Pozdrav " + user.getFirstname() + ", \n\nobaveštavamo vas da" +
+                " je upravo kreirana nova brza rezervacija u okviru vikendice na kojoj" +
+                "ste pretplaćeni." + "\n Ponuda: " + "Možete rezervisati brod "+boatName + " u periodu od "+ reservation.getDate1() +
+                " do " + reservation.getDate2() + " Tom prilikom ostvarujete " + reservation.getSale() + "% popusta. \n" + reservation.getDescription()
+                + "\n\nS poštovanjem admin tim.");
+        javaMailSender.send(mail);
+    }
+
+    @Async
     public void sendNotificationForEnablingRevision(User user) throws MailException,
             InterruptedException{
         SimpleMailMessage mail = new SimpleMailMessage();

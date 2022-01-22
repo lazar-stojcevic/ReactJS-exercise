@@ -45,6 +45,8 @@
     <b-form-group id="input-country" label="Your longitude:" label-for="country">
       <b-form-input
           id="country"
+          type="number"
+          step="0.00000001"
           v-model="form.longitude"
           required
       ></b-form-input>
@@ -53,6 +55,8 @@
     <b-form-group id="input-country" label="Your latitude:" label-for="country">
       <b-form-input
           id="country"
+          type="number"
+          step="0.00000001"
           v-model="form.latitude"
           required
       ></b-form-input>
@@ -168,30 +172,39 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault()
-
-
-      BoatService.create({
-        "name": this.form.name,
-        "conductRules": this.form.conductRules,
-        "street": this.form.street,
-        "city": this.form.city,
-        "country": this.form.country,
-        "promo": this.form.promo,
-        "boatOwnerId": LogInService.userId,
-        "price": this.form.price,
-        "type": this.form.type,
-        "numberOfEngines": this.form.numberOfEngines,
-        "enginePower": this.form.enginePower,
-        "topSpeed": this.form.topSpeed,
-        "capacity": this.form.capacity,
-        "fishingEquipment": this.form.fishingEquipment,
-        "freeCancel": this.form.freeCancel,
-        "captain":this.form.captain,
-        "latitude": this.form.latitude,
-        "longitude": this.form.longitude
-      }).then(res => {this.user = res.data}).catch(() => {
-        alert("SERVER ERROR");
-      });
+      if(this.form.latitude < -90 || this.form.latitude>90){
+        alert("Invalid latitude");
+      }else {
+        if (this.form.longitude < -180 || this.form.longitude > 180) {
+          alert("Invalid longitude");
+        } else {
+          BoatService.create({
+            "name": this.form.name,
+            "conductRules": this.form.conductRules,
+            "street": this.form.street,
+            "city": this.form.city,
+            "country": this.form.country,
+            "promo": this.form.promo,
+            "boatOwnerId": LogInService.userId,
+            "price": this.form.price,
+            "type": this.form.type,
+            "numberOfEngines": this.form.numberOfEngines,
+            "enginePower": this.form.enginePower,
+            "topSpeed": this.form.topSpeed,
+            "capacity": this.form.capacity,
+            "fishingEquipment": this.form.fishingEquipment,
+            "freeCancel": this.form.freeCancel,
+            "captain": this.form.captain,
+            "latitude": this.form.latitude,
+            "longitude": this.form.longitude
+          }).then(res => {
+            this.user = res.data;
+            this.$router.push('/usersBoats');
+          }).catch(() => {
+            alert("SERVER ERROR");
+          });
+        }
+      }
 
     }
   }

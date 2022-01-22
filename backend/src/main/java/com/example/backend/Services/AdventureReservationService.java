@@ -45,6 +45,13 @@ public class AdventureReservationService {
     @Autowired
     private AdditionalServiceService additionalServiceService;
 
+    @Autowired
+    private CottageReservationService cottageReservationService;
+
+    @Autowired
+    private BoatReservationService boatReservationService;
+
+
     public AdventureReservationService(AdventureReservationRepository repository, CustomerService customerServiceMock){
         this.adventureReservationRepository = repository;
         this.customerService = customerServiceMock;
@@ -91,15 +98,15 @@ public class AdventureReservationService {
            AdventureReservation adventureReservation = findAdventureReservation(reservation.getReservationId());
            if(adventureReservation.getCustomer() != null)
                return null;
-            for (AdventureReservation ar : customer.getAdventureReservations()){
+            for (AdventureReservation ar : getAllFutureTermsByCustomerId(customer.getId())){
                 if (isReservationsOverlapForAdventures(ar, adventureReservation))
                     return null;
             }
-            for (CottageReservation cr : customer.getCottageReservations()){
+            for (CottageReservation cr : cottageReservationService.getAllFutureTermsByCustomerId(customer.getId())){
                 if(isReservationsOverlapForCottages(cr, adventureReservation))
                     return null;
             }
-            for(BoatReservation br: customer.getBoatReservations()){
+            for(BoatReservation br: boatReservationService.getAllFutureTermsByCustomerId(customer.getId())){
                 if(isReservationsOverlapForBoats(br, adventureReservation))
                     return null;
             }
@@ -123,15 +130,15 @@ public class AdventureReservationService {
             AdventureReservation adventureReservation = getAdventureReservationById(reservation.getReservationId());
             if (adventureReservation.getCustomer() != null)
                 return null;
-            for (AdventureReservation ar : customer.getAdventureReservations()) {
+            for (AdventureReservation ar : getAllFutureTermsByCustomerId(customer.getId())) {
                 if (isReservationsOverlapForAdventures(ar, adventureReservation))
                     return null;
             }
-            for (CottageReservation cr : customer.getCottageReservations()){
+            for (CottageReservation cr : cottageReservationService.getAllFutureTermsByCustomerId(customer.getId())){
                 if(isReservationsOverlapForCottages(cr, adventureReservation))
                     return null;
             }
-            for(BoatReservation br: customer.getBoatReservations()){
+            for(BoatReservation br: boatReservationService.getAllFutureTermsByCustomerId(customer.getId())){
                 if(isReservationsOverlapForBoats(br, adventureReservation))
                     return null;
             }
@@ -261,6 +268,7 @@ public class AdventureReservationService {
         return save(reservation);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public Collection<AdventureReservation> getAllFutureTermsByCustomerId(long id){
         return adventureReservationRepository.getAllReservationOfCustomerInFuture(id,
                 LocalDateTime.now());

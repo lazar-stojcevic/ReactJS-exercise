@@ -8,7 +8,7 @@
             <div class="btn-group-sm">
               <button @click="changeModeToInfo" v-if="mode === 'neutral'" class="btn-info">CHANGE YOUR INFO</button>
               <button @click="changeModeToPassword" v-if="mode === 'neutral'" class="btn-info">CHANGE PASSWORD</button>
-              <button v-if="mode === 'neutral'" class="btn-danger">SEND REQUEST FOR DELETING</button>
+              <button @click="changeModeToDelete" v-if="mode === 'neutral'" class="btn-danger">SEND REQUEST FOR DELETING</button>
             </div>
           </div>
 
@@ -33,6 +33,21 @@
             </tr>
             </tbody>
           </table>
+
+          <div v-if="mode === 'delete'" class="container">
+            <form @submit.prevent="deleteUser">
+              <div class="input-group mb-3">
+                <span class="input-group-text">REASON</span>
+                <input type="text" class="form-control" v-model="reason">
+              </div>
+              <div class="input-group mb-3">
+                <div class="btn-group-sm">
+                  <button type="submit" class="btn-info">CONFIRM</button>
+                  <button @click="changeModeToNeutral()" type="reset" class="btn-danger">CLOSE</button>
+                </div>
+              </div>
+            </form>
+          </div>
 
           <!--PASSWORD CHANGING-->
           <div v-if="mode === 'changePassword'" class="container">
@@ -97,6 +112,7 @@
 <script>
 import LogInService from "../../Services/LogInService";
 import BoatOwnerService from "../../Services/BoatOwnerService";
+import DeleteProfileRequestService from "../../Services/DeleteProfileRequestService";
 
 
 export default {
@@ -112,7 +128,8 @@ export default {
       confirmPassword: '',
       newUserInfo: '',
       fromDate: ' ',
-      toDate: ''
+      toDate: '',
+      reason:''
     }
   },
   mounted() {
@@ -138,6 +155,9 @@ export default {
     changeModeToPassword() {
       this.mode = 'changePassword'
     },
+    changeModeToDelete() {
+      this.mode = 'delete'
+    },
     changePassword() {
       if (this.newPassword !== this.confirmPassword && this.newPassword.trim() !== '') {
         alert("NEW PASSWORD IS NOT MATCHING WITH CONFIRM PASSWORD");
@@ -161,6 +181,15 @@ export default {
       });
       this.mode = 'neutral';
     },
+    deleteUser(){
+      DeleteProfileRequestService.saveDeleteProfileRequest({
+        'reason': this.reason,
+        'long': LogInService.userId
+      }).then(() => alert("Request sent!")).catch(() => {
+        alert("SERVER ERROR");
+      });
+      this.mode = 'neutral';
+    }
   }
 }
 </script>

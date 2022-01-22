@@ -12,5 +12,4 @@ public interface IBoatService {
     Boat findById(long id);
     Boat saveBoat(BoatDto newBoat);
     Boat updateBoat(BoatDto changeDto);
-    void deleteBoat(long id);
 }

@@ -44,6 +44,8 @@
     <b-form-group id="input-country" label="Your longitude:" label-for="country">
       <b-form-input
           id="country"
+          type="number"
+          step="0.00000001"
           v-model="form.longitude"
           required
       ></b-form-input>
@@ -52,6 +54,8 @@
     <b-form-group id="input-country" label="Your latitude:" label-for="country">
       <b-form-input
           id="country"
+          type="number"
+          step="0.00000001"
           v-model="form.latitude"
           required
       ></b-form-input>
@@ -68,6 +72,7 @@
     <b-form-group id="input-price" label="Price for day:" label-for="price">
       <b-form-input
           id="price"
+          type="number"
           v-model="form.price"
           required
       ></b-form-input>
@@ -101,23 +106,32 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault()
+      if(this.form.latitude < -90 || this.form.latitude>90){
+        alert("Invalid latitude");
+      }else {
+        if (this.form.longitude < -180 || this.form.longitude > 180) {
+          alert("Invalid longitude");
+        } else {
 
-
-      CottageService.create({
-        "name": this.form.name,
-        "conductRules": this.form.conductRules,
-        "street": this.form.street,
-        "city": this.form.city,
-        "country": this.form.country,
-        "promo": this.form.promo,
-        "cottageOwnerId": LogInService.userId,
-        "price": this.form.price,
-        "latitude": this.form.latitude,
-        "longitude": this.form.longitude
-      }).then(res => {this.user = res.data}).catch(() => {
-        alert("SERVER ERROR");
-      });
-
+          CottageService.create({
+            "name": this.form.name,
+            "conductRules": this.form.conductRules,
+            "street": this.form.street,
+            "city": this.form.city,
+            "country": this.form.country,
+            "promo": this.form.promo,
+            "cottageOwnerId": LogInService.userId,
+            "price": this.form.price,
+            "latitude": this.form.latitude,
+            "longitude": this.form.longitude
+          }).then(res => {
+            this.user = res.data;
+            this.$router.push('/usersCottage');
+          }).catch(() => {
+            alert("SERVER ERROR");
+          });
+        }
+      }
     }
   }
 }

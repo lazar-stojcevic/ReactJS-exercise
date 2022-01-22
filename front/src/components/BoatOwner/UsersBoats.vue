@@ -25,9 +25,8 @@
     <br>
     <p>Boats</p>
     <br>
-    <div v-for="boat in filtered" :key="boat.id">
+    <div style="margin-right: 20px; margin-left: 20px" v-for="boat in filtered" :key="boat.id">
       <b-card
-          style="max-width: 20rem;"
           class="mb-2"
       >
         <b-card-title>

@@ -7,8 +7,11 @@ import com.example.backend.Dtos.NewSubcriptionDto;
 import com.example.backend.Dtos.PasswordChangeDto;
 import com.example.backend.Repository.*;
 import com.example.backend.Services.Interfaces.IBoatService;
+import com.sun.jdi.event.ExceptionEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -71,42 +74,64 @@ public class BoatService implements IBoatService {
         boat.setFishingEquipment(newBoat.getFishingEquipment());
         boat.setFreeCancel(newBoat.isFreeCancel());
         boat.setCaptain(newBoat.isCaptain());
-        return boatRepository.save(boat);
+        return save(boat);
     }
 
     @Override
+    @Transactional
     public Boat updateBoat(BoatDto changeDto) {
-        Boat boat = findById(changeDto.getId());
-        boat.setName(changeDto.getName());
-        boat.setPromo(changeDto.getPromo());
-        boat.setCapacity(changeDto.getCapacity());
-        boat.setConductRules(changeDto.getConductRules());
-        boat.getAddress().setCity(changeDto.getCity());
-        boat.getAddress().setStreet(changeDto.getStreet());
-        boat.getAddress().setCountry(changeDto.getCountry());
-        boat.getAddress().setLatitude(changeDto.getLatitude());
-        boat.getAddress().setLongitude(changeDto.getLongitude());
-        boat.setType(changeDto.getType());
-        boat.setNumberOfEngines(changeDto.getNumberOfEngines());
-        boat.setCapacity(changeDto.getCapacity());
-        boat.setEnginePower(changeDto.getEnginePower());
-        boat.setTopSpeed(changeDto.getTopSpeed());
-        boat.getPriceList().setPrice(changeDto.getPrice());
-        boat.setFishingEquipment(changeDto.getFishingEquipment());
-        boat.setFreeCancel(changeDto.isFreeCancel());
-        boat.setCaptain(changeDto.isCaptain());
-        return boatRepository.save(boat);
-    }
-
-    @Override
-    public void deleteBoat(long id) {
-        Collection<BoatReservation> reservations = boatReservationRepository.getAllBoatReservationInFuture(id, LocalDateTime.now());
-        if(reservations.isEmpty()){
-            deleteById(id);
+        try {
+            Boat boat = getBoatById(changeDto.getId());
+            boat.setName(changeDto.getName());
+            boat.setPromo(changeDto.getPromo());
+            boat.setCapacity(changeDto.getCapacity());
+            boat.setConductRules(changeDto.getConductRules());
+            boat.getAddress().setCity(changeDto.getCity());
+            boat.getAddress().setStreet(changeDto.getStreet());
+            boat.getAddress().setCountry(changeDto.getCountry());
+            boat.getAddress().setLatitude(changeDto.getLatitude());
+            boat.getAddress().setLongitude(changeDto.getLongitude());
+            boat.setType(changeDto.getType());
+            boat.setNumberOfEngines(changeDto.getNumberOfEngines());
+            boat.setCapacity(changeDto.getCapacity());
+            boat.setEnginePower(changeDto.getEnginePower());
+            boat.setTopSpeed(changeDto.getTopSpeed());
+            boat.getPriceList().setPrice(changeDto.getPrice());
+            boat.setFishingEquipment(changeDto.getFishingEquipment());
+            boat.setFreeCancel(changeDto.isFreeCancel());
+            boat.setCaptain(changeDto.isCaptain());
+            return save(boat);
+        }catch (Exception e)
+        {
+            return null;
         }
     }
 
+    @Transactional
+    public Boat save(Boat boat){ return boatRepository.save(boat);}
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Boat getBoatById(long id){
+        return boatRepository.findBoatById(id);
+    }
+
+    @Transactional
+    public boolean deleteBoat(long id) {
+        try{
+            if(getBoatById(id)!=null){
+                Collection<BoatReservation> reservations = boatReservationRepository.getAllBoatReservationInFuture(id, LocalDateTime.now());
+                if(reservations.isEmpty()){
+                    deleteById(id);
+                    return true;
+                }
+            }
+            return false;
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    @Transactional
     public void deleteById(long id) {boatRepository.deleteById(id);}
 
     public boolean isUserSubcribed(long boatId, long userId){

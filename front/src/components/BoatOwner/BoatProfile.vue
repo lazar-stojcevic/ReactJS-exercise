@@ -193,6 +193,8 @@
             <b-form-group id="input-country" label="Your longitude:" label-for="country">
               <b-form-input
                   id="country"
+                  type="number"
+                  step="0.00000001"
                   v-model="boat.address.longitude"
                   required
               ></b-form-input>
@@ -201,6 +203,8 @@
             <b-form-group id="input-country" label="Your latitude:" label-for="country">
               <b-form-input
                   id="country"
+                  type="number"
+                  step="0.00000001"
                   v-model="boat.address.latitude"
                   required
               ></b-form-input>
@@ -385,37 +389,47 @@ export default {
 
 
     update(){
-      BoatService.update({
-        "id": this.id,
-        "name": this.boat.name,
-        "conductRules": this.boat.conductRules,
-        "street": this.boat.address.street,
-        "city": this.boat.address.city,
-        "country": this.boat.address.country,
-        "promo": this.boat.promo,
-        "cottageOwnerId": LogInService.userId,
-        "price": this.boat.priceList.price,
-        "type": this.boat.type,
-        "numberOfEngines": this.boat.numberOfEngines,
-        "enginePower": this.boat.enginePower,
-        "topSpeed": this.boat.topSpeed,
-        "capacity": this.boat.capacity,
-        "fishingEquipment": this.boat.fishingEquipment,
-        "freeCancel": this.boat.freeCancel,
-        "captain":this.boat.captain,
-        "latitude": this.boat.address.latitude,
-        "longitude": this.boat.address.longitude
-      }).then(res => {this.user = res.data;
-        this.changeModeToNeutral()}).catch(() => {
-        alert("SERVER ERROR");
-      });
+      if(this.boat.latitude < -90 || this.boat.latitude>90){
+        alert("Invalid latitude");
+      }else {
+        if (this.boat.longitude < -180 || this.boat.longitude > 180) {
+          alert("Invalid longitude");
+        } else {
+          BoatService.update({
+            "id": this.id,
+            "name": this.boat.name,
+            "conductRules": this.boat.conductRules,
+            "street": this.boat.address.street,
+            "city": this.boat.address.city,
+            "country": this.boat.address.country,
+            "promo": this.boat.promo,
+            "cottageOwnerId": LogInService.userId,
+            "price": this.boat.priceList.price,
+            "type": this.boat.type,
+            "numberOfEngines": this.boat.numberOfEngines,
+            "enginePower": this.boat.enginePower,
+            "topSpeed": this.boat.topSpeed,
+            "capacity": this.boat.capacity,
+            "fishingEquipment": this.boat.fishingEquipment,
+            "freeCancel": this.boat.freeCancel,
+            "captain": this.boat.captain,
+            "latitude": this.boat.address.latitude,
+            "longitude": this.boat.address.longitude
+          }).then(res => {
+            this.user = res.data;
+            this.changeModeToNeutral()
+          }).catch(() => {
+            alert("SERVER ERROR");
+          });
+        }
+      }
     },
 
     deleteBoat(id){
       BoatService.delete(id).then(response=>{
         this.$router.push('/usersBoats');
         this.response=response;
-      })
+      }).catch(() => {alert("You have future reservation! Can't delete entity!")})
     },
     uploadImage() {
       const file = document.querySelector('input[type=file]').files[0]

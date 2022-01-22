@@ -16,8 +16,9 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
     @Query("select cr from BoatReservation cr where cr.boat.id = ?1 and cr.reservationStart > ?2 ")
     Collection<BoatReservation> getAllBoatReservationInFuture(long boatId , LocalDateTime now);
 
-    @Query("select cr from BoatReservation cr where cr.customer.id = ?1" +
-            " and cr.reservationStart > ?2")
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select cr from BoatReservation cr where cr.customer.id = ?1 and cr.reservationStart > ?2")
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "0")})
     Collection<BoatReservation> getAllReservationOfCustomerInFuture(long customerId , LocalDateTime now);
 
     @Query("select cr from BoatReservation cr where cr.customer.id = ?1" +
@@ -39,8 +40,9 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
             " and cr.fast = false")
     Collection<BoatReservation> getAllReservationOfOwner(long customerId);
 
-    @Query("select cr from BoatReservation cr where cr.boat.boatOwner.id = ?1"+
-            " and cr.captain = true")
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select cr from BoatReservation cr where cr.boat.boatOwner.id = ?1 and cr.captain = true")
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "0")})
     Collection<BoatReservation> getAllReservationOfCaptain(long customerId);
 
     @Query("select cr from BoatReservation cr where cr.boat.boatOwner.id = ?1"+

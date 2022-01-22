@@ -41,6 +41,12 @@ public class CottageReservationService {
     @Autowired
     private AdditionalCottageServiceService additionalCottageServiceService;
 
+    @Autowired
+    private BoatReservationService boatReservationService;
+
+    @Autowired
+    private AdventureReservationService adventureReservationService;
+
 
     public CottageReservationService(CottageReservationRepository repository, CottageRepository cottageRepository, ForbiddenCustomerToCottageRepository forbiddenCustomerToCottageRepository){
         this.cottageReservationRepository = repository;
@@ -48,15 +54,7 @@ public class CottageReservationService {
         this.forbiddenCustomerToCottageRepository = forbiddenCustomerToCottageRepository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public CottageReservation save(CottageReservation cottageReservation){
-        return this.cottageReservationRepository.save(cottageReservation);
-    }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public Collection<CottageReservation> getAllFutureCottageReservationForCottage(long id){
-        return this.cottageReservationRepository.getAllFutureCottageReservationOfCottage(id, LocalDateTime.now());
-    }
 
     public Collection<CottageReservation> getAll(){
         return cottageReservationRepository.findAll();
@@ -139,6 +137,17 @@ public class CottageReservationService {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public CottageReservation save(CottageReservation cottageReservation){
+        return this.cottageReservationRepository.save(cottageReservation);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Collection<CottageReservation> getAllFutureCottageReservationForCottage(long id){
+        return this.cottageReservationRepository.getAllFutureCottageReservationOfCottage(id, LocalDateTime.now());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
     public Collection<CottageReservation> getAllFutureTermsByCustomerId(long id){
         return cottageReservationRepository.getAllReservationOfCustomerInFuture(id,
                 LocalDateTime.now());
@@ -203,7 +212,9 @@ public class CottageReservationService {
         }
     }
 
+    @Transactional
     public CottageReservation makeFastReservationSlot(FastReservationDto reservation) throws InterruptedException {
+        try {
         CottageReservation cottageReservation = new CottageReservation();
         cottageReservation.setReservationStart(reservation.getDate1());
         cottageReservation.setReservationEnd(reservation.getDate2());
@@ -214,14 +225,19 @@ public class CottageReservationService {
 
         calculateFullPriceOfReservation(cottageReservation, cottageReservation.getCottagePriceList().getAdditionalServices());
         cottageReservation.setLength((int) ChronoUnit.DAYS.between(reservation.getDate1(), reservation.getDate2()));
-
-        if(isFastReservationPeriodValid(cottageReservation)){
-            for (Customer cr: customerService.getAllCustomers()) {
-                if(cr.getEmail().equals("yoxy99@gmail.com")) {
+        try {
+            if (isFastReservationPeriodValid(cottageReservation)) {
+                for (Customer cr : cottageService.findById(reservation.getCottageId()).getPrepaidCustomers()) {
                     emailService.sendNotificationForCreatingFastReservation(cr, reservation, cottageReservation.getCottage().getName());
                 }
+                return save(cottageReservation);
             }
-            return save(cottageReservation);
+        } catch (Exception e) {
+            return null;
+        }
+
+        }catch (Exception e){
+            return null;
         }
 
         return null;
@@ -308,18 +324,18 @@ public class CottageReservationService {
     }
 
     private boolean IsCustomersReservationsOverlapsWithNew(Customer customer, CottageReservation newReservation){
-        for (AdventureReservation ar : customer.getAdventureReservations()){
+        for (AdventureReservation ar : adventureReservationService.getAllFutureTermsByCustomerId(customer.getId())){
             if (isReservationsOverlapWithAdventureReservations(ar, newReservation))
                 return true;
         }
 
-        for (CottageReservation cr : customer.getCottageReservations()){
+        for (CottageReservation cr : getAllFutureTermsByCustomerId(customer.getId())){
             if (isReservationsOverlapWithCottageReservations(cr, newReservation)){
                 return true;
             }
         }
 
-        for (BoatReservation br: customer.getBoatReservations()){
+        for (BoatReservation br: boatReservationService.getAllFutureCottageReservationForBoat(customer.getId())){
             if (isReservationsOverlapWithBoatReservations(br, newReservation)){
                 return true;
             }
@@ -338,7 +354,7 @@ public class CottageReservationService {
 
     private boolean isFastReservationPeriodValid(CottageReservation reservation){
         if(isSearchInCottageAvailablePeriod(reservation.getReservationStart(), reservation.getReservationEnd(), reservation.getCottage())){
-            for (CottageReservation cr : reservation.getCottage().getReservations()){
+            for (CottageReservation cr : getAllFutureCottageReservationForCottage(reservation.getCottage().getId())){
                 if (isReservationsOverlapWithCottageReservations(cr, reservation)){
                     return false;
                 }

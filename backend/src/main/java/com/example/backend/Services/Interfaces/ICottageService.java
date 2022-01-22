@@ -10,5 +10,4 @@ public interface ICottageService {
     Cottage findById(long id);
     Cottage saveCottage(CottageDto newCottage);
     Cottage updateCottage(CottageDto changeDto);
-    void deleteCottage(long id);
 }

@@ -59,7 +59,11 @@ export default {
       if(this.period.date1 > this.period.date2){
         alert("Lose uneti datumi");
       }else {
-        CottageReservationService.AddPeriodForFastReservation(this.period);
+        CottageReservationService.AddPeriodForFastReservation(this.period).then(() => {
+              alert("Fast reservation created")
+              this.$router.push('/');
+            }
+        ).catch(() => {alert("Period overlaps! Try other date.")});
       }
 
     }

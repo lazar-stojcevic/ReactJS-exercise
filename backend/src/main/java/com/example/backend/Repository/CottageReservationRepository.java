@@ -15,8 +15,9 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
     @Query("select cr from CottageReservation cr where cr.cottage.id = ?1 and cr.reservationStart > ?2 ")
     Collection<CottageReservation> getAllCottageReservationInFuture(long cottageId , LocalDateTime now);
 
-    @Query("select cr from CottageReservation cr where cr.customer.id = ?1" +
-            " and cr.reservationStart > ?2")
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select cr from CottageReservation cr where cr.customer.id = ?1 and cr.reservationStart > ?2")
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "0")})
     Collection<CottageReservation> getAllReservationOfCustomerInFuture(long customerId , LocalDateTime now);
 
     @Query("select cr from CottageReservation cr where cr.cottage.cottageOwner.id = ?1"+

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class BoatReservationService {
@@ -35,6 +36,12 @@ public class BoatReservationService {
 
     @Autowired
     private AdditionalBoatServiceService additionalBoatServiceService;
+
+    @Autowired
+    private CottageReservationService cottageReservationService;
+
+    @Autowired
+    private AdventureReservationService adventureReservationService;
 
     public BoatReservationService(BoatReservationRepository repository, ForbiddenCustomerToBoatRepository forbiddenCustomerToBoatRepository){
         this.boatReservationRepository = repository;
@@ -62,6 +69,7 @@ public class BoatReservationService {
         return boatReservationRepository.findById(id).orElse(null);
     }
 
+    @Transactional
     public Collection<Boat> getAllAvailableBoatsForSearch(ReservationSearchDto search){
         List<Boat> boats = new ArrayList<>();
         for (Boat boat : boatService.findAllBoats()){
@@ -81,14 +89,18 @@ public class BoatReservationService {
                         }
                     }
 
-                    if(search.isCaptain()){
-                        for (BoatReservation br : getAllTermsByCaptainId(boat.getBoatOwner().getId())) {
-                            if (isReservationsOverlapForSearch(br, search.getDateFrom(), search.getDateTo())) {
-                                valid = false;
-                                break;
+                    try {
+                        if (search.isCaptain()) {
+                            for (BoatReservation br : getAllTermsByCaptainId(boat.getBoatOwner().getId())) {
+                                if (isReservationsOverlapForSearch(br, search.getDateFrom(), search.getDateTo())) {
+                                    valid = false;
+                                    break;
+                                }
                             }
-                        }
 
+                        }
+                    }catch (Exception e){
+                        return null;
                     }
                     if (valid)
                         boats.add(boat);
@@ -133,14 +145,25 @@ public class BoatReservationService {
         }
     }
 
+    @Transactional
+    public BoatReservation save(BoatReservation boatReservation){
+        return this.boatReservationRepository.save(boatReservation);
+    }
+
     @Transactional(propagation = Propagation.REQUIRED)
     public Collection<BoatReservation> getAllFutureCottageReservationForBoat(long id){
         return this.boatReservationRepository.getAllFutureBoatReservationOfBoat(id, LocalDateTime.now());
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public Collection<BoatReservation> getAllFutureTermsByCustomerId(long id){
         return boatReservationRepository.getAllReservationOfCustomerInFuture(id,
                 LocalDateTime.now());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Collection<BoatReservation> getAllTermsByCaptainId(long id){
+        return boatReservationRepository.getAllReservationOfCaptain(id);
     }
 
     public Collection<BoatReservation> getAllPastTermsByCustomerId(long id){
@@ -149,10 +172,6 @@ public class BoatReservationService {
 
     public Collection<BoatReservation> getAllTermsByOwnerId(long id){
         return boatReservationRepository.getAllReservationOfOwner(id);
-    }
-
-    public Collection<BoatReservation> getAllTermsByCaptainId(long id){
-        return boatReservationRepository.getAllReservationOfCaptain(id);
     }
 
     public Collection<BoatReservation> getAllFastTermsByOwnerId(long id){
@@ -212,28 +231,34 @@ public class BoatReservationService {
         return reservations;
     }
 
+    @Transactional
     public BoatReservation makeFastReservationSlot(FastReservationDto reservation) throws InterruptedException {
 
-        BoatReservation boatReservation= new BoatReservation();
-        boatReservation.setReservationStart(reservation.getDate1());
-        boatReservation.setReservationEnd(reservation.getDate2());
-        boatReservation.setBoat(boatService.findById(reservation.getCottageId()));
-        boatReservation.setDiscount(reservation.getSale());
-        boatReservation.setBoatPriceList(boatReservation.getBoat().getPriceList());
-        boatReservation.setFast(true);
+        try {
 
-        calculateFullPriceOfReservation(boatReservation, boatReservation.getBoatPriceList().getAdditionalServices());
-        boatReservation.setLength((int) ChronoUnit.DAYS.between(reservation.getDate1(), reservation.getDate2()));
+            BoatReservation boatReservation = new BoatReservation();
+            boatReservation.setReservationStart(reservation.getDate1());
+            boatReservation.setReservationEnd(reservation.getDate2());
+            boatReservation.setBoat(boatService.findById(reservation.getCottageId()));
+            boatReservation.setDiscount(reservation.getSale());
+            boatReservation.setBoatPriceList(boatReservation.getBoat().getPriceList());
+            boatReservation.setFast(true);
 
-        if(isFastReservationPeriodValid(boatReservation)){
-            for (Customer cr: customerService.getAllCustomers()) {
-                if(cr.getEmail().equals("yoxy99@gmail.com")) {
-                    emailService.sendNotificationForCreatingFastReservation(cr, reservation, boatReservation.getBoat().getName());
+            calculateFullPriceOfReservation(boatReservation, boatReservation.getBoatPriceList().getAdditionalServices());
+            boatReservation.setLength((int) ChronoUnit.DAYS.between(reservation.getDate1(), reservation.getDate2()));
+            try {
+                if (isFastReservationPeriodValid(boatReservation)) {
+                    for (Customer cr : boatService.findById(reservation.getCottageId()).getPrepaidCustomers()) {
+                        emailService.sendNotificationForCreatingFastReservationBoat(cr, reservation, boatReservation.getBoat().getName());
+                    }
+                    return save(boatReservation);
                 }
-            }
-            return save(boatReservation);
+            } catch (Exception e) {
+            return null;
         }
-
+        } catch (Exception e) {
+            return null;
+        }
         return null;
     }
 
@@ -287,11 +312,6 @@ public class BoatReservationService {
         return boat.getAddress().getCountry().toUpperCase(Locale.ROOT).contains(country.toUpperCase(Locale.ROOT));
     }
 
-    @Transactional
-    public BoatReservation save(BoatReservation boatReservation){
-        return this.boatReservationRepository.save(boatReservation);
-    }
-
     private boolean isReservationsOverlapForSearch(BoatReservation existingReservation, LocalDateTime start, LocalDateTime end){
         if(start.isAfter(existingReservation.getReservationStart()) &&
                 start.isBefore(existingReservation.getReservationEnd()))
@@ -318,18 +338,18 @@ public class BoatReservationService {
     }
 
     private boolean IsCustomersReservationsOverlapsWithNew(Customer customer, BoatReservation newReservation){
-        for (AdventureReservation ar : customer.getAdventureReservations()){
+        for (AdventureReservation ar : adventureReservationService.getAllFutureTermsByCustomerId(customer.getId())){
             if (isReservationsOverlapWithAdventureReservations(ar, newReservation))
                 return true;
         }
 
-        for (CottageReservation cr : customer.getCottageReservations()){
+        for (CottageReservation cr : cottageReservationService.getAllFutureTermsByCustomerId(customer.getId())){
             if (isReservationsOverlapWithCottageReservations(cr, newReservation)){
                 return true;
             }
         }
 
-        for (BoatReservation br: customer.getBoatReservations()){
+        for (BoatReservation br: getAllFutureTermsByCustomerId(customer.getId())){
             if (isReservationsOverlapWithBoatReservations(br, newReservation)){
                 return true;
             }
