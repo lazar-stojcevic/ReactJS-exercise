@@ -649,8 +649,8 @@ public class BackendApplication implements CommandLineRunner {
         CottageReservation cottageReservation1 = new CottageReservation();
         cottageReservation1.setCustomer(customer1);
         cottageReservation1.setCottage(cottage1);
-        cottageReservation1.setReservationStart(LocalDateTime.of(2022, 1,15,10,20));
-        cottageReservation1.setReservationEnd(LocalDateTime.of(2022, 1,20,10,20));
+        cottageReservation1.setReservationStart(LocalDateTime.of(2022, 1,20,10,20));
+        cottageReservation1.setReservationEnd(LocalDateTime.of(2022, 1,25,10,20));
         cottageReservation1.setLength(6);
         cottageReservation1.setDiscount(0);
         cottageReservation1.setPrice(7000);
@@ -674,8 +674,8 @@ public class BackendApplication implements CommandLineRunner {
 
         CottageReservation cottageReservation3 = new CottageReservation();
         cottageReservation3.setCottage(cottage1);
-        cottageReservation3.setReservationStart(LocalDateTime.of(2022, 4,22,10,20));
-        cottageReservation3.setReservationEnd(LocalDateTime.of(2022, 4,25,10,20));
+        cottageReservation3.setReservationStart(LocalDateTime.of(2022, 1,20,10,20));
+        cottageReservation3.setReservationEnd(LocalDateTime.of(2022, 1,25,10,20));
         cottageReservation3.setLength(4);
         cottageReservation3.setDiscount(10);
         cottageReservation3.setPrice(6300);
@@ -784,8 +784,8 @@ public class BackendApplication implements CommandLineRunner {
         BoatReservation boatReservation = new BoatReservation();
         boatReservation.setCustomer(customer1);
         boatReservation.setBoat(boat);
-        boatReservation.setReservationStart(LocalDateTime.of(2022,3 ,15,10,20));
-        boatReservation.setReservationEnd(LocalDateTime.of(2022, 3,20,10,20));
+        boatReservation.setReservationStart(LocalDateTime.of(2022,1 ,20,10,20));
+        boatReservation.setReservationEnd(LocalDateTime.of(2022, 1,24,10,20));
         boatReservation.setLength(5);
         boatReservation.setDiscount(0);
         boatReservation.setPrice(7000);

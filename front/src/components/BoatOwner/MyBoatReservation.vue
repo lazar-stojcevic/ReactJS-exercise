@@ -2,13 +2,13 @@
   <div class="container w-100">
 
     <br>
-    <h3>Cottage reservations</h3>
+    <h3>Boat reservations</h3>
     <br>
     <br>
     <table class="table table-striped">
       <thead>
       <tr>
-        <td>COTTAGE</td>
+        <td>BOAT</td>
         <td>FROM DATE</td>
         <td>TO DATE</td>
         <td>PRICE</td>
@@ -77,7 +77,7 @@ export default {
     },
 
     canReserve(date1, date2){
-      if(date1 < Date.now() && date2 > Date.now()){
+      if(moment(date1) < moment() && moment(date2) > moment()){
         return false;
       }
       return true;

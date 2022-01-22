@@ -77,7 +77,7 @@ export default {
     },
 
     canReserve(date1, date2){
-      if(date1 < Date.now() && date2 > Date.now()){
+      if(moment(date1) < moment() && moment(date2) > moment()){
         return false;
       }
       return true;
