@@ -67,7 +67,7 @@
           Address: {{boat.address.country}}, {{boat.address.city}}, {{boat.address.street}}
         </b-card-sub-title>
         <br>
-        <b-button  variant="danger" v-on:click="unsubscribeCottage(boat.id)">Unsubscribe</b-button>
+        <b-button  variant="danger" v-on:click="unsubscribeBoat(boat.id)">Unsubscribe</b-button>
       </b-card>
     </div>
   </div>
