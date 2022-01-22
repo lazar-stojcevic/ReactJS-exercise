@@ -423,8 +423,8 @@ public class BackendApplication implements CommandLineRunner {
         address6.setCity("Zlatibor");
         address6.setCountry("Srbija");
         address6.setStreet("Ustanicka");
-        address6.setLongitude(20.400593632559573);
-        address6.setLatitude(44.81003164358128);
+        address6.setLongitude(19.678199248553067);
+        address6.setLatitude(43.70736769310007);
         cottage1.setAddress(address6);
         cottage1.setCottageOwner(cottageOwner1);
 
@@ -471,8 +471,8 @@ public class BackendApplication implements CommandLineRunner {
         address7.setCity("Tara");
         address7.setCountry("Srbija");
         address7.setStreet("Ustanicka");
-        address7.setLongitude(20.400593632559573);
-        address7.setLatitude(44.81003164358128);
+        address7.setLongitude(19.486279145477692);
+        address7.setLatitude(43.85058655437049);
         cottage2.setAddress(address7);
         cottage2.setCottageOwner(cottageOwner1);
         CottagePriceList priceList15 = new CottagePriceList();
@@ -674,8 +674,8 @@ public class BackendApplication implements CommandLineRunner {
 
         CottageReservation cottageReservation3 = new CottageReservation();
         cottageReservation3.setCottage(cottage1);
-        cottageReservation3.setReservationStart(LocalDateTime.of(2022, 1,22,10,20));
-        cottageReservation3.setReservationEnd(LocalDateTime.of(2022, 1,25,10,20));
+        cottageReservation3.setReservationStart(LocalDateTime.of(2022, 4,22,10,20));
+        cottageReservation3.setReservationEnd(LocalDateTime.of(2022, 4,25,10,20));
         cottageReservation3.setLength(4);
         cottageReservation3.setDiscount(10);
         cottageReservation3.setPrice(6300);

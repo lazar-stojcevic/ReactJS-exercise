@@ -184,7 +184,7 @@ export default {
     deleteUser(){
       DeleteProfileRequestService.saveDeleteProfileRequest({
         'reason': this.reason,
-        'long': LogInService.userId
+        'userId': LogInService.userId
       }).then(() => alert("Request sent!")).catch(() => {
         alert("SERVER ERROR");
       });

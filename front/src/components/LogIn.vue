@@ -63,7 +63,7 @@ export default {
           this.$router.push("/registration");
         else
           this.$router.push("/");
-      });
+      }).catch(() => {alert("Wrong email or password")});
     }
   }
 }
