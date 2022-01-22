@@ -24,7 +24,8 @@
         <button type="submit" class="btn-info">Search</button>
       </b-form>
       <br>
-      <div style="display: flex">
+      <div style="display: flex; align-items: center; margin-left: 1rem">
+        Sort:
         <b-form-select v-model="sort" class="m-3">
           <b-form-select-option value="markASC">mark ascending</b-form-select-option>
           <b-form-select-option value="markDESC">mark descending</b-form-select-option>

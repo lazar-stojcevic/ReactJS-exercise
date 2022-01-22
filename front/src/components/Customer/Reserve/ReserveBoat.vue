@@ -27,6 +27,18 @@
       <button type="submit" class="btn-info">Search</button>
     </b-form>
     <br>
+    <div style="display: flex; align-items: center; margin-left: 1rem">
+      Sort:
+      <b-form-select v-model="sort" class="m-3">
+        <b-form-select-option value="markASC">mark ascending</b-form-select-option>
+        <b-form-select-option value="markDESC">mark descending</b-form-select-option>
+        <b-form-select-option value="priceASC">price ascending</b-form-select-option>
+        <b-form-select-option value="priceDESC">price descending</b-form-select-option>
+      </b-form-select>
+      <b-input-group>
+        <b-button variant="info" @click="sortReservations">Sort</b-button>
+      </b-input-group>
+    </div>
     <div style="margin-right: 20px; margin-left: 20px" v-for="boat in boats" :key="boat.id">
       <b-card bg-variant="dark" text-variant="white">
         <b-card-title>

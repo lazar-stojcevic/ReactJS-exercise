@@ -28,9 +28,11 @@
     <div v-for="boat in filtered" :key="boat.id">
       <b-card
           name="boat"
-          style="max-width: 20rem;"
+          style="max-width: 70rem;"
           class="mb-2"
       >
+        <b-card-body style="display: flex">
+          <div style="width: 30rem;">
         <b-card-title>
           {{boat.name}}
         </b-card-title>
@@ -51,6 +53,8 @@
         <b-card-text>
           Average mark: {{boat.rating}}
         </b-card-text>
+            <router-link class="btn btn-secondary" :to="'boat/'+boat.id.toString()" style="margin: 5px">See more</router-link>
+          </div>
         <GmapMap
             :center = '{ lat: boat.address.latitude, lng: boat.address.longitude }'
             :zoom='12'
@@ -60,8 +64,7 @@
               :position='{ lat: boat.address.latitude, lng: boat.address.longitude }'
           />
         </GmapMap>
-        <router-link class="btn btn-secondary" :to="'boat/'+boat.id.toString()" style="margin: 5px">See more</router-link>
-
+        </b-card-body>
       </b-card>
     </div>
 
