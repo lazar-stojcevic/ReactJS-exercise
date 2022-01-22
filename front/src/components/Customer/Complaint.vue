@@ -6,7 +6,7 @@
   <div v-for="reservation in adventures" :key="reservation.id">
     <b-card
         name="adventure"
-        style="max-width: 50rem; margin-left: 20px; margin-right: 20px"
+        style="max-width: 70rem; margin-left: 15rem; margin-right: 15rem"
         class="mb-2"
     >
       <b-card-title>
@@ -45,7 +45,7 @@
     <div v-for="reservation in cottages" :key="reservation.id">
       <b-card
           name="cottage"
-          style="max-width: 50rem; margin-left: 20px; margin-right: 20px"
+          style="max-width: 70rem; margin-left: 15rem; margin-right: 15rem"
           class="mb-2"
       >
         <b-card-title>
@@ -83,7 +83,7 @@
     <div v-for="reservation in boats" :key="reservation.id">
       <b-card
           name="cottage"
-          style="max-width: 50rem; margin-left: 20px; margin-right: 20px"
+          style="max-width: 70rem; margin-left: 15rem; margin-right: 15rem"
           class="mb-2"
       >
         <b-card-title>

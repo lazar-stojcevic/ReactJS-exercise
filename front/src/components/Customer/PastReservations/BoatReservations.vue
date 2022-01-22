@@ -18,7 +18,7 @@
     <div v-for="reservation in reservations" :key="reservation.id">
       <b-card
           tag="boat"
-          style="max-width: 20rem;"
+          style="max-width: 70rem; margin-left: 10rem; margin-right: 10rem"
           class="mb-2"
       >
         <b-card-title>
