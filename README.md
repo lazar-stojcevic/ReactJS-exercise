@@ -27,3 +27,9 @@ tako da odgovaraju lokalnoj bazi
 - Dalje pratiti README.md koji se nalazi u direktorijumu front
 - Aplikacija je dostupna i na heroku platformi: 
 https://booking-tim13-frontend.herokuapp.com/#/
+### Nalozi za korišćenje
+- email: yoxy99@naaci.com - password: 123 - običan korisnik
+- email: teddyjj25@gmail.com - password: 123 - vlasnik vikendice
+- email: mejl55@gmail.com - password: 123 - vlasnik broda
+- email: qwe@gmail.com - password: 123 - admin
+- email: asd@gmail.com - password: 123 - instruktor pecanja
