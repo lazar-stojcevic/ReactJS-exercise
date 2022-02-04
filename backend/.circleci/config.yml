@@ -1,0 +1,26 @@
+
+version: 2.1
+
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/openjdk:11.0
+    working_directory: ~/project/backend
+    steps:
+      - checkout:
+          path: ~/project
+      - run:
+          name: Build
+          command: mvn -B -DskipTests clean package
+      #- run:
+      #    name: Test
+      #    command: mvn test
+      - run:
+          name: Analyze on SonarCloud
+          command: mvn verify sonar:sonar -Dsonar.projectKey=blupulov_ISA-projekat -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=48018ef1d0b95480786a31a828df3ed9e14e84cb
+orbs:
+  heroku: circleci/heroku@1.2.6
+workflows:
+  sample:
+    jobs:
+      - build-and-test
