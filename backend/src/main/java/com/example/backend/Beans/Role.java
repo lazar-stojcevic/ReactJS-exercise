@@ -7,7 +7,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="ROLE")
-public class Role implements GrantedAuthority {
+public class
+Role implements GrantedAuthority {
 
     private static final long serialVersionUID = 1L;
 
