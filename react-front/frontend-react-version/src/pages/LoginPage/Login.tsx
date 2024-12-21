@@ -22,7 +22,7 @@ const Login = () => {
           }, {headers});
           console.log("Login successful:", response.data);
           // Save token or handle success response
-          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("token", response.data.accessToken);
     
         } catch (err) {
           console.error("Error:", err);
