@@ -44,6 +44,16 @@ function NavBar() {
             Login
           </Link>
         </Typography>
+        <Typography variant="h6" component="div">
+          <Link
+            href="/profile"
+            color="inherit"
+            underline="none"
+            sx={{ fontWeight: "bold" }}
+          >
+            Profile
+          </Link>
+        </Typography>
       </Toolbar>
     </AppBar>
   );

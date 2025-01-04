@@ -23,6 +23,7 @@ const Login = () => {
           console.log("Login successful:", response.data);
           // Save token or handle success response
           localStorage.setItem("token", response.data.accessToken);
+          localStorage.setItem("user-id", response.data.id);
     
         } catch (err) {
           console.error("Error:", err);
